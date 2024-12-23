@@ -4,6 +4,9 @@ export default {
     content: ["./index.html", "./src/**/*.{ts,tsx,js,jsx}"],
   theme: {
   	extend: {
+		backgroundImage: {
+			'custom-bg' : "url('./src/assets/Landing2.png')"
+		},
   		borderRadius: {
   			lg: 'var(--radius)',
   			md: 'calc(var(--radius) - 2px)',
@@ -12,7 +15,8 @@ export default {
 		  fontFamily : {
 			"inter" : ["Inter", "sans-serif"],
 			"sofia" : ["Sofia Pro", "sans-serif"],
-			"poppins" : ["Poppins", "sans-serif"]
+			"poppins" : ["Poppins", "sans-serif"],	
+			"syne" : ["Syne", "sans-serif"]
 		  },
   		colors: {
   			background: 'hsl(var(--background))',
