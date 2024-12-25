@@ -33,7 +33,6 @@ const WalletConnect = () => {
     if (window.ethereum) {
       setWeb3(new Web3(window.ethereum));
     }
-    console.log(web3);
   }, []);
 
   useEffect(() => {
@@ -46,7 +45,7 @@ const WalletConnect = () => {
     }
     getChainId();
     console.log(chainId);
-  }, [web3]);
+  }, []);
 
   web3?.provider?.on("chainChanged", (newId) => {
     const decId = parseInt(newId, 16);
@@ -55,18 +54,20 @@ const WalletConnect = () => {
   });
 
   web3?.provider?.on("accountsChanged", () => {
-    setIsConnected(false);
     window.ethereum
       .request({ method: "eth_accounts" })
       .then((accounts: string | string[]) => {
         if (accounts.length > 0) {
+          if (!accounts.includes(connectedAccount!))
+            setConnectedAccount(accounts[0]);
           console.log("Currently connected accounts:", accounts);
         } else {
+          setIsAuthenticated(false)
+          setIsConnected(false);
           console.log("No accounts connected");
         }
       });
   });
-
 
   async function switchToBSC() {
     try {
@@ -91,13 +92,11 @@ const WalletConnect = () => {
       return;
     }
 
-    // request accounts from MetaMask
     await window.ethereum.request({ method: "eth_requestAccounts" });
 
-    // get list of accounts
     const allAccounts = await web3.eth.getAccounts();
     setAccounts(allAccounts);
-    // get the first account and populate placeholder
+
     setConnectedAccount(allAccounts[0]);
     setIsConnected(true);
   }
@@ -185,6 +184,12 @@ const WalletConnect = () => {
             >
               <img src={metafox} alt="" className="w-8" /> Login with MetaMask
             </Button>
+          )}
+          {chainId == "56" && isConnected && (
+            <div className="py-5 w-[90%] px-4 mx-auto rounded-lg bg-slate-100">
+              <p className=" text-sm font-syne font-semibold my-3">Centrium wants you to sign this message with your Ethereum account:</p>
+              <p className="text-center text-sm font-syne font-semibold">{`${trunc}.`}</p>
+            </div>
           )}
           {chainId == "56" && isConnected && (
             <Button
