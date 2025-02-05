@@ -9,11 +9,11 @@ function App() {
   // const ModalOpen = useModal()
   return (
     <ContextProvider>
-        <div className="flex w-full">
-          <Sidebar />
-          <Outlet />
-        </div>
-        <CreatePostModal />
+      <div className="flex w-full">
+        <Sidebar />
+        <Outlet />
+      </div>
+      <CreatePostModal />
     </ContextProvider>
   );
 }
