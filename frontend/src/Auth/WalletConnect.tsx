@@ -29,12 +29,14 @@ const WalletConnect = () => {
   const { setIsAuthenticated } = useAuth();
   const navigate = useNavigate();
 
+  //Set Web3 on load
   useEffect(() => {
     if (window.ethereum) {
       setWeb3(new Web3(window.ethereum));
     }
   }, []);
 
+  //Grab and Set Chain ID
   useEffect(() => {
     async function getChainId() {
       if (web3 === null) {
@@ -47,12 +49,14 @@ const WalletConnect = () => {
     console.log(chainId);
   }, []);
 
+  //Log new chain ID on change
   web3?.provider?.on("chainChanged", (newId) => {
     const decId = parseInt(newId, 16);
     setChainId(`${decId}`);
     console.log(chainId);
   });
 
+  //Log new accounts on change
   web3?.provider?.on("accountsChanged", () => {
     window.ethereum
       .request({ method: "eth_accounts" })
@@ -62,7 +66,7 @@ const WalletConnect = () => {
             setConnectedAccount(accounts[0]);
           console.log("Currently connected accounts:", accounts);
         } else {
-          setIsAuthenticated(false)
+          setIsAuthenticated(false);
           setIsConnected(false);
           console.log("No accounts connected");
         }
@@ -117,7 +121,10 @@ const WalletConnect = () => {
   };
 
   return (
-    <div className={`w-screen h-screen bg-custom-bg bg-cover`}>
+    <div
+      className={`w-screen h-screen bg-cover bg-center`}
+      style={{ backgroundImage: `url(${"../../public/Landing2.png"})` }}
+    >
       <div className="header flex justify-between items-center mx-auto px-[5%] py-4 border-b-2 border-slate-400">
         <img src={Logo} alt="" className="" />
         <Button
@@ -187,7 +194,10 @@ const WalletConnect = () => {
           )}
           {chainId == "56" && isConnected && (
             <div className="py-5 w-[90%] px-4 mx-auto rounded-lg bg-slate-100">
-              <p className=" text-sm font-syne font-semibold my-3">Centrium wants you to sign this message with your Ethereum account:</p>
+              <p className=" text-sm font-syne font-semibold my-3">
+                Centrium wants you to sign this message with your Ethereum
+                account:
+              </p>
               <p className="text-center text-sm font-syne font-semibold">{`${trunc}.`}</p>
             </div>
           )}
