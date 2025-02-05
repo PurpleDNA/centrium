@@ -10,10 +10,9 @@ import CreateThread from "./pages/CreateThread.tsx";
 import CreateGuide from "./pages/CreateGuide.tsx";
 import ViewThread from "./pages/ViewThread.tsx";
 import ViewGuide from "./pages/ViewGuide.tsx";
-import AuthProvider  from "./Auth/AuthContext.tsx";
+import AuthProvider from "./Auth/AuthContext.tsx";
 import WalletConnect from "./Auth/WalletConnect.tsx";
 import ProtectedRoutes from "./ProtectedRoutes.tsx";
-
 
 const router = createBrowserRouter([
   {
@@ -53,8 +52,8 @@ const router = createBrowserRouter([
   },
   {
     path: "/walletconnect",
-    element: <WalletConnect/>
-  }
+    element: <WalletConnect />,
+  },
 ]);
 
 createRoot(document.getElementById("root")!).render(
