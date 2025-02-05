@@ -122,7 +122,7 @@ const WalletConnect = () => {
 
   return (
     <div
-      className={`w-screen h-screen bg-cover bg-center`}
+      className={`w-screen bg-cover bg-center`}
       style={{ backgroundImage: `url(${"../../public/Landing2.png"})` }}
     >
       <div className="header flex justify-between items-center mx-auto px-[5%] py-4 border-b-2 border-slate-400">
