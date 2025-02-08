@@ -13,6 +13,7 @@ import ViewGuide from "./pages/ViewGuide.tsx";
 import AuthProvider from "./Auth/AuthContext.tsx";
 import WalletConnect from "./Auth/WalletConnect.tsx";
 import ProtectedRoutes from "./ProtectedRoutes.tsx";
+import { Web3Provider } from "./Auth/Web3Provider.tsx";
 
 const router = createBrowserRouter([
   {
@@ -58,8 +59,10 @@ const router = createBrowserRouter([
 
 createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <AuthProvider>
-      <RouterProvider router={router} />
-    </AuthProvider>
+    <Web3Provider>
+      <AuthProvider>
+        <RouterProvider router={router} />
+      </AuthProvider>
+    </Web3Provider>
   </React.StrictMode>
 );
