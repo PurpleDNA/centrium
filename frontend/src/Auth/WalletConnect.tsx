@@ -5,8 +5,8 @@ import { ConnectKitButton } from "connectkit";
 import { useAuth } from "./AuthContext";
 import { useNavigate } from "react-router-dom";
 import Logo from "../assets/Logo.svg";
-import Centrium from "../assets/Centrum2.png";
-import BNB2 from "../assets/BNB.png";
+// import Centrium from "../assets/Centrum2.png";
+// import BNB2 from "../assets/BNB.png";
 import { useAccount } from "wagmi";
 import { useEffect } from "react";
 // import bnbVector from "../assets/Vector.png";
@@ -139,7 +139,7 @@ const WalletConnect = () => {
   }, [isConnected, navigate, setIsAuthenticated, isAuthenticated]);
   return (
     <div
-      className={`w-screen bg-cover bg-center`}
+      className={`w-screen h-screen bg-cover bg-center`}
       style={{ backgroundImage: `url(${"../../public/Landing2.png"})` }}
     >
       <div className="header flex justify-between items-center mx-auto px-[5%] py-4 border-b-2 border-slate-400">
@@ -188,10 +188,10 @@ const WalletConnect = () => {
           </ConnectKitButton.Custom>
         </div>
       </div>
-      <div className="footer flex justify-center items-center gap-6 w-full py-7">
+      {/* <div className="footer flex justify-center items-center gap-6 w-full py-7">
         <img src={Centrium} alt="" />
         <img src={BNB2} alt="" className="w-14" />
-      </div>
+      </div> */}
       {/* <div
         className={`w-screen h-screen fixed inset-0 items-center justify-center bg-slate-300/50 z-10 ${
           isModalOpen ? "flex" : "hidden"
