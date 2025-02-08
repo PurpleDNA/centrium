@@ -1,125 +1,142 @@
 // import React from 'react'
-import Web3 from "web3";
-import { useEffect, useState } from "react";
+// import Web3 from "web3";
+import { ConnectKitButton } from "connectkit";
+// import { useEffect} from "react";
 import { useAuth } from "./AuthContext";
 import { useNavigate } from "react-router-dom";
 import Logo from "../assets/Logo.svg";
 import Centrium from "../assets/Centrum2.png";
 import BNB2 from "../assets/BNB.png";
-import bnbVector from "../assets/Vector.png";
-import metafox from "../assets/metafox.png";
+import { useAccount } from "wagmi";
+import { useEffect } from "react";
+// import bnbVector from "../assets/Vector.png";
+// import metafox from "../assets/metafox.png";
 import { Button } from "@/components/ui/button";
-import { ArrowBigRightDash, Wallet, X } from "lucide-react";
-import { motion } from "motion/react";
+import { ArrowBigRightDash, Wallet } from "lucide-react";
+
+// import { motion } from "motion/react";
 const WalletConnect = () => {
-  const [web3, setWeb3] = useState<Web3 | null>(null);
-  const [chainId, setChainId] = useState<string | null>(null);
-  const [isConnected, setIsConnected] = useState(false);
-  const [accounts, setAccounts] = useState<string[] | null>(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [connectedAccount, setConnectedAccount] = useState<string | null>(null);
-  const trunc = `${connectedAccount?.slice(
-    0,
-    6
-  )}.......${connectedAccount?.slice(
-    connectedAccount?.length - 7,
-    connectedAccount?.length - 1
-  )} `;
-  const messageToSign = `Centrium wants you to sign this message with your Ethereum account: ${trunc}. Click 'Sign' or 'Approve' to prove that you are the account owner. This request will not trigger any blockchain transactions or cost any gas fees.`;
-  const { setIsAuthenticated } = useAuth();
+  const {
+    setIsAuthenticated,
+    isAuthenticated,
+  }: {
+    setIsAuthenticated: (value: boolean) => void;
+    isAuthenticated: boolean;
+  } = useAuth();
   const navigate = useNavigate();
+  // const [web3, setWeb3] = useState<Web3 | null>(null);
+  // const [chainId, setChainId] = useState<string | null>(null);
+  // const [isConnected, setIsConnected] = useState(false);
+  // const [accounts, setAccounts] = useState<string[] | null>(null);
+  // const [isModalOpen, setIsModalOpen] = useState(false);
+  // const [connectedAccount, setConnectedAccount] = useState<string | null>(null);
+  // const trunc = `${connectedAccount?.slice(
+  //   0,
+  //   6
+  // )}.......${connectedAccount?.slice(
+  //   connectedAccount?.length - 7,
+  //   connectedAccount?.length - 1
+  // )} `;
+  // const messageToSign = `Centrium wants you to sign this message with your Ethereum account: ${trunc}. Click 'Sign' or 'Approve' to prove that you are the account owner. This request will not trigger any blockchain transactions or cost any gas fees.`;
 
   //Set Web3 on load
-  useEffect(() => {
-    if (window.ethereum) {
-      setWeb3(new Web3(window.ethereum));
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (window.ethereum) {
+  //     setWeb3(new Web3(window.ethereum));
+  //   }
+  // }, []);
 
   //Grab and Set Chain ID
-  useEffect(() => {
-    async function getChainId() {
-      if (web3 === null) {
-        return;
-      }
+  // useEffect(() => {
+  //   async function getChainId() {
+  //     if (web3 === null) {
+  //       return;
+  //     }
 
-      setChainId(`${await web3.eth.getChainId()}`);
-    }
-    getChainId();
-    console.log(chainId);
-  }, []);
+  //     setChainId(`${await web3.eth.getChainId()}`);
+  //   }
+  //   getChainId();
+  //   console.log(chainId);
+  // }, []);
 
-  //Log new chain ID on change
-  web3?.provider?.on("chainChanged", (newId) => {
-    const decId = parseInt(newId, 16);
-    setChainId(`${decId}`);
-    console.log(chainId);
-  });
+  // Log new chain ID on change
+  // web3?.provider?.on("chainChanged", (newId) => {
+  //   const decId = parseInt(newId, 16);
+  //   setChainId(`${decId}`);
+  //   console.log(chainId);
+  // });
 
   //Log new accounts on change
-  web3?.provider?.on("accountsChanged", () => {
-    window.ethereum
-      .request({ method: "eth_accounts" })
-      .then((accounts: string | string[]) => {
-        if (accounts.length > 0) {
-          if (!accounts.includes(connectedAccount!))
-            setConnectedAccount(accounts[0]);
-          console.log("Currently connected accounts:", accounts);
-        } else {
-          setIsAuthenticated(false);
-          setIsConnected(false);
-          console.log("No accounts connected");
-        }
-      });
-  });
+  // web3?.provider?.on("accountsChanged", () => {
+  //   window.ethereum
+  //     .request({ method: "eth_accounts" })
+  //     .then((accounts: string | string[]) => {
+  //       if (accounts.length > 0) {
+  //         if (!accounts.includes(connectedAccount!))
+  //           setConnectedAccount(accounts[0]);
+  //         console.log("Currently connected accounts:", accounts);
+  //       } else {
+  //         setIsAuthenticated(false);
+  //         setIsConnected(false);
+  //         console.log("No accounts connected");
+  //       }
+  //     });
+  // });
 
-  async function switchToBSC() {
-    try {
-      await window.ethereum.request({
-        method: "wallet_switchEthereumChain",
-        params: [{ chainId: "0x38" }], // 0x38 is 56 in hexadecimal
-      });
-      console.log("Switched to BSC");
-      setChainId("56");
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (error: any) {
-      if (error.code === 4902) {
-        console.error("BSC network not found in Metamask");
-      } else {
-        console.error("Failed to switch network", error);
-      }
+  // async function switchToBSC() {
+  //   try {
+  //     await window.ethereum.request({
+  //       method: "wallet_switchEthereumChain",
+  //       params: [{ chainId: "0x38" }], // 0x38 is 56 in hexadecimal
+  //     });
+  //     console.log("Switched to BSC");
+  //     setChainId("56");
+  //     // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  //   } catch (error: any) {
+  //     if (error.code === 4902) {
+  //       console.error("BSC network not found in Metamask");
+  //     } else {
+  //       console.error("Failed to switch network", error);
+  //     }
+  //   }
+  // }
+
+  // async function requestAccounts() {
+  //   if (web3 === null) {
+  //     return;
+  //   }
+
+  //   await window.ethereum.request({ method: "eth_requestAccounts" });
+
+  //   const allAccounts = await web3.eth.getAccounts();
+  //   setAccounts(allAccounts);
+
+  //   setConnectedAccount(allAccounts[0]);
+  //   setIsConnected(true);
+  // }
+  // async function signMessage() {
+  //   if (web3 === null || accounts === null || messageToSign === null) {
+  //     return;
+  //   }
+
+  //   // // sign message with first MetaMask account
+  //   // await web3.eth.personal.sign(messageToSign, accounts[0], "");
+
+  //   setIsAuthenticated(true);
+  //   navigate("/");
+  // }
+
+  // const handleModal = () => {
+  //   setIsModalOpen(!isModalOpen);
+  // };
+
+  const { isConnected } = useAccount();
+  useEffect(() => {
+    if (isConnected) {
+      setIsAuthenticated(true);
+      navigate("/");
     }
-  }
-
-  async function requestAccounts() {
-    if (web3 === null) {
-      return;
-    }
-
-    await window.ethereum.request({ method: "eth_requestAccounts" });
-
-    const allAccounts = await web3.eth.getAccounts();
-    setAccounts(allAccounts);
-
-    setConnectedAccount(allAccounts[0]);
-    setIsConnected(true);
-  }
-  async function signMessage() {
-    if (web3 === null || accounts === null || messageToSign === null) {
-      return;
-    }
-
-    // sign message with first MetaMask account
-    await web3.eth.personal.sign(messageToSign, accounts[0], "");
-
-    setIsAuthenticated(true);
-    navigate("/");
-  }
-
-  const handleModal = () => {
-    setIsModalOpen(!isModalOpen);
-  };
-
+  }, [isConnected, navigate, setIsAuthenticated, isAuthenticated]);
   return (
     <div
       className={`w-screen bg-cover bg-center`}
@@ -127,14 +144,22 @@ const WalletConnect = () => {
     >
       <div className="header flex justify-between items-center mx-auto px-[5%] py-4 border-b-2 border-slate-400">
         <img src={Logo} alt="" className="" />
-        <Button
-          onClick={handleModal}
-          className="py-5 bg-[#3801A7] hover:bg-[#1e0846] modalbtn"
-        >
-          {" "}
-          Get Started
-          <ArrowBigRightDash className="ml-4" />
-        </Button>
+        <div>
+          <ConnectKitButton.Custom>
+            {({ show }) => {
+              return (
+                <Button
+                  onClick={show}
+                  className="py-5 bg-[#3801A7] hover:bg-[#1e0846]"
+                >
+                  {" "}
+                  Get Started
+                  <ArrowBigRightDash className="ml-4" />
+                </Button>
+              );
+            }}
+          </ConnectKitButton.Custom>
+        </div>
       </div>
       <div className="hero w-[65%] mx-auto flex flex-col gap-10 py-10">
         <h1 className="font-sofia font-semibold text-[#051314] text-7xl text-center">
@@ -146,18 +171,28 @@ const WalletConnect = () => {
           spaces. Whether you're new or experienced, Centrium makes navigating
           Web3 easy and engaging.
         </p>
-        <Button
-          onClick={handleModal}
-          className="py-5 bg-[#3801A7] hover:bg-[#1e0846] w-max px-8 mx-auto modalbtn"
-        >
-          Connect Wallet <Wallet className="ml-6" />
-        </Button>
+        <div className="flex justify-center items-center gap-4">
+          <ConnectKitButton.Custom>
+            {({ show }) => {
+              return (
+                <Button
+                  onClick={show}
+                  className="py-5 bg-[#3801A7] hover:bg-[#1e0846]"
+                >
+                  {" "}
+                  Connect Wallet
+                  <Wallet className="ml-4" />
+                </Button>
+              );
+            }}
+          </ConnectKitButton.Custom>
+        </div>
       </div>
       <div className="footer flex justify-center items-center gap-6 w-full py-7">
         <img src={Centrium} alt="" />
         <img src={BNB2} alt="" className="w-14" />
       </div>
-      <div
+      {/* <div
         className={`w-screen h-screen fixed inset-0 items-center justify-center bg-slate-300/50 z-10 ${
           isModalOpen ? "flex" : "hidden"
         }`}
@@ -213,7 +248,7 @@ const WalletConnect = () => {
             MetaMask must be installed
           </p>
         </motion.div>
-      </div>
+      </div> */}
     </div>
   );
 };
