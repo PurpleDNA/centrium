@@ -3,10 +3,11 @@
   "devDependencies": {
     "@nomicfoundation/hardhat-toolbox-viem": "^3.0.0",
     "@nomicfoundation/hardhat-web3-v4": "^1.0.0",
-    "hardhat": "^2.22.17",
-    "web3": "^4.16.0"
+    "hardhat": "^2.22.17"
   },
   "dependencies": {
-    "dotenv": "^16.4.7"
+    "dotenv": "^16.4.7",
+    "viem": "^2.22.22",
+    "web3": "^4.16.0"
   }
 }
