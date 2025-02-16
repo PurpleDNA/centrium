@@ -10,10 +10,10 @@ import CreateThread from "./pages/CreateThread.tsx";
 import CreateGuide from "./pages/CreateGuide.tsx";
 import ViewThread from "./pages/ViewThread.tsx";
 import ViewGuide from "./pages/ViewGuide.tsx";
-import AuthProvider  from "./Auth/AuthContext.tsx";
+import AuthProvider from "./Auth/AuthContext.tsx";
 import WalletConnect from "./Auth/WalletConnect.tsx";
 import ProtectedRoutes from "./ProtectedRoutes.tsx";
-
+import { Web3Provider } from "./Auth/Web3Provider.tsx";
 
 const router = createBrowserRouter([
   {
@@ -53,14 +53,16 @@ const router = createBrowserRouter([
   },
   {
     path: "/walletconnect",
-    element: <WalletConnect/>
-  }
+    element: <WalletConnect />,
+  },
 ]);
 
 createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <AuthProvider>
-      <RouterProvider router={router} />
-    </AuthProvider>
+    <Web3Provider>
+      <AuthProvider>
+        <RouterProvider router={router} />
+      </AuthProvider>
+    </Web3Provider>
   </React.StrictMode>
 );
