@@ -5,15 +5,16 @@ import {
   Search,
   Home,
   PenLine,
-  UsersRound,
+  // UsersRound,
 } from "lucide-react";
 import profpic from "../../assets/profpic.svg";
 import { Button } from "../ui/button";
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import jamMenu from "../../assets/jam_menu.svg";
 import { NavLink } from "react-router-dom";
 import { Context } from "@/Contexts/Context";
 import { ConnectKitButton } from "connectkit";
+import Landing from "../../assets/Landing.png";
 
 function Sidebar() {
   const useSafeContext = () => {
@@ -23,32 +24,33 @@ function Sidebar() {
     }
     return context;
   };
-  const { setIsModalOpen } = useSafeContext();
+  const { isNavOpen, setIsNavOpen, setIsModalOpen } = useSafeContext();
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const toggleModal = () => setIsModalOpen((prev: any) => !prev);
-  const [isOpen, setIsOpen] = useState(true);
+  const toggleNav = () => setIsNavOpen((prev: boolean) => !prev);
+  // const [isNavOpen, setisNavOpen] = useState<boolean | null>(null);
   const handleBar = () => {
-    setIsOpen(!isOpen);
+    toggleNav();
   };
   return (
     <div
-      className={` hidden md:flex flex-col gap-8 h-screen top-0 sticky left-0 pt-2 w-max border-r-2 border-r-slate-300 px-5 ${
-        isOpen ? "" : "items-center"
+      className={`bg-white hidden md:flex flex-col gap-8 h-screen top-0 sticky left-0 pt-2 border-r-2 border-r-slate-300 px-5 ${
+        isNavOpen ? "w-[20%]" : "w-max items-center"
       }`}
     >
       <div
         className={`flex justify-between items-center h-14 ${
-          isOpen ? "w-56" : "w-max"
+          isNavOpen ? "w-full" : "w-max"
         } `}
       >
         <div
           className={`w-[52px] h-[52px] rounded-full ${
-            isOpen ? "block" : "hidden"
+            isNavOpen ? "block" : "hidden"
           }`}
         >
           <img src={profpic} alt="profile picture" />
         </div>
-        {isOpen ? (
+        {isNavOpen ? (
           <img
             src={jamMenu}
             onClick={() => handleBar()}
@@ -75,23 +77,39 @@ function Sidebar() {
             }}
           >
             <item.icon />
-            <span className={`text-lg ${isOpen ? "block" : "hidden"} `}>
+            <span className={`text-lg ${isNavOpen ? "block" : "hidden"} `}>
               {item.title}
             </span>
           </NavLink>
         ))}
-        <ConnectKitButton />
+        {isNavOpen ? (
+          <ConnectKitButton />
+        ) : (
+          <ConnectKitButton.Custom>
+            {({ show }) => {
+              return (
+                <div onClick={show} className="w-max cursor-pointer px-1">
+                  <img
+                    src={Landing}
+                    alt=""
+                    className="w-10 h-10 rounded-full"
+                  />
+                </div>
+              );
+            }}
+          </ConnectKitButton.Custom>
+        )}
       </div>
       <div>
         <Button
           onClick={toggleModal}
           className={`bg-[#3800A7] mt-12 hover:bg-[#1e0846] py-6 ${
-            isOpen ? "w-44" : "w-max"
+            isNavOpen ? "w-44" : "w-max"
           }`}
         >
           {" "}
           <PenLine className="mr-4" />
-          {isOpen ? "Create Post" : ""}
+          {isNavOpen ? "Create Post" : ""}
         </Button>
       </div>
     </div>
@@ -109,11 +127,11 @@ const items = [
     url: "/search",
     icon: Search,
   },
-  {
-    title: "Community",
-    url: "/community",
-    icon: UsersRound,
-  },
+  // {
+  //   title: "Community",
+  //   url: "/community",
+  //   icon: UsersRound,
+  // },
   {
     title: "Notifications",
     url: "/notifications",

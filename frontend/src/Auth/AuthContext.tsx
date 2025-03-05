@@ -2,10 +2,11 @@
 import { createContext, FC, ReactNode, useContext, useState } from "react";
 
 //create Authentication Context
-const authContext = createContext<{
+interface contextProps {
   isAuthenticated: boolean;
   setIsAuthenticated: React.Dispatch<React.SetStateAction<boolean>>;
-}>({
+}
+const authContext = createContext<contextProps>({
   isAuthenticated: false,
   setIsAuthenticated: () => {},
 });
@@ -17,15 +18,11 @@ interface ContextProviderProps {
 
 const AuthProvider: FC<ContextProviderProps> = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const authValue: {
-    isAuthenticated: boolean;
-    setIsAuthenticated: React.Dispatch<React.SetStateAction<boolean>>;
-  } = {
-    isAuthenticated,
-    setIsAuthenticated,
-  };
+
   return (
-    <authContext.Provider value={authValue}>{children}</authContext.Provider>
+    <authContext.Provider value={{ isAuthenticated, setIsAuthenticated }}>
+      {children}
+    </authContext.Provider>
   );
 };
 
