@@ -2,11 +2,11 @@ import CommentSection from "@/components/ViewThread/CommentSection";
 import Content from "@/components/ViewThread/Content";
 import { ThumbsDown, ThumbsUp, Bookmark, BookOpenCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
-// import Similar from "@/components/ViewThread/Slider/Similar";
+import Similar from "@/components/ViewThread/Slider/Similar";
 
 const viewThread = () => {
   return (
-    <div className="flex">
+    <div className="flex w-full">
       <div className="w-2/3 flex flex-col gap-5 border-r-2 border-slate-300">
         <Content />
         <div className="flex gap-8 px-3">
@@ -29,16 +29,16 @@ const viewThread = () => {
           <p>Enjoyed this post? follow The RizzKing</p>
           <Button>Follow</Button>
         </div>
-        <div className="flex flex-col gap-5">
+        <div className="flex flex-col gap-5 w-full">
           <div className="flex-start px-3">
             <h2 className="font-semibold font-sofia">More like this</h2>
           </div>
-          {/* <div className="w-full px-3">
+          <div className="w-full px-3">
             <Similar />
-          </div> */}
+          </div>
         </div>
       </div>
-      <div className="w-1/3">
+      <div className="w-1/3 z-50">
         <CommentSection />
       </div>
     </div>
