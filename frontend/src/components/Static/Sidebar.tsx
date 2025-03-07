@@ -35,8 +35,9 @@ function Sidebar() {
   return (
     <div
       className={`bg-white hidden md:flex flex-col gap-8 h-screen top-0 sticky left-0 pt-2 border-r-2 border-r-slate-300 px-5 ${
-        isNavOpen ? "w-[20%]" : "w-max items-center"
-      }`}
+        isNavOpen ? "" : "items-center"
+      } transition-all duration-1000 overflow-hidden`}
+      style={{ width: isNavOpen ? "20%" : "max-content" }}
     >
       <div
         className={`flex justify-between items-center h-14 ${
@@ -108,7 +109,7 @@ function Sidebar() {
           }`}
         >
           {" "}
-          <PenLine className="mr-4" />
+          <PenLine className={`${isNavOpen ? "mr-4" : "mx-auto"}`} />
           {isNavOpen ? "Create Post" : ""}
         </Button>
       </div>

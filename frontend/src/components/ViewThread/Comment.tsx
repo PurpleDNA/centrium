@@ -30,16 +30,16 @@ const Comment = ({ likes, dislikes, replies }: Props) => {
       <div className="flex justify-between items-center">
         <div className="flex gap-5 items-center">
           <div className="flex items-center gap-1">
-            <ThumbsUp />
-            <span className="font-sofia text-lg">{likes}</span>
+            <ThumbsUp size={"20px"} />
+            <span className="font-sofia text-sm">{likes}</span>
           </div>
           <div className="flex items-center gap-1">
-            <ThumbsDown />
-            <span className="font-sofia text-lg">{dislikes}</span>
+            <ThumbsDown size={"20px"} />
+            <span className="font-sofia text-sm">{dislikes}</span>
           </div>
           <div className="flex items-center gap-1">
-            <MessageCircle />
-            <span className="font-sofia text-lg">{replies}</span>
+            <MessageCircle size={"20px"} />
+            <span className="font-sofia text-sm">{replies}</span>
           </div>
         </div>
         <div className="font-semibold">Reply</div>

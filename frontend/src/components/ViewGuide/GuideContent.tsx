@@ -1,10 +1,10 @@
 import profpic from "../../assets/rizzking.svg";
 import { Dot } from "lucide-react";
 function GuideContent() {
-    const guideTitle = JSON.parse(localStorage.getItem("guideTitle") ?? "");
-    const guideDesc = JSON.parse(localStorage.getItem("guideDesc") ?? "");
-    const safesteps = JSON.parse(localStorage.getItem("safesteps") ?? "");
-    const guideTags = JSON.parse(localStorage.getItem("guideTags") ?? "");
+  const guideTitle = JSON.parse(localStorage.getItem("guideTitle") ?? "");
+  const guideDesc = JSON.parse(localStorage.getItem("guideDesc") ?? "");
+  const safesteps = JSON.parse(localStorage.getItem("safesteps") ?? "");
+  const guideTags = JSON.parse(localStorage.getItem("guideTags") ?? "");
 
   return (
     <div className="w-full flex flex-col gap-7 pb-3 border-b border-slate-300">
@@ -33,7 +33,7 @@ function GuideContent() {
         </div>
       </div>
       <div>
-        {safesteps.map((safestep:[number,string], i:number) => (
+        {safesteps.map((safestep: [number, string], i: number) => (
           <div
             key={i}
             className="px-4 pt-1 pb-4 w-4/5 flex flex-col gap-3 mx-auto border border-[#3800A7] rounded-md mb-5"
@@ -54,7 +54,7 @@ function GuideContent() {
       </div>
       <div className="tags flex gap-1 md:gap-3 px-5">
         {guideTags.map((tag: string) => (
-          <span className="rounded-xl font-sofia text-xs md:text-sm bg-[#7d52d3] px-2 md:px-3 py-1 md:py-2 inline w-auto text-white">
+          <span className="rounded-md font-sofia text-xs bg-[#ECECEC] p-1 inline w-auto text-black">
             {tag}
           </span>
         ))}

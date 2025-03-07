@@ -15,6 +15,8 @@ import WalletConnect from "./Auth/WalletConnect.tsx";
 import ProtectedRoutes from "./ProtectedRoutes.tsx";
 import { Web3Provider } from "./Auth/Web3Provider.tsx";
 import { ContextProvider } from "./Contexts/Context.tsx";
+import Notifications from "./pages/Notifications.tsx";
+import Profile from "./pages/Profile.tsx";
 
 const router = createBrowserRouter([
   {
@@ -49,6 +51,14 @@ const router = createBrowserRouter([
       {
         path: "guide",
         element: <ViewGuide />,
+      },
+      {
+        path: "notifications",
+        element: <Notifications />,
+      },
+      {
+        path: "profile",
+        element: <Profile />,
       },
     ],
   },
