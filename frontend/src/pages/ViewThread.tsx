@@ -11,18 +11,20 @@ const viewThread = () => {
         <Content />
         <div className="flex gap-8 px-3">
           <div className="flex gap-2 items-center">
-            <BookOpenCheck />{" "}
-            <span className="text-lg font-sofia">45 Read</span>
+            <BookOpenCheck size={"20px"} />{" "}
+            <span className="text-sm font-sofia">45 Read</span>
           </div>
           <div className="flex gap-2 items-center">
-            <ThumbsUp /> <span className="text-lg font-sofia">24 Likes</span>
+            <ThumbsUp size={"20px"} />{" "}
+            <span className="text-sm font-sofia">24 Likes</span>
           </div>
           <div className="flex gap-2 items-center">
-            <ThumbsDown />{" "}
-            <span className="text-lg font-sofia">8 Dislikes</span>
+            <ThumbsDown size={"20px"} />{" "}
+            <span className="text-sm font-sofia">8 Dislikes</span>
           </div>
           <div className="flex gap-2 items-center">
-            <Bookmark /> <span className="text-lg font-sofia">18 Saves</span>
+            <Bookmark size={"20px"} />{" "}
+            <span className="text-sm font-sofia">18 Saves</span>
           </div>
         </div>
         <div className="w-full flex gap-4 justify-center items-center">
