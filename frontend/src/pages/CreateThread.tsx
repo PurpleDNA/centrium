@@ -9,7 +9,7 @@ function CreateThread() {
   };
   return (
     <div className="flex w-full">
-      <div className="w-3/4">
+      <div className="lg:w-3/4 w-full">
         <div className="w-full pt-10 border-b-2 border-slate-300 sticky top-0 bg-white">
           <div className="flex gap-16 mx-auto font-sofia w-max font-semibold">
             <span
@@ -35,7 +35,7 @@ function CreateThread() {
           {activePage === "preview" && <PreviewThread />}
         </div>
       </div>
-      <div className="w-1/3">
+      <div className="w-1/3 hidden lg:block">
         <Publish />
       </div>
     </div>

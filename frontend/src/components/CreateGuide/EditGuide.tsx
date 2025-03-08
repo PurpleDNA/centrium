@@ -13,10 +13,17 @@ function EditThread() {
     }
     return context;
   };
-  const { guideTitle, setGuideTitle, steps ,setSteps, guideDesc,setGuideDesc} = useSafeContext();
+  const {
+    guideTitle,
+    setGuideTitle,
+    steps,
+    setSteps,
+    guideDesc,
+    setGuideDesc,
+  } = useSafeContext();
   const addStep = () => {
     setSteps((prev) => {
-      return [...prev,[prev.length + 1, ""]];
+      return [...prev, [prev.length + 1, ""]];
     });
   };
   return (
@@ -27,7 +34,7 @@ function EditThread() {
       className="w-full relative"
     >
       <textarea
-        className="text-5xl font-semibold w-full px-6 mb-4"
+        className="md:text-4xl text-2xl font-semibold w-full px-6 mb-4"
         placeholder="Title..."
         rows={3}
         value={guideTitle}

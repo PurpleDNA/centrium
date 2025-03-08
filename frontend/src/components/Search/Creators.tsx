@@ -8,8 +8,8 @@ const Creators = () => {
   const handleFollowing = (number: number) => {
     if (!isFollowing.includes(number)) {
       setIsFollowing((prev) => [...prev, number]);
-    }else {
-        setIsFollowing((prev) => prev.filter((value) => value !== number))
+    } else {
+      setIsFollowing((prev) => prev.filter((value) => value !== number));
     }
   };
   return (
@@ -21,7 +21,7 @@ const Creators = () => {
             <img src={creator.profpic} alt="" />
             <div className="flex flex-col justify-start">
               <h1 className="font-sofia text-base">{creator.username}</h1>
-              <p>{creator.bio}</p>
+              <p className="hidden lg:block">{creator.bio}</p>
             </div>
           </div>
           <Button onClick={() => handleFollowing(i)}>

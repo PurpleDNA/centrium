@@ -7,7 +7,7 @@ import Similar from "@/components/ViewThread/Slider/Similar";
 const viewThread = () => {
   return (
     <div className="flex w-full">
-      <div className="w-2/3 flex flex-col gap-5 border-r-2 border-slate-300">
+      <div className="w-full lg:w-2/3 flex flex-col gap-5 border-r-2 border-slate-300">
         <Content />
         <div className="flex gap-8 px-3">
           <div className="flex gap-2 items-center">
@@ -40,7 +40,7 @@ const viewThread = () => {
           </div>
         </div>
       </div>
-      <div className="w-1/3 z-50">
+      <div className="w-1/3 z-50 hidden lg:block">
         <CommentSection />
       </div>
     </div>

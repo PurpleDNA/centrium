@@ -6,6 +6,8 @@ import Sidebar from "./components/Static/Sidebar";
 // import { ContextProvider } from "./Contexts/Context";
 import CreatePostModal from "./components/modals/CreatePostModal";
 import { Context } from "./Contexts/Context";
+import MobileNav from "./components/Static/MobileNav";
+import MobileConnect from "./components/Static/MobileConnect";
 function App() {
   // const ModalOpen = useModal()
   const useSafeContext = () => {
@@ -25,10 +27,14 @@ function App() {
             isNavOpen ? "w-[80%]" : "w-full"
           } h-screen overflow-y-scroll`}
         >
-          <Outlet />
+          <MobileConnect />
+          <div className="mt-8 md:mt-0">
+            <Outlet />
+          </div>
         </div>
       </div>
       <CreatePostModal />
+      <MobileNav />
     </div>
   );
 }

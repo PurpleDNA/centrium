@@ -6,10 +6,10 @@ import PublishGuide from "@/components/CreateGuide/PublishGuide";
 import { useState } from "react";
 
 function CreateGuide() {
-    const [activePage, setActivePage] = useState("editing");
-    const handleNavigation = (page: string) => {
-      setActivePage(page);
-    };
+  const [activePage, setActivePage] = useState("editing");
+  const handleNavigation = (page: string) => {
+    setActivePage(page);
+  };
   return (
     <div className="flex w-full">
       <div className="lg:w-3/4 w-full">
@@ -38,10 +38,11 @@ function CreateGuide() {
           {activePage === "preview" && <PreviewGuide />}
         </div>
       </div>
-      <div className="w-1/3">
+      <div className="w-1/3 hidden lg:block">
         <PublishGuide />
       </div>
     </div>
-)}
+  );
+}
 
-export default CreateGuide
+export default CreateGuide;
