@@ -16,8 +16,8 @@ function Notifications() {
   return (
     <div className="flex">
       <div className="w-full lg:w-3/4">
-        <div className="w-full pt-10 border-b-2 border-slate-300 sticky top-0 bg-white">
-          <div className="flex gap-16 mx-auto font-sofia w-max font-semibold">
+        <div className="w-full pt-4 md:pt-10 border-b-2 border-slate-300 sticky top-8 md:top-0 bg-white">
+          <div className="flex justify-between px-7 md:px-24 font-sofia w-full font-semibold">
             <span
               onClick={() => handleNavigation("general")}
               className={`cursor-pointer ${
@@ -158,14 +158,14 @@ const feed:
       postType: string;
     }[]
   | [] = [
-  {
-    username: "The Rizz King",
-    date: "31 jul 2024",
-    title: "Navigating writing and reading with Inkworth",
-    demo: "As a writer, you can share your literary works with a vibrant community, receiving feedback and with a vibrant community, receiving feedback and with a vibrant community, receiving feedback and with a vibrant community",
-    duration: 4,
-    postType: guide,
-  },
+  // {
+  //   username: "The Rizz King",
+  //   date: "31 jul 2024",
+  //   title: "Navigating writing and reading with Inkworth",
+  //   demo: "As a writer, you can share your literary works with a vibrant community, receiving feedback and with a vibrant community, receiving feedback and with a vibrant community, receiving feedback and with a vibrant community",
+  //   duration: 4,
+  //   postType: guide,
+  // },
   // {
   //   username: "PurpleDNA",
   //   date: "31 jul 2024",

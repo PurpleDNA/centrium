@@ -8,10 +8,12 @@ function GuideContent() {
 
   return (
     <div className="w-full flex flex-col gap-7 pb-3 border-b border-slate-300">
-      <h1 className="font-semibold text-5xl mb-4 px-3 break-words font-sofia">
-        {guideTitle}
-      </h1>
-      <p className="px-3">{guideDesc}</p>
+      <div>
+        <h1 className="font-semibold text-2xl pt-1 md:text-4xl mb-4 px-3 break-words font-sofia">
+          {guideTitle}
+        </h1>
+        <p className="px-3">{guideDesc}</p>
+      </div>
       <div className="flex gap-3 px-3 items-center pb-7 border-b-2 border-slate-300">
         <div>
           <img src={profpic} alt="" />

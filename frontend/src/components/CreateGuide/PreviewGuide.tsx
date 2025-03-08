@@ -16,7 +16,7 @@ function PreviewThread() {
   const safesteps = steps.map((step) => [step[0], DOMpurify.sanitize(step[1])]);
   return (
     <div className="w-full flex flex-col gap-7">
-      <h1 className="font-semibold text-5xl mb-4 px-3 break-words font-sofia">
+      <h1 className="font-semibold md:text-4xl text-2xl mb-4 px-3 break-words font-sofia">
         {guideTitle}
       </h1>
       <p className="px-3">{guideDesc}</p>

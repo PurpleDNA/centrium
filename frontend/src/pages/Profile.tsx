@@ -22,9 +22,9 @@ function Profile() {
   const { isEditProfileOpen } = useSafeContext();
   return (
     <div className="flex w-full">
-      <div className="w-2/3 flex flex-col gap-5">
-        <div className="w-full pt-10 border-b-2 border-slate-300 sticky top-0 bg-white">
-          <div className="flex justify-between mx-auto font-sofia w-ful font-semibold px-10">
+      <div className="w-full lg:w-2/3 flex flex-col gap-5">
+        <div className="w-full pt-4 md:pt-10 border-b-2 border-slate-300 sticky top-8 md:top-0 bg-white">
+          <div className="flex justify-between mx-auto font-sofia w-full font-semibold px-4 md:px-10">
             <span
               onClick={() => handleNavigation("threads")}
               className={`cursor-pointer ${
@@ -66,7 +66,7 @@ function Profile() {
           {activePage === "drafts" && <Guides />}
         </div>
       </div>
-      <div className={`w-1/3`}>
+      <div className={`w-1/3 hidden lg:block`}>
         <ProfileCard />
       </div>
       {isEditProfileOpen ? <EditProfileModal /> : null}
