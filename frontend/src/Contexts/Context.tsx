@@ -6,6 +6,8 @@ interface ContextType {
   setIsNavOpen: React.Dispatch<React.SetStateAction<boolean>>;
   isEditProfileOpen: boolean;
   setIsEditProfileOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  isPublishOpen: boolean;
+  setIsPublishOpen: React.Dispatch<React.SetStateAction<boolean>>;
   post: string;
   setPost: React.Dispatch<React.SetStateAction<string>>;
   title: string;
@@ -29,6 +31,7 @@ export const ContextProvider: FC<ContextProviderProps> = ({ children }) => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [isNavOpen, setIsNavOpen] = useState<boolean>(false);
   const [isEditProfileOpen, setIsEditProfileOpen] = useState<boolean>(false);
+  const [isPublishOpen, setIsPublishOpen] = useState<boolean>(false);
   const [post, setPost] = useState("");
   const [title, setTitle] = useState("");
   const [guideTitle, setGuideTitle] = useState("");
@@ -42,6 +45,8 @@ export const ContextProvider: FC<ContextProviderProps> = ({ children }) => {
     setIsNavOpen,
     isEditProfileOpen,
     setIsEditProfileOpen,
+    isPublishOpen,
+    setIsPublishOpen,
     post,
     setPost,
     title,

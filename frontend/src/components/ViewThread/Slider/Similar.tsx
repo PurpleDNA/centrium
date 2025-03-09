@@ -83,7 +83,7 @@ const feed: {
   {
     username: "The Rizz King",
     date: "31 jul 2024",
-    title: "Navigating writing and reading with Inkworth",
+    title: "The Scalability Challenge in Web3 and How to Solve It",
     demo: "As a writer, you can share your literary works with a vibrant community, receiving feedback and",
     duration: 4,
     postType: guide,
@@ -91,7 +91,7 @@ const feed: {
   {
     username: "The Rizz King",
     date: "31 jul 2024",
-    title: "Navigating writing and reading with Inkworth",
+    title: "The Scalability Challenge in Web3 and How to Solve It",
     demo: "As a writer, you can share your literary works with a vibrant community, receiving feedback and",
     duration: 4,
     postType: thread,
@@ -99,7 +99,7 @@ const feed: {
   {
     username: "The Rizz King",
     date: "31 jul 2024",
-    title: "Navigating writing and reading with Inkworth",
+    title: "The Scalability Challenge in Web3 and How to Solve It",
     demo: "As a writer, you can share your literary works with a vibrant community, receiving feedback and",
     duration: 4,
     postType: guide,
