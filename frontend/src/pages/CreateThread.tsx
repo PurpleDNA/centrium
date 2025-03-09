@@ -1,7 +1,7 @@
 import EditThread from "@/components/CreateThread/EditThread";
 import PreviewThread from "@/components/CreateThread/PreviewThread";
 import Publish from "@/components/CreateThread/Publish";
-import MobilePublish from "@/components/modals/MobilePublish";
+import MobilePublish from "@/components/CreateThread/MobilePublish";
 import { Button } from "@/components/ui/button";
 import { useContext, useState } from "react";
 import { Context } from "../Contexts/Context";
