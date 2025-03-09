@@ -28,7 +28,7 @@ function App() {
           } h-screen overflow-y-scroll`}
         >
           <MobileConnect />
-          <div className="mt-8 md:mt-0">
+          <div className="mt-8 md:mt-0 mb-8 md:mb-0">
             <Outlet />
           </div>
         </div>

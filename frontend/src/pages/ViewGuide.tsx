@@ -37,7 +37,7 @@ const ViewGuide = () => {
           <div className="flex-start px-3">
             <h2 className="font-semibold font-sofia">More like this</h2>
           </div>
-          <div className="w-full px-3">
+          <div className="w-full px-3 mb-10 md:mb-0">
             <Similar />
           </div>
         </div>
