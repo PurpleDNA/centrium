@@ -161,7 +161,7 @@ const WalletConnect = () => {
           </ConnectKitButton.Custom>
         </div>
       </div>
-      <div className="hero w-[90%] lg:w-[65%] mx-auto flex flex-col gap-10 py-10">
+      <div className="hero w-[90%] lg:w-[65%] mx-auto flex flex-col gap-10 py-10 mt-20 lg:mt-0">
         <h1 className="font-sofia font-semibold text-[#051314] text-2xl lg:text-7xl text-center">
           Discover, Learn, and Grow in Web3 – All in One Place
         </h1>
