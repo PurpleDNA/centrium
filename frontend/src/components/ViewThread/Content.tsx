@@ -7,7 +7,9 @@ function Content() {
 
   return (
     <div className="w-full flex flex-col gap-5 pb-3 border-b-2 border-slate-300">
-      <h1 className="font-semibold text-5xl mb-4 px-3 break-words">{title}</h1>
+      <h1 className="font-semibold text-2xl pt-1 md:text-4xl md:mb-4 px-3 break-words">
+        {title}
+      </h1>
       <div className="flex gap-3 px-3 items-center pb-4 border-b-2 border-slate-300">
         <div>
           <img src={profpic} alt="" />
@@ -38,7 +40,7 @@ function Content() {
       />
       <div className="tags flex gap-1 md:gap-3 px-5">
         {tags.map((tag: string) => (
-          <span className="rounded-xl font-sofia text-xs md:text-sm bg-[#7d52d3] px-2 md:px-3 py-1 md:py-2 inline w-auto text-white">
+          <span className="rounded-md font-sofia text-xs bg-[#ECECEC] p-1 inline w-auto text-black">
             {tag}
           </span>
         ))}
