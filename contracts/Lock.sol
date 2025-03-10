@@ -8,31 +8,31 @@ contract Lock {
     uint public unlockTime;
     address payable public owner;
 
-     struct Profile {
+    struct Profile {
         uint256 age; // weight is accumulated by delegation
         bool online; // if true, that person already voted
         address identity;
         string name; // index of the voted proposal
     }
 
-
     // This declares a state variable that
     // stores a `Person` struct for each possible address.
     mapping(address => Profile) public profiles;
 
-
-     function create_profile(string memory name, uint256 age) public returns (string memory) {
-            profiles[owner].identity = msg.sender;  //can save
-            profiles[owner].age = age;
-            profiles[owner].name = name;
-            profiles[owner].online = true;
-            documentCount += 1;
-            emit Stored();
-            return name;
+    function create_profile(
+        string memory name,
+        uint256 age
+    ) public returns (string memory) {
+        profiles[owner].identity = msg.sender; //can save
+        profiles[owner].age = age;
+        profiles[owner].name = name;
+        profiles[owner].online = true;
+        documentCount += 1;
+        emit Stored();
+        return name;
     }
 
-    event Stored(
-    );
+    event Stored();
 
     struct Document {
         address ownerAddress;
@@ -40,8 +40,8 @@ contract Lock {
         uint256 timestamp;
         uint256 modified;
     }
-    mapping (bytes32 => Document) public documents; //every file hashed will belong to a address using the data type 32 bytes, size of a sha256 hash. 
-    mapping (uint => bytes32) public hashList; //every file hashed will belong to a address using the data type 32 bytes, size of a sha256 hash. 
+    mapping(bytes32 => Document) public documents; //every file hashed will belong to a address using the data type 32 bytes, size of a sha256 hash.
+    mapping(uint => bytes32) public hashList; //every file hashed will belong to a address using the data type 32 bytes, size of a sha256 hash.
     uint public documentCount = 0;
 
     function amIMaster() public view returns (string memory) {
@@ -66,21 +66,30 @@ contract Lock {
         return keccak256(abi.encodePacked(file));
     }
 
-    function changeOwner(string memory file,address newOwner) public returns (bool) {
+    function changeOwner(
+        string memory file,
+        address newOwner
+    ) public returns (bool) {
         if (amIOwner(file)) {
-             bytes32 fileHash = keccak256(abi.encodePacked(file));
-             documents[fileHash].ownerAddress = newOwner;
-             documents[fileHash].modified = block.timestamp;
-             emit Stored();
-             return true;
+            bytes32 fileHash = keccak256(abi.encodePacked(file));
+            documents[fileHash].ownerAddress = newOwner;
+            documents[fileHash].modified = block.timestamp;
+            emit Stored();
+            return true;
         }
         return false;
     }
 
-    function store(string memory file,string memory content) public returns (bytes32) {
+    function store(
+        string memory file,
+        string memory content
+    ) public returns (bytes32) {
         bytes32 fileHash = keccak256(abi.encodePacked(file));
-        if (documents[fileHash].ownerAddress == 0x0000000000000000000000000000000000000000) {
-            documents[fileHash].ownerAddress = msg.sender;  //can save
+        if (
+            documents[fileHash].ownerAddress ==
+            0x0000000000000000000000000000000000000000
+        ) {
+            documents[fileHash].ownerAddress = msg.sender; //can save
             documents[fileHash].content = content;
             documents[fileHash].timestamp = block.timestamp;
             hashList[documentCount] = fileHash;
@@ -94,14 +103,24 @@ contract Lock {
         return documentCount;
     }
 
-    function getDocument(uint index) public view returns (bytes32 fileHash, address ownerAddress, string memory content, uint256 timestamp) {
+    function getDocument(
+        uint index
+    )
+        public
+        view
+        returns (
+            bytes32 fileHash,
+            address ownerAddress,
+            string memory content,
+            uint256 timestamp
+        )
+    {
         require(index > documentCount);
 
         fileHash = hashList[index];
         ownerAddress = documents[fileHash].ownerAddress;
         content = documents[fileHash].content;
         timestamp = documents[fileHash].timestamp;
-
     }
 
     function hasOwner(string memory file) public view returns (address) {
