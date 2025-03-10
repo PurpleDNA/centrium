@@ -2,13 +2,13 @@ import { WagmiProvider, createConfig, http } from "wagmi";
 import { bsc, mainnet } from "wagmi/chains";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ConnectKitProvider, getDefaultConfig } from "connectkit";
-import { injected, metaMask } from "wagmi/connectors";
+import { injected } from "wagmi/connectors";
 
 const config = createConfig(
   getDefaultConfig({
     // Your dApps chains
     chains: [bsc, mainnet],
-    connectors: [injected(), metaMask()],
+    connectors: [injected()],
     // multiInjectedProviderDiscovery: false,
     transports: {
       // RPC URL for each chain
