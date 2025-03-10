@@ -1,13 +1,13 @@
 // import React from "react";
 import { useContext, useState } from "react";
 import { Button } from "../ui/button";
-import { Plus, Minus } from "lucide-react";
+import { Plus } from "lucide-react";
 import { Context } from "@/Contexts/Context";
 import DOMpurify from "dompurify";
+import { X } from "lucide-react";
 
-function Publish() {
+function MobileGuidePublish() {
   const [selected, setSelected] = useState<string[]>([]);
-  const [visible, setVisible] = useState(false);
   const useSafeContext = () => {
     const context = useContext(Context);
     if (!context) {
@@ -15,13 +15,15 @@ function Publish() {
     }
     return context;
   };
-  const { post, title } = useSafeContext();
-  const safepost = DOMpurify.sanitize(post);
+  const { guideTitle, guideDesc, steps, setIsPublishGuideOpen } =
+    useSafeContext();
+  const safesteps = steps.map((step) => [step[0], DOMpurify.sanitize(step[1])]);
 
   const publish = () => {
-    localStorage.setItem("safepost", JSON.stringify(safepost));
-    localStorage.setItem("title", JSON.stringify(title));
-    localStorage.setItem("tags", JSON.stringify(selected));
+    localStorage.setItem("safesteps", JSON.stringify(safesteps));
+    localStorage.setItem("guideTitle", JSON.stringify(guideTitle));
+    localStorage.setItem("guideTags", JSON.stringify(selected));
+    localStorage.setItem("guideDesc", JSON.stringify(guideDesc));
   };
 
   const handleSelected = (tag: string) => {
@@ -31,17 +33,14 @@ function Publish() {
       setSelected((prev) => [...prev, tag]);
     }
   };
-  const handleVisible = () => {
-    setVisible(!visible);
-  };
   return (
-    <div className="hidden border-l-2 gap-5 py-5 border-l-slate-300 lg:flex flex-col scrollbar-hide sticky top-0 h-screen overflow-y-scroll px-3">
-      <div className="w-full">
-        <div>
-          <div
-            onClick={() => handleVisible()}
-            className="w-full flex gap-3 justify-between pr-1 py-1 border-2 border-gray-200 hover:border-greenn cursor-pointer items-center rounded-md mb-2 bg-slate-100 hover:bg-slate-400"
-          >
+    <div className="w-screen h-screen bg-[#E5E5E5] fixed flex flex-col justify-center inset-0 top-0 left-0 z-50 bg-opacity-90 backdrop-blur-sm p-3">
+      <div className="bg-white flex flex-col px-5 p-2">
+        <div onClick={() => setIsPublishGuideOpen(false)}>
+          <X className="ml-auto w-5 mb-4" />
+        </div>
+        <div className="w-full">
+          <div className="w-full flex gap-3 justify-between pr-1 py-1 border-2 border-gray-200 hover:border-greenn cursor-pointer items-center rounded-md mb-2 bg-slate-100 hover:bg-slate-400">
             <div className="overflow-x-hidden flex gap-1 scrollbar-hide ">
               {selected.length === 0 ? (
                 <span className="ml-6 text-sm">Add atleast 3 tags</span>
@@ -58,25 +57,15 @@ function Publish() {
               )}
             </div>
             <div className="">
-              {visible ? (
-                <Minus
-                  // onClick={() => handleSelected("clear")}
-                  className="w-6 h-6 border rounded-full border-dblue p-1 transition-all duration-300 ease-in-out"
-                />
-              ) : (
-                <Plus
-                  // onClick={() => handleSelected("clear")}
-                  className="w-6 h-6 border rounded-full border-dblue p-1 transition-all duration-300 ease-in-out"
-                />
-              )}
+              <Plus
+                // onClick={() => handleSelected("clear")}
+                className="w-6 h-6 border rounded-full border-dblue p-1 transition-all duration-300 ease-in-out"
+              />
             </div>
           </div>
           <div
-            className={`w-full border-2 border-slate-200 hover:border-greenn  flex-col gap-2 p-2 ${
-              visible ? "flex " : "hidden"
-            }`}
+            className={`w-full bg-[#ECECEC] border-2 border-slate-200 hover:border-greenn  flex-col gap-2 p-2 flex mb-3`}
           >
-            <h3 className="font-semibold">Top tags this week</h3>
             <div className="grid grid-cols-3 text-[12px] gap-1">
               {tags.map((tag, i) =>
                 selected.includes(tag) ? (
@@ -101,14 +90,14 @@ function Publish() {
           </div>
         </div>
       </div>
-      <div>
+      <div className="flex flex-row-reverse justify-around mt-5">
         <Button
           onClick={publish}
-          className="w-full bg-[#3800A7] hover:bg-[#1e0846] mb-2"
+          className="w-1/3 bg-[#3800A7] hover:bg-[#1e0846]"
         >
           Publish
         </Button>
-        <Button className="w-full bg-white border border-[#3800A7] text-black hover:bg-[#1e0846] hover:text-white">
+        <Button className="w-1/3 bg-white border border-[#3800A7] text-black hover:bg-[#1e0846] hover:text-white">
           Save to drafts
         </Button>
       </div>
@@ -143,4 +132,4 @@ const tags = [
   "Blockchain",
 ];
 
-export default Publish;
+export default MobileGuidePublish;
