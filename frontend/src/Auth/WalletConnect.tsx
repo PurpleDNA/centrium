@@ -143,29 +143,29 @@ const WalletConnect = () => {
       style={{ backgroundImage: `url(${"/Landing2.png"})` }}
     >
       <div className="header flex justify-between items-center mx-auto px-[5%] py-4 border-b-2 border-slate-400">
-        <img src={Logo} alt="" className="" />
+        <img src={Logo} alt="" className="w-24 lg:w-40" />
         <div>
           <ConnectKitButton.Custom>
             {({ show }) => {
               return (
                 <Button
                   onClick={show}
-                  className="py-5 bg-[#3801A7] hover:bg-[#1e0846]"
+                  className="py-2 lg:py-5 text-xs lg:text-base bg-[#3801A7] hover:bg-[#1e0846]"
                 >
                   {" "}
                   Get Started
-                  <ArrowBigRightDash className="ml-4" />
+                  <ArrowBigRightDash className="ml-1" />
                 </Button>
               );
             }}
           </ConnectKitButton.Custom>
         </div>
       </div>
-      <div className="hero w-[65%] mx-auto flex flex-col gap-10 py-10">
-        <h1 className="font-sofia font-semibold text-[#051314] text-7xl text-center">
+      <div className="hero w-[90%] lg:w-[65%] mx-auto flex flex-col gap-10 py-10">
+        <h1 className="font-sofia font-semibold text-[#051314] text-2xl lg:text-7xl text-center">
           Discover, Learn, and Grow in Web3 – All in One Place
         </h1>
-        <p className="font-poppins text-lg text-center">
+        <p className="font-poppins text-sm lg:text-lg text-center">
           Centrium bridges the gap in Web3 content discovery by providing
           structured threads, step-by-step guides, and tailored community
           spaces. Whether you're new or experienced, Centrium makes navigating
