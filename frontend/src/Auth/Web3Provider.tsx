@@ -1,5 +1,5 @@
 import { WagmiProvider, createConfig, http } from "wagmi";
-import { bsc, mainnet } from "wagmi/chains";
+import { bscTestnet } from "wagmi/chains";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ConnectKitProvider, getDefaultConfig } from "connectkit";
 import { injected } from "wagmi/connectors";
@@ -7,12 +7,12 @@ import { injected } from "wagmi/connectors";
 const config = createConfig(
   getDefaultConfig({
     // Your dApps chains
-    chains: [bsc, mainnet],
+    chains: [bscTestnet],
     connectors: [injected()],
     // multiInjectedProviderDiscovery: false,
     transports: {
       // RPC URL for each chain
-      [bsc.id]: http(`https://binance.llamarpc.com}`),
+      [bscTestnet.id]: http(`https://data-seed-prebsc-2-s1.bnbchain.org:8545`),
     },
 
     // Required API Keys

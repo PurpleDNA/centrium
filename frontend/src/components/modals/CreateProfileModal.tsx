@@ -1,6 +1,7 @@
 // import React from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { Button } from "../ui/button";
+import { useCentriumHooks } from "../../AppServices/CentriumHooks";
 type Inputs = {
   username: string;
   age: number;
@@ -12,8 +13,12 @@ function CreateProfileModal() {
     handleSubmit,
     formState: { errors },
   } = useForm<Inputs>();
-  const onSubmit: SubmitHandler<Inputs> = (data) => console.log(data);
 
+  const { createProfile } = useCentriumHooks();
+  const onSubmit: SubmitHandler<Inputs> = (data) => {
+    createProfile(data.username, data.age);
+    console.log(data);
+  };
   return (
     <div
       className={`w-screen h-screen bg-[#222226] fixed inset-0 top-0 left-0 z-50 flex justify-center items-center bg-opacity-80 backdrop-blur-sm`}
