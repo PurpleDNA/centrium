@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { PenLine } from "lucide-react";
 import { useContext, useState } from "react";
 import { Context } from "../Contexts/Context";
+import CreateProfileModal from "@/components/modals/CreateProfileModal";
 
 function Home() {
   const [activePage, setActivePage] = useState("following");
@@ -62,6 +63,7 @@ function Home() {
       <div className="w-1/3 hidden lg:block">
         <Connect />
       </div>
+      <CreateProfileModal />
       <Button
         onClick={toggleModal}
         className={`bg-[#3800A7] mt-12 hover:bg-[#1e0846] py-6 w-max md:hidden fixed bottom-16 right-8`}
