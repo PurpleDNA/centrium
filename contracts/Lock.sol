@@ -17,9 +17,7 @@ contract Lock {
         mapping(bytes32 => Document) drafts;
         bytes32[] draftHashes;
     }
-
     mapping(address => Profile) public profiles;
-
     struct Document {
         address ownerAddress;
         string content;
