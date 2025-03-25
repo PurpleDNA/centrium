@@ -3,7 +3,7 @@ import { useContext, useState } from "react";
 import { Button } from "../ui/button";
 import { Plus, Minus } from "lucide-react";
 import { Context } from "@/Contexts/Context";
-import  DOMpurify  from "dompurify";
+import DOMpurify from "dompurify";
 
 function Publish() {
   const [selected, setSelected] = useState<string[]>([]);
@@ -18,11 +18,11 @@ function Publish() {
   const { post, title } = useSafeContext();
   const safepost = DOMpurify.sanitize(post);
 
-  const publish = ()=> {
-    localStorage.setItem("safepost", JSON.stringify(safepost))
-    localStorage.setItem("title", JSON.stringify(title))
-    localStorage.setItem("tags", JSON.stringify(selected))
-  }
+  const publish = () => {
+    localStorage.setItem("safepost", JSON.stringify(safepost));
+    localStorage.setItem("title", JSON.stringify(title));
+    localStorage.setItem("tags", JSON.stringify(selected));
+  };
 
   const handleSelected = (tag: string) => {
     if (selected.includes(tag)) {
@@ -102,7 +102,10 @@ function Publish() {
         </div>
       </div>
       <div>
-        <Button onClick={publish} className="w-full bg-[#3800A7] hover:bg-[#1e0846] mb-2">
+        <Button
+          onClick={publish}
+          className="w-full bg-[#3800A7] hover:bg-[#1e0846] mb-2"
+        >
           Publish
         </Button>
         <Button className="w-full bg-white border border-[#3800A7] text-black hover:bg-[#1e0846] hover:text-white">

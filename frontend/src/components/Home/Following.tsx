@@ -14,17 +14,15 @@ function Following() {
     >
       {feed.map((post, index) => (
         <div key={index}>
-          {
-            post.postType === guide ? (
-              <Link to="/guide">
+          {post.postType === guide ? (
+            <Link to="/guide">
               <FeedPost {...post} />
             </Link>
-            ) : (
-              <Link to="/post">
+          ) : (
+            <Link to="/post">
               <FeedPost {...post} />
             </Link>
-            )
-          }
+          )}
         </div>
       ))}
     </motion.div>
@@ -41,144 +39,144 @@ const feed: {
   {
     username: "The Rizz King",
     date: "31 jul 2024",
-    title: "Navigating writing and reading with Inkworth",
-    demo: "As a writer, you can share your literary works with a vibrant community, receiving feedback and with a vibrant community, receiving feedback and with a vibrant community, receiving feedback and with a vibrant community",
+    title: "The Scalability Challenge in Web3 and How to Solve It",
+    demo: "One of the biggest challenges in Web3 is scalability. As blockchain networks grow, they often struggle with slow transaction speeds and high gas fees. Ethereum, for example, can process only about 15 transactions per second, leading to congestion and expensive fees during peak usage.",
     duration: 4,
     postType: guide,
   },
   {
     username: "PurpleDNA",
     date: "31 jul 2024",
-    title: "Navigating writing and reading with Inkworth",
-    demo: "As a writer, you can share your literary works with a vibrant community, receiving feedback and with a vibrant community, receiving feedback and with a vibrant community, receiving feedback and with a vibrant community",
+    title: "The Scalability Challenge in Web3 and How to Solve It",
+    demo: "One of the biggest challenges in Web3 is scalability. As blockchain networks grow, they often struggle with slow transaction speeds and high gas fees. Ethereum, for example, can process only about 15 transactions per second, leading to congestion and expensive fees during peak usage.",
     duration: 4,
     postType: thread,
   },
   {
     username: "LAITO",
     date: "31 jul 2024",
-    title: "Navigating writing and reading with Inkworth",
-    demo: "As a writer, you can share your literary works with a vibrant community, receiving feedback and with a vibrant community, receiving feedback and with a vibrant community, receiving feedback and with a vibrant community",
+    title: "The Scalability Challenge in Web3 and How to Solve It",
+    demo: "One of the biggest challenges in Web3 is scalability. As blockchain networks grow, they often struggle with slow transaction speeds and high gas fees. Ethereum, for example, can process only about 15 transactions per second, leading to congestion and expensive fees during peak usage.",
     duration: 4,
     postType: guide,
   },
   {
     username: "The Rizz King",
     date: "31 jul 2024",
-    title: "Navigating writing and reading with Inkworth",
-    demo: "As a writer, you can share your literary works with a vibrant community, receiving feedback and with a vibrant community, receiving feedback and with a vibrant community, receiving feedback and with a vibrant community",
+    title: "The Scalability Challenge in Web3 and How to Solve It",
+    demo: "One of the biggest challenges in Web3 is scalability. As blockchain networks grow, they often struggle with slow transaction speeds and high gas fees. Ethereum, for example, can process only about 15 transactions per second, leading to congestion and expensive fees during peak usage.",
     duration: 4,
     postType: thread,
   },
   {
     username: "The Rizz King",
     date: "31 jul 2024",
-    title: "Navigating writing and reading with Inkworth",
-    demo: "As a writer, you can share your literary works with a vibrant community, receiving feedback and with a vibrant community, receiving feedback and with a vibrant community, receiving feedback and with a vibrant community",
+    title: "The Scalability Challenge in Web3 and How to Solve It",
+    demo: "One of the biggest challenges in Web3 is scalability. As blockchain networks grow, they often struggle with slow transaction speeds and high gas fees. Ethereum, for example, can process only about 15 transactions per second, leading to congestion and expensive fees during peak usage.",
     duration: 4,
     postType: guide,
   },
   {
     username: "The Rizz King",
     date: "31 jul 2024",
-    title: "Navigating writing and reading with Inkworth",
-    demo: "As a writer, you can share your literary works with a vibrant community, receiving feedback and with a vibrant community, receiving feedback and with a vibrant community, receiving feedback and with a vibrant community",
+    title: "The Scalability Challenge in Web3 and How to Solve It",
+    demo: "One of the biggest challenges in Web3 is scalability. As blockchain networks grow, they often struggle with slow transaction speeds and high gas fees. Ethereum, for example, can process only about 15 transactions per second, leading to congestion and expensive fees during peak usage.",
     duration: 4,
     postType: thread,
   },
   {
     username: "The Rizz King",
     date: "31 jul 2024",
-    title: "Navigating writing and reading with Inkworth",
-    demo: "As a writer, you can share your literary works with a vibrant community, receiving feedback and with a vibrant community, receiving feedback and with a vibrant community, receiving feedback and with a vibrant community",
+    title: "The Scalability Challenge in Web3 and How to Solve It",
+    demo: "One of the biggest challenges in Web3 is scalability. As blockchain networks grow, they often struggle with slow transaction speeds and high gas fees. Ethereum, for example, can process only about 15 transactions per second, leading to congestion and expensive fees during peak usage.",
     duration: 4,
     postType: guide,
   },
   {
     username: "The Rizz King",
     date: "31 jul 2024",
-    title: "Navigating writing and reading with Inkworth",
-    demo: "As a writer, you can share your literary works with a vibrant community, receiving feedback and with a vibrant community, receiving feedback and with a vibrant community, receiving feedback and with a vibrant community",
+    title: "The Scalability Challenge in Web3 and How to Solve It",
+    demo: "One of the biggest challenges in Web3 is scalability. As blockchain networks grow, they often struggle with slow transaction speeds and high gas fees. Ethereum, for example, can process only about 15 transactions per second, leading to congestion and expensive fees during peak usage.",
     duration: 4,
     postType: guide,
   },
   {
     username: "The Rizz King",
     date: "31 jul 2024",
-    title: "Navigating writing and reading with Inkworth",
-    demo: "As a writer, you can share your literary works with a vibrant community, receiving feedback and with a vibrant community, receiving feedback and with a vibrant community, receiving feedback and with a vibrant community",
+    title: "The Scalability Challenge in Web3 and How to Solve It",
+    demo: "One of the biggest challenges in Web3 is scalability. As blockchain networks grow, they often struggle with slow transaction speeds and high gas fees. Ethereum, for example, can process only about 15 transactions per second, leading to congestion and expensive fees during peak usage.",
     duration: 4,
     postType: thread,
   },
   {
     username: "The Rizz King",
     date: "31 jul 2024",
-    title: "Navigating writing and reading with Inkworth",
-    demo: "As a writer, you can share your literary works with a vibrant community, receiving feedback and with a vibrant community, receiving feedback and with a vibrant community, receiving feedback and with a vibrant community",
+    title: "The Scalability Challenge in Web3 and How to Solve It",
+    demo: "One of the biggest challenges in Web3 is scalability. As blockchain networks grow, they often struggle with slow transaction speeds and high gas fees. Ethereum, for example, can process only about 15 transactions per second, leading to congestion and expensive fees during peak usage.",
     duration: 4,
     postType: guide,
   },
   {
     username: "The Rizz King",
     date: "31 jul 2024",
-    title: "Navigating writing and reading with Inkworth",
-    demo: "As a writer, you can share your literary works with a vibrant community, receiving feedback and with a vibrant community, receiving feedback and with a vibrant community, receiving feedback and with a vibrant community",
+    title: "The Scalability Challenge in Web3 and How to Solve It",
+    demo: "One of the biggest challenges in Web3 is scalability. As blockchain networks grow, they often struggle with slow transaction speeds and high gas fees. Ethereum, for example, can process only about 15 transactions per second, leading to congestion and expensive fees during peak usage.",
     duration: 4,
     postType: thread,
   },
   {
     username: "The Rizz King",
     date: "31 jul 2024",
-    title: "Navigating writing and reading with Inkworth",
-    demo: "As a writer, you can share your literary works with a vibrant community, receiving feedback and with a vibrant community, receiving feedback and with a vibrant community, receiving feedback and with a vibrant community",
+    title: "The Scalability Challenge in Web3 and How to Solve It",
+    demo: "One of the biggest challenges in Web3 is scalability. As blockchain networks grow, they often struggle with slow transaction speeds and high gas fees. Ethereum, for example, can process only about 15 transactions per second, leading to congestion and expensive fees during peak usage.",
     duration: 4,
     postType: thread,
   },
   {
     username: "The Rizz King",
     date: "31 jul 2024",
-    title: "Navigating writing and reading with Inkworth",
-    demo: "As a writer, you can share your literary works with a vibrant community, receiving feedback and with a vibrant community, receiving feedback and with a vibrant community, receiving feedback and with a vibrant community",
+    title: "The Scalability Challenge in Web3 and How to Solve It",
+    demo: "One of the biggest challenges in Web3 is scalability. As blockchain networks grow, they often struggle with slow transaction speeds and high gas fees. Ethereum, for example, can process only about 15 transactions per second, leading to congestion and expensive fees during peak usage.",
     duration: 4,
     postType: thread,
   },
   {
     username: "The Rizz King",
     date: "31 jul 2024",
-    title: "Navigating writing and reading with Inkworth",
-    demo: "As a writer, you can share your literary works with a vibrant community, receiving feedback and with a vibrant community, receiving feedback and with a vibrant community, receiving feedback and with a vibrant community",
+    title: "The Scalability Challenge in Web3 and How to Solve It",
+    demo: "One of the biggest challenges in Web3 is scalability. As blockchain networks grow, they often struggle with slow transaction speeds and high gas fees. Ethereum, for example, can process only about 15 transactions per second, leading to congestion and expensive fees during peak usage.",
     duration: 4,
     postType: guide,
   },
   {
     username: "The Rizz King",
     date: "31 jul 2024",
-    title: "Navigating writing and reading with Inkworth",
-    demo: "As a writer, you can share your literary works with a vibrant community, receiving feedback and with a vibrant community, receiving feedback and with a vibrant community, receiving feedback and with a vibrant community",
+    title: "The Scalability Challenge in Web3 and How to Solve It",
+    demo: "One of the biggest challenges in Web3 is scalability. As blockchain networks grow, they often struggle with slow transaction speeds and high gas fees. Ethereum, for example, can process only about 15 transactions per second, leading to congestion and expensive fees during peak usage.",
     duration: 4,
     postType: thread,
   },
   {
     username: "The Rizz King",
     date: "31 jul 2024",
-    title: "Navigating writing and reading with Inkworth",
-    demo: "As a writer, you can share your literary works with a vibrant community, receiving feedback and with a vibrant community, receiving feedback and with a vibrant community, receiving feedback and with a vibrant community",
+    title: "The Scalability Challenge in Web3 and How to Solve It",
+    demo: "One of the biggest challenges in Web3 is scalability. As blockchain networks grow, they often struggle with slow transaction speeds and high gas fees. Ethereum, for example, can process only about 15 transactions per second, leading to congestion and expensive fees during peak usage.",
     duration: 4,
     postType: guide,
   },
   {
     username: "The Rizz King",
     date: "31 jul 2024",
-    title: "Navigating writing and reading with Inkworth",
-    demo: "As a writer, you can share your literary works with a vibrant community, receiving feedback and with a vibrant community, receiving feedback and with a vibrant community, receiving feedback and with a vibrant community",
+    title: "The Scalability Challenge in Web3 and How to Solve It",
+    demo: "One of the biggest challenges in Web3 is scalability. As blockchain networks grow, they often struggle with slow transaction speeds and high gas fees. Ethereum, for example, can process only about 15 transactions per second, leading to congestion and expensive fees during peak usage.",
     duration: 4,
     postType: thread,
   },
   {
     username: "The Rizz King",
     date: "31 jul 2024",
-    title: "Navigating writing and reading with Inkworth",
-    demo: "As a writer, you can share your literary works with a vibrant community, receiving feedback and with a vibrant community, receiving feedback and with a vibrant community, receiving feedback and with a vibrant community",
+    title: "The Scalability Challenge in Web3 and How to Solve It",
+    demo: "One of the biggest challenges in Web3 is scalability. As blockchain networks grow, they often struggle with slow transaction speeds and high gas fees. Ethereum, for example, can process only about 15 transactions per second, leading to congestion and expensive fees during peak usage.",
     duration: 4,
     postType: guide,
   },

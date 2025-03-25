@@ -1,29 +1,28 @@
 /* eslint-disable react-refresh/only-export-components */
 import { createContext, FC, ReactNode, useContext, useState } from "react";
 
-const authContext = createContext<{
+//create Authentication Context
+interface contextProps {
   isAuthenticated: boolean;
   setIsAuthenticated: React.Dispatch<React.SetStateAction<boolean>>;
-}>({
+}
+const authContext = createContext<contextProps>({
   isAuthenticated: false,
   setIsAuthenticated: () => {},
 });
 
+//create Authentication Context Provider
 interface ContextProviderProps {
   children: ReactNode;
 }
 
 const AuthProvider: FC<ContextProviderProps> = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const authValue: {
-    isAuthenticated: boolean;
-    setIsAuthenticated: React.Dispatch<React.SetStateAction<boolean>>;
-  } = {
-    isAuthenticated,
-    setIsAuthenticated,
-  };
+
   return (
-    <authContext.Provider value={authValue}>{children}</authContext.Provider>
+    <authContext.Provider value={{ isAuthenticated, setIsAuthenticated }}>
+      {children}
+    </authContext.Provider>
   );
 };
 

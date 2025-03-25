@@ -27,16 +27,16 @@ function CreatePostModal() {
           <X onClick={toggleModal} className="cursor-pointer" />
         </div>
         <div className="font-sofia text-center mb-5">Create Post</div>
-        <div className="flex gap-6 justify-center">
+        <div className="flex gap-6 justify-center mb-5">
           <NavLink to="create-thread" onClick={toggleModal}>
-            <div className="bg-slate-300 rounded-lg flex flex-col gap-2 p-4 items-center cursor-pointer hover:bg-slate-600 hover:text-white">
-              <img src={thread} alt="" className="w-14" />
+            <div className="bg-[#E9E9E9] rounded-lg flex flex-col gap-2 p-4 items-center cursor-pointer hover:font-bold">
+              <img src={thread} alt="" className="w-12" />
               <p className="font-sofia">Thread Post</p>
             </div>
           </NavLink>
           <NavLink to="create-guide" onClick={toggleModal}>
-            <div className="bg-slate-300 rounded-lg flex flex-col gap-3 py-4 px-[19px] items-center cursor-pointer hover:bg-slate-600 hover:text-white">
-              <img src={guide} alt="" className="w-14" />
+            <div className="bg-[#E9E9E9] rounded-lg flex flex-col gap-3 py-4 px-[19px] items-center cursor-pointer hover:font-bold">
+              <img src={guide} alt="" className="w-12" />
               <p className="font-sofia">Guide Post</p>
             </div>
           </NavLink>
