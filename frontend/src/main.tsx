@@ -45,7 +45,7 @@ const router = createBrowserRouter([
         element: <CreateGuide />,
       },
       {
-        path: "post",
+        path: "post/:thread_id",
         element: <ViewThread />,
       },
       {

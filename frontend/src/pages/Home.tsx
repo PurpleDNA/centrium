@@ -6,10 +6,13 @@ import { Button } from "@/components/ui/button";
 import { PenLine } from "lucide-react";
 import { useContext, useState } from "react";
 import { Context } from "../Contexts/Context";
+import { useCentriumHooks } from "@/AppServices/CentriumHooks";
 import CreateProfileModal from "@/components/modals/CreateProfileModal";
 
 function Home() {
   const [activePage, setActivePage] = useState("following");
+  const { getDocumentCount } = useCentriumHooks();
+  console.log(getDocumentCount());
   const handleNavigation = (page: string) => {
     setActivePage(page);
   };

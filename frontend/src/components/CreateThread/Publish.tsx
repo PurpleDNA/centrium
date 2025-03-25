@@ -4,10 +4,12 @@ import { Button } from "../ui/button";
 import { Plus, Minus } from "lucide-react";
 import { Context } from "@/Contexts/Context";
 import DOMpurify from "dompurify";
+import { useCentriumHooks } from "@/AppServices/CentriumHooks";
 
 function Publish() {
   const [selected, setSelected] = useState<string[]>([]);
   const [visible, setVisible] = useState(false);
+  const { createPost } = useCentriumHooks();
   const useSafeContext = () => {
     const context = useContext(Context);
     if (!context) {
@@ -15,13 +17,14 @@ function Publish() {
     }
     return context;
   };
+
   const { post, title } = useSafeContext();
   const safepost = DOMpurify.sanitize(post);
 
   const publish = () => {
-    localStorage.setItem("safepost", JSON.stringify(safepost));
-    localStorage.setItem("title", JSON.stringify(title));
-    localStorage.setItem("tags", JSON.stringify(selected));
+    createPost(title, safepost).then((res) =>
+      console.log("Your transaction hash is: " + res)
+    );
   };
 
   const handleSelected = (tag: string) => {

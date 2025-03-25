@@ -5,9 +5,12 @@ import { Plus } from "lucide-react";
 import { Context } from "@/Contexts/Context";
 import DOMpurify from "dompurify";
 import { X } from "lucide-react";
+import { useCentriumHooks } from "@/AppServices/CentriumHooks";
 
 function MobilePublish() {
   const [selected, setSelected] = useState<string[]>([]);
+  const { createPost } = useCentriumHooks();
+
   const useSafeContext = () => {
     const context = useContext(Context);
     if (!context) {
@@ -19,9 +22,9 @@ function MobilePublish() {
   const safepost = DOMpurify.sanitize(post);
 
   const publish = () => {
-    localStorage.setItem("safepost", JSON.stringify(safepost));
-    localStorage.setItem("title", JSON.stringify(title));
-    localStorage.setItem("tags", JSON.stringify(selected));
+    createPost(title, safepost).then((res) =>
+      console.log("Your transaction hash is: " + res)
+    );
   };
 
   const handleSelected = (tag: string) => {
