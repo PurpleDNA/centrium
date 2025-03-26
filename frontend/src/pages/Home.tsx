@@ -4,15 +4,18 @@ import Threads from "@/components/Home/Threads";
 import Connect from "@/components/Static/Connect";
 import { Button } from "@/components/ui/button";
 import { PenLine } from "lucide-react";
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import { Context } from "../Contexts/Context";
-import { useCentriumHooks } from "@/AppServices/CentriumHooks";
 import CreateProfileModal from "@/components/modals/CreateProfileModal";
+import { useSelector } from "react-redux";
+import { useCentriumHooks } from "../AppServices/CentriumHooks";
+import { useAccount } from "wagmi";
 
 function Home() {
   const [activePage, setActivePage] = useState("following");
-  const { getDocumentCount } = useCentriumHooks();
-  console.log(getDocumentCount());
+  const [accountModal, setAccountModal] = useState(false);
+  const { useGetProfile } = useCentriumHooks();
+  const { address } = useAccount();
   const handleNavigation = (page: string) => {
     setActivePage(page);
   };
@@ -25,6 +28,19 @@ function Home() {
   };
   const { isNavOpen, setIsModalOpen } = useSafeContext();
   const toggleModal = () => setIsModalOpen((prev: boolean) => !prev);
+
+  useGetProfile(address!);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const isAccount = useSelector((state: any) => state.userProfile.isAccount);
+  console.log(isAccount);
+
+  useEffect(() => {
+    if (isAccount) {
+      setAccountModal(false);
+    } else {
+      setAccountModal(true);
+    }
+  }, [isAccount]);
 
   return (
     <div className="flex">
@@ -66,7 +82,7 @@ function Home() {
       <div className="w-1/3 hidden lg:block">
         <Connect />
       </div>
-      <CreateProfileModal />
+      {accountModal && <CreateProfileModal />}
       <Button
         onClick={toggleModal}
         className={`bg-[#3800A7] mt-12 hover:bg-[#1e0846] py-6 w-max md:hidden fixed bottom-16 right-8`}

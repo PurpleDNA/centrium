@@ -2,6 +2,7 @@
 import { useForm, SubmitHandler } from "react-hook-form";
 import { Button } from "../ui/button";
 import { useCentriumHooks } from "../../AppServices/CentriumHooks";
+import { useAccount } from "wagmi";
 type Inputs = {
   username: string;
   age: number;
@@ -13,13 +14,16 @@ function CreateProfileModal() {
     handleSubmit,
     // formState: { errors },
   } = useForm<Inputs>();
+  const { address } = useAccount();
 
   const { createProfile } = useCentriumHooks();
   const onSubmit: SubmitHandler<Inputs> = (data) => {
-    createProfile(data.username, data.age).then((res) =>
-      console.log("The transaction hash is: " + res)
-    );
-    console.log(data);
+    if (address) {
+      createProfile(data.username, data.age, address).then((res) =>
+        console.log("The transaction hash is: " + res)
+      );
+      console.log(data);
+    }
   };
   return (
     <div
