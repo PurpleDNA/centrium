@@ -9,7 +9,7 @@ import { useCentriumHooks } from "@/AppServices/CentriumHooks";
 
 function MobilePublish() {
   const [selected, setSelected] = useState<string[]>([]);
-  const { createPost } = useCentriumHooks();
+  const { createThread } = useCentriumHooks();
 
   const useSafeContext = () => {
     const context = useContext(Context);
@@ -22,7 +22,7 @@ function MobilePublish() {
   const safepost = DOMpurify.sanitize(post);
 
   const publish = () => {
-    createPost(title, safepost).then((res) =>
+    createThread(title, safepost).then((res) =>
       console.log("Your transaction hash is: " + res)
     );
   };
