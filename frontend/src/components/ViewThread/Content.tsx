@@ -1,14 +1,21 @@
 import profpic from "../../assets/rizzking.svg";
 import { Dot } from "lucide-react";
+import { useParams } from "react-router-dom";
+import { useCentriumHooks } from "../../AppServices/CentriumHooks";
 function Content() {
-  const title = JSON.parse(localStorage.getItem("title") ?? "");
-  const safepost = JSON.parse(localStorage.getItem("safepost") ?? "");
+  const { thread_id } = useParams();
+  const { useGetThread } = useCentriumHooks();
+  const post = useGetThread(Number(thread_id)) as { content: string };
+  const title = post.content;
+  // const title = JSON.parse(localStorage.getItem("title") ?? "");
+  // const safepost = JSON.parse(localStorage.getItem("safepost") ?? "");
+
   const tags = JSON.parse(localStorage.getItem("tags") ?? "");
 
   return (
     <div className="w-full flex flex-col gap-5 pb-3 border-b-2 border-slate-300">
       <h1 className="font-semibold text-2xl pt-1 md:text-4xl md:mb-4 px-3 break-words">
-        {title}
+        {title ? title : "wazza"}
       </h1>
       <div className="flex gap-3 px-3 items-center pb-4 border-b-2 border-slate-300">
         <div>
@@ -36,7 +43,7 @@ function Content() {
           backgroundColor: "#fff",
         }}
         className="w-full"
-        dangerouslySetInnerHTML={{ __html: safepost }}
+        dangerouslySetInnerHTML={{ __html: title }}
       />
       <div className="tags flex gap-1 md:gap-3 px-5">
         {tags.map((tag: string) => (

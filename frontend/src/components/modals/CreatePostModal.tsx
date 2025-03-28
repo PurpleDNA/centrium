@@ -5,6 +5,7 @@ import { X } from "lucide-react";
 import { Context } from "@/Contexts/Context";
 import { useContext } from "react";
 import { NavLink } from "react-router-dom";
+import { motion } from "motion/react";
 
 function CreatePostModal() {
   const useSafeContext = () => {
@@ -14,13 +15,14 @@ function CreatePostModal() {
     }
     return context;
   };
-  const { isModalOpen, setIsModalOpen } = useSafeContext();
+  const { setIsModalOpen } = useSafeContext();
   const toggleModal = () => setIsModalOpen((prev: any) => !prev);
   return (
-    <div
-      className={`w-screen h-screen fixed inset-0 items-center justify-center bg-slate-300/50 z-10 ${
-        isModalOpen ? "flex" : "hidden"
-      }`}
+    <motion.div
+      initial={{ opacity: 0, scale: 0.5 }}
+      animate={{ opacity: 1, scale: 1 }}
+      exit={{ opacity: 0, x: 100 }}
+      className={`w-screen h-screen fixed inset-0 items-center justify-center bg-slate-300/50 z-10 flex`}
     >
       <div className="flex flex-col px-8 py-5 rounded-md bg-white border-2 border-black">
         <div className="flex justify-end">
@@ -42,7 +44,7 @@ function CreatePostModal() {
           </NavLink>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }
 
