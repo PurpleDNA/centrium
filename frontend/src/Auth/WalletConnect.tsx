@@ -13,16 +13,12 @@ import { useEffect } from "react";
 // import metafox from "../assets/metafox.png";
 import { Button } from "@/components/ui/button";
 import { ArrowBigRightDash, Wallet } from "lucide-react";
+import { useCentriumHooks } from "@/AppServices/CentriumHooks";
+import FallbackLoading from "@/components/FallbackLoading";
 
 // import { motion } from "motion/react";
 const WalletConnect = () => {
-  const {
-    setIsAuthenticated,
-    isAuthenticated,
-  }: {
-    setIsAuthenticated: (value: boolean) => void;
-    isAuthenticated: boolean;
-  } = useAuth();
+  const { setIsAuthenticated, isAuthenticated } = useAuth();
   const navigate = useNavigate();
   // const [web3, setWeb3] = useState<Web3 | null>(null);
   // const [chainId, setChainId] = useState<string | null>(null);
@@ -131,17 +127,28 @@ const WalletConnect = () => {
   // };
 
   const { isConnected } = useAccount();
+  const { isLoading, setIsLoading } = useCentriumHooks();
   useEffect(() => {
     if (isConnected) {
+      // sessionStorage.setItem("userSession", "true");
       setIsAuthenticated(true);
       navigate("/");
+    } else {
+      setIsLoading(false);
     }
-  }, [isConnected, navigate, setIsAuthenticated, isAuthenticated]);
+  }, [
+    isConnected,
+    navigate,
+    setIsAuthenticated,
+    isAuthenticated,
+    setIsLoading,
+  ]);
   return (
     <div
       className={`w-screen h-screen bg-cover bg-center`}
       style={{ backgroundImage: `url(${"/Landing2.png"})` }}
     >
+      {isLoading && <FallbackLoading />}
       <div className="header flex justify-between items-center mx-auto px-[5%] py-4 border-b-2 border-slate-400">
         <img src={Logo} alt="" className="w-24 lg:w-40" />
         <div>

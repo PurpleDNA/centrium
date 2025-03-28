@@ -17,7 +17,7 @@ function App() {
     }
     return context;
   };
-  const { isNavOpen } = useSafeContext();
+  const { isNavOpen, isModalOpen } = useSafeContext();
   return (
     <div>
       <div className="flex w-full">
@@ -33,7 +33,7 @@ function App() {
           </div>
         </div>
       </div>
-      <CreatePostModal />
+      {isModalOpen && <CreatePostModal />}
       <MobileNav />
     </div>
   );
