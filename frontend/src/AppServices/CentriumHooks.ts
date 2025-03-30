@@ -1,7 +1,16 @@
-// import { useNavigate } from "react-router-dom";
-import { http, createConfig, waitForTransactionReceipt } from "@wagmi/core";
+import { useNavigate } from "react-router-dom";
+import {
+  http,
+  createConfig,
+  waitForTransactionReceipt,
+  // watchContractEvent,
+} from "@wagmi/core";
 import { bscTestnet } from "@wagmi/core/chains";
-import { useReadContract, useWriteContract } from "wagmi";
+import {
+  useReadContract,
+  useWriteContract,
+  useWatchContractEvent,
+} from "wagmi";
 import { readContract } from "@wagmi/core";
 import abi from "../ABI/lock-abi.json";
 import { useDispatch } from "react-redux";
@@ -10,21 +19,40 @@ import {
   userProfile,
 } from "@/Redux/Slices/userProfileSlice";
 import { useState } from "react";
+import { useAccount } from "wagmi";
 
 export const useCentriumHooks = () => {
-  // const navigate = useNavigate();
-
+  const navigate = useNavigate();
+  const account = useAccount();
+  const senderAddy = account.address;
+  type profType = (string | number | boolean | string[])[];
+  const { writeContractAsync } = useWriteContract();
+  const address = "0x101eB58C3141E309943B256C1680D16e91b12055";
+  const dispatch = useDispatch();
+  const [isLoading, setIsLoading] = useState(false);
   const config = createConfig({
     chains: [bscTestnet],
     transports: {
       [bscTestnet.id]: http(`https://data-seed-prebsc-2-s1.bnbchain.org:8545`),
     },
   });
-  type profType = (string | number | boolean | string[])[];
-  const { writeContractAsync } = useWriteContract();
-  const address = "0x101eB58C3141E309943B256C1680D16e91b12055";
-  const dispatch = useDispatch();
-  const [isLoading, setIsLoading] = useState(false);
+
+  useWatchContractEvent({
+    abi,
+    address,
+    eventName: "PostCreated",
+    onLogs(logs) {
+      const logArgs = logs[0] as unknown as {
+        args: { author: string; postHash: string };
+      };
+      console.log("Return value:", logArgs.args);
+      const args = logArgs.args;
+      if (args.author === senderAddy) {
+        navigate(`/post/${args.postHash}`);
+      }
+    },
+    pollingInterval: 1_000,
+  });
 
   // Function to create Profile
   const createProfile = async (
@@ -43,8 +71,8 @@ export const useCentriumHooks = () => {
         },
         {
           onError: (data) => {
-            console.log(data);
-            throw new Error("Create Profile Failed");
+            const message = data as unknown as { shortMessage: string };
+            throw new Error("Failed: " + message.shortMessage);
           },
         }
       );
@@ -85,6 +113,7 @@ export const useCentriumHooks = () => {
     following,
     bio,
   }: userProfile) => {
+    // setIsLoading(true)
     try {
       dispatch(
         updateUserProfile({
@@ -101,6 +130,8 @@ export const useCentriumHooks = () => {
       console.log("User Profile Succesfully Updated");
     } catch (error) {
       console.error("updateProfile Error >>>>>>>" + error);
+    } finally {
+      // setIsLoading(false)
     }
   };
 
@@ -141,51 +172,87 @@ export const useCentriumHooks = () => {
           dispatch(updateUserProfile(ProfileData));
         }
       }
-      console.log(Profile);
-      return Profile;
+      // console.log(Profile);
     } catch (error) {
       console.error("getProfile Error >>>>>>>" + error);
+      window.location.reload();
     } finally {
       setIsLoading(false);
     }
   };
 
   //Function to create ThreadPost
-  const createThread = async (title: string, content: string) => {
+  const createThread = async (
+    title: string,
+    content: string,
+    tags: string[]
+  ) => {
     try {
-      return await writeContractAsync(
+      const hash = await writeContractAsync(
         {
           abi,
           address: address,
-          functionName: "store",
-          args: [title, content],
+          functionName: "createPost",
+          args: [title, content, tags],
+        },
+        {
+          onError: (data) => {
+            const message = data as unknown as { shortMessage: string };
+            throw new Error("Failed: " + message.shortMessage);
+          },
         }
-        // {
-        //   onSuccess: (data) => {
-        //     console.log(data);
-        //   },
-        // }
       );
-      // .then(() => {
-      //   const count = data;
-      //   navigate(`/post/${count}`);
-      //   return count;
-      // });
+
+      const receipt = await waitForTransactionReceipt(config, { hash });
+
+      if (receipt.status === "reverted") {
+        throw new Error("Create Thread Failed");
+      }
+    } catch (error) {
+      console.error("createPost Error >>>>>>>" + error);
+    }
+  };
+
+  const createGuide = async (
+    title: string,
+    content: (string | number)[][],
+    description: string,
+    tags: string[]
+  ) => {
+    try {
+      const hash = await writeContractAsync(
+        {
+          abi,
+          address: address,
+          functionName: "createGuidePost",
+          args: [title, content, description, tags],
+        },
+        {
+          onError: (data) => {
+            const message = data as unknown as { shortMessage: string };
+            throw new Error("Failed: " + message.shortMessage);
+          },
+        }
+      );
+
+      const receipt = await waitForTransactionReceipt(config, { hash });
+
+      if (receipt.status === "reverted") {
+        throw new Error("Create Guide Failed");
+      }
     } catch (error) {
       console.error("createPost Error >>>>>>>" + error);
     }
   };
 
   //Function to get Thread Post
-  const useGetThread = (index: number) => {
-    const post = useReadContract({
+  const useGetPost = (fileHash: string) => {
+    return useReadContract({
       abi,
       address: address,
-      functionName: "getDocument",
-      args: [index],
+      functionName: "getDocumentByHash",
+      args: [fileHash],
     });
-    console.log(post);
-    return post.data;
   };
 
   // Get Document Count
@@ -207,7 +274,8 @@ export const useCentriumHooks = () => {
     createProfile,
     updateProfile,
     createThread,
-    useGetThread,
+    createGuide,
+    useGetPost,
     getProfile,
     // getDocumentCount,
   };

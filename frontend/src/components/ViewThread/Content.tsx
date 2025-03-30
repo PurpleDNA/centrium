@@ -2,20 +2,26 @@ import profpic from "../../assets/rizzking.svg";
 import { Dot } from "lucide-react";
 import { useParams } from "react-router-dom";
 import { useCentriumHooks } from "../../AppServices/CentriumHooks";
+import { useEffect, useState } from "react";
 function Content() {
   const { thread_id } = useParams();
-  const { useGetThread } = useCentriumHooks();
-  const post = useGetThread(Number(thread_id)) as { content: string };
-  const title = post.content;
-  // const title = JSON.parse(localStorage.getItem("title") ?? "");
-  // const safepost = JSON.parse(localStorage.getItem("safepost") ?? "");
+  const { useGetPost } = useCentriumHooks();
+  const [content, setContent] = useState("");
+  const [tags, setTags] = useState<string[]>([]);
+  const { data: result, status } = useGetPost(thread_id!);
 
-  const tags = JSON.parse(localStorage.getItem("tags") ?? "");
+  useEffect(() => {
+    if (status === "success" && result) {
+      const post = result as never[];
+      setContent(post[1]);
+      setTags(post[2]);
+    }
+  }, [status, result]);
 
   return (
     <div className="w-full flex flex-col gap-5 pb-3 border-b-2 border-slate-300">
       <h1 className="font-semibold text-2xl pt-1 md:text-4xl md:mb-4 px-3 break-words">
-        {title ? title : "wazza"}
+        {"wazza"}
       </h1>
       <div className="flex gap-3 px-3 items-center pb-4 border-b-2 border-slate-300">
         <div>
@@ -43,7 +49,7 @@ function Content() {
           backgroundColor: "#fff",
         }}
         className="w-full"
-        dangerouslySetInnerHTML={{ __html: title }}
+        dangerouslySetInnerHTML={{ __html: content }}
       />
       <div className="tags flex gap-1 md:gap-3 px-5">
         {tags.map((tag: string) => (
