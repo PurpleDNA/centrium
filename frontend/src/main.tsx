@@ -19,7 +19,7 @@ import { Web3Provider } from "./Auth/Web3Provider.tsx";
 import { ContextProvider } from "./Contexts/Context.tsx";
 import Notifications from "./pages/Notifications.tsx";
 import Profile from "./pages/Profile.tsx";
-import ERR404 from "./assets/404.png";
+import NotFound from "./components/NotFound.tsx";
 
 const router = createBrowserRouter([
   {
@@ -29,11 +29,7 @@ const router = createBrowserRouter([
         <App />
       </ProtectedRoutes>
     ),
-    errorElement: (
-      <div>
-        <img src={ERR404} alt="" className="w-screen h-screen" />
-      </div>
-    ),
+    errorElement: <NotFound />,
     children: [
       {
         index: true,
