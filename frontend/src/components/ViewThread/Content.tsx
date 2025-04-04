@@ -5,17 +5,55 @@ import { useCentriumHooks } from "../../AppServices/CentriumHooks";
 import { useEffect, useState } from "react";
 function Content() {
   const { thread_id } = useParams();
-  const { useGetPost } = useCentriumHooks();
+  const { useGetPost, getProfile } = useCentriumHooks();
+  const [author, setAuthor] = useState("");
+  const [addr, setAddr] = useState("");
   const [content, setContent] = useState("");
+  const [date, setDate] = useState("");
   const [tags, setTags] = useState<string[]>([]);
+  const [time, setTime] = useState(0);
   const { data: result, status } = useGetPost(thread_id!);
+  function formatDate(bigInt: number) {
+    const timestamp = Number(String(bigInt).slice(0, String(bigInt).length));
+    const date = new Date(timestamp * 1000); // Convert seconds to milliseconds
+    const day = String(date.getUTCDate()).padStart(2, "0");
+    const month = date.toLocaleString("en-US", {
+      month: "short",
+      timeZone: "UTC",
+    }); // Get short month name
+    const year = date.getUTCFullYear();
+
+    return `${day} ${month} ${year}`;
+  }
+  function estTime(content: string) {
+    const wordNum = content.trim().split(/\s+/).length;
+    if (wordNum / 220 < 1) {
+      return 1;
+    } else {
+      return Math.floor(wordNum / 220);
+    }
+  }
 
   useEffect(() => {
-    if (status === "success" && result) {
-      const post = result as never[];
-      setContent(post[1]);
-      setTags(post[2]);
+    async function fetchData() {
+      if (status === "success" && result) {
+        const post = result as never[];
+        const authorProfile = await getProfile(post[0]);
+        const authorr = (authorProfile as unknown as { username: string })
+          .username;
+        const truncAddr =
+          (post[0] as string).slice(0, 6) +
+          "....." +
+          (post[0] as string).slice(-5);
+        setAddr(truncAddr);
+        setAuthor(authorr);
+        setContent(post[1]);
+        setTags(post[2]);
+        setDate(formatDate(post[5]));
+        setTime(estTime(post[1]));
+      }
     }
+    fetchData();
   }, [status, result]);
 
   return (
@@ -29,17 +67,17 @@ function Content() {
         </div>
         <div className="flex flex-col justify-between gap-3">
           <div className="flex gap-3 items-center">
-            <span className="font-sofia pr-4 border-r-2 border-slate-400">
-              The Rizz King
+            <span className="font-sofia pr-4 border-r-2 border-slate-400 font-semibold">
+              {author}
             </span>
-            <span className="py-1 px-3 bg-slate-300 rounded-xl text-sm">
-              walletAddy
+            <span className="py-1 px-3 bg-slate-300 rounded-xl text-sm font-sofia">
+              {addr}
             </span>
           </div>
           <div className="flex gap-1 text-sm items-center font-sofia">
-            <span>31 July 2024</span>
+            <span>{date}</span>
             <Dot />
-            <span>4 minute read</span>
+            <span>{time} minute read</span>
           </div>
         </div>
       </div>
@@ -52,8 +90,11 @@ function Content() {
         dangerouslySetInnerHTML={{ __html: content }}
       />
       <div className="tags flex gap-1 md:gap-3 px-5">
-        {tags.map((tag: string) => (
-          <span className="rounded-md font-sofia text-xs bg-[#ECECEC] p-1 inline w-auto text-black">
+        {tags.map((tag: string, i) => (
+          <span
+            key={i}
+            className="rounded-md font-sofia text-xs bg-[#ECECEC] hover:bg-[#cecdcd] p-1 inline w-auto text-black cursor-pointer"
+          >
             {tag}
           </span>
         ))}

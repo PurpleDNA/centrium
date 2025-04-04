@@ -20,22 +20,25 @@ import {
 } from "@/Redux/Slices/userProfileSlice";
 import { useState } from "react";
 import { useAccount } from "wagmi";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export const useCentriumHooks = () => {
-  const navigate = useNavigate();
-  const account = useAccount();
-  const senderAddy = account.address;
-  type profType = (string | number | boolean | string[])[];
-  const { writeContractAsync } = useWriteContract();
-  const address = "0x101eB58C3141E309943B256C1680D16e91b12055";
-  const dispatch = useDispatch();
-  const [isLoading, setIsLoading] = useState(false);
   const config = createConfig({
     chains: [bscTestnet],
     transports: {
       [bscTestnet.id]: http(`https://data-seed-prebsc-2-s1.bnbchain.org:8545`),
     },
   });
+  const address = "0x101eB58C3141E309943B256C1680D16e91b12055";
+  const navigate = useNavigate();
+  const account = useAccount();
+  const senderAddy = account.address;
+  const { writeContractAsync } = useWriteContract();
+  const dispatch = useDispatch();
+  const [isLoading, setIsLoading] = useState(false);
+  const [isInteracting, setIsInteracting] = useState(false);
+  type profType = (string | number | boolean | string[])[];
 
   useWatchContractEvent({
     abi,
@@ -81,6 +84,8 @@ export const useCentriumHooks = () => {
 
       if (receipt.status === "reverted") {
         throw new Error("Create Profile Failed");
+      } else {
+        toast.success("Profile created successfully");
       }
 
       if (receipt.status === "success") {
@@ -97,6 +102,7 @@ export const useCentriumHooks = () => {
       }
     } catch (error) {
       console.error("createProfile Error >>>>>>>" + error);
+      toast.error("Create Profile Failed");
     } finally {
       setIsLoading(false);
     }
@@ -157,8 +163,13 @@ export const useCentriumHooks = () => {
             following: Number(Array(Profile[3]).length),
             followers: Number(Array(Profile[4]).length),
           };
-          dispatch(updateUserProfile(ProfileData));
-          sessionStorage.setItem("userSession", "true");
+          if (sender === senderAddy) {
+            dispatch(updateUserProfile(ProfileData));
+            sessionStorage.setItem("userSession", "true");
+            return ProfileData;
+          } else {
+            return ProfileData;
+          }
         } else {
           const ProfileData: userProfile = {
             isAccount: false,
@@ -207,9 +218,12 @@ export const useCentriumHooks = () => {
 
       if (receipt.status === "reverted") {
         throw new Error("Create Thread Failed");
+      } else {
+        toast.success("Thread created successfully");
       }
     } catch (error) {
       console.error("createPost Error >>>>>>>" + error);
+      toast.error("Create thread failed");
     }
   };
 
@@ -239,9 +253,43 @@ export const useCentriumHooks = () => {
 
       if (receipt.status === "reverted") {
         throw new Error("Create Guide Failed");
+      } else {
+        toast.success("Guide created successfully");
       }
     } catch (error) {
       console.error("createPost Error >>>>>>>" + error);
+      toast.error("create guide failed");
+    }
+  };
+
+  const createComment = async (id: string, content: string) => {
+    try {
+      const hash = await writeContractAsync(
+        {
+          abi,
+          address: address,
+          functionName: "commentOnPost",
+          args: [id, content],
+        },
+        {
+          onError: (data) => {
+            const message = data as unknown as { shortMessage: string };
+            throw new Error("Failed: " + message.shortMessage);
+          },
+        }
+      );
+      // return "comment created";
+
+      const receipt = await waitForTransactionReceipt(config, { hash });
+
+      if (receipt.status === "reverted") {
+        throw new Error("Create Comment Failed");
+      } else {
+        toast.success("comment created");
+      }
+    } catch (error) {
+      console.error("createComment Error >>>>>>>" + error);
+      toast.error("create comment failed");
     }
   };
 
@@ -253,6 +301,20 @@ export const useCentriumHooks = () => {
       functionName: "getDocumentByHash",
       args: [fileHash],
     });
+  };
+
+  const getPostAsync = async (fileHash: string) => {
+    try {
+      const post = await readContract(config, {
+        abi,
+        address: address,
+        functionName: "getDocumentByHash",
+        args: [fileHash],
+      });
+      return post;
+    } catch (error) {
+      console.error("getPostAsync Error >>>>>>>" + error);
+    }
   };
 
   // Get Document Count
@@ -271,12 +333,16 @@ export const useCentriumHooks = () => {
   return {
     isLoading,
     setIsLoading,
+    isInteracting,
+    setIsInteracting,
     createProfile,
     updateProfile,
     createThread,
     createGuide,
     useGetPost,
     getProfile,
+    createComment,
+    getPostAsync,
     // getDocumentCount,
   };
 };

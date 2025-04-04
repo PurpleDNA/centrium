@@ -8,11 +8,12 @@ interface Props {
 
 const ProtectedRoutes: FC<Props> = ({ children }) => {
   const { status } = useAccount();
+  console.log(status);
   const navigate = useNavigate();
   useEffect(() => {
     if (
-      // status !== "reconnecting" &&
-      // status !== "connecting" &&
+      status !== "reconnecting" &&
+      status !== "connecting" &&
       status === "disconnected"
     ) {
       navigate("/walletconnect", { replace: true });

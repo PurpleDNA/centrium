@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 export interface userProfile {
   isAccount: boolean | undefined;
-  walletAddress: `0x${string}`;
+  walletAddress: `0x${string}` | "";
   username: string;
   age: number;
   online: boolean;
@@ -13,7 +13,7 @@ export interface userProfile {
 
 const initialState: userProfile = {
   isAccount: undefined,
-  walletAddress: "0x",
+  walletAddress: "",
   username: "",
   age: 0,
   online: false,

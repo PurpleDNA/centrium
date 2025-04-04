@@ -8,7 +8,7 @@ function NotFound() {
   return (
     <div className="bg-white flex flex-col justify-center gap-8 items-center h-screen">
       <p className="font-sofia text-center text-4xl font-semibold">
-        You should not be here buddy... 🧭
+        You should not be here 🧭
       </p>
       <img src={ERR404} alt="" className="max-w-[50%] mx-auto" />
       <Button
