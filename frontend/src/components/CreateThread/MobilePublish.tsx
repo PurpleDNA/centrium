@@ -5,10 +5,18 @@ import { Context } from "@/Contexts/Context";
 import DOMpurify from "dompurify";
 import { X } from "lucide-react";
 import { useCentriumHooks } from "@/AppServices/CentriumHooks";
+import CircleLoader from "react-spinners/CircleLoader";
+
+const override = {
+  display: "block",
+  margin: "0 auto",
+  borderColor: "#3800A7",
+  // color: "white",
+};
 
 function MobilePublish() {
   const [selected, setSelected] = useState<string[]>([]);
-  const { createThread } = useCentriumHooks();
+  const { createThread, isInteracting, setIsInteracting } = useCentriumHooks();
   const [value, setValue] = useState<string>("");
   const useSafeContext = () => {
     const context = useContext(Context);
@@ -22,7 +30,9 @@ function MobilePublish() {
   const safepost = DOMpurify.sanitize(post);
 
   const publish = () => {
+    setIsInteracting(true);
     createThread(title, safepost, selected);
+    setIsInteracting(false);
   };
 
   const handleSelected = (tag: string) => {
@@ -126,7 +136,17 @@ function MobilePublish() {
           className="w-1/3 bg-[#3800A7] hover:bg-[#1e0846]"
           disabled={selected.length < 3 || !title || !safepost}
         >
-          Publish
+          {isInteracting ? (
+            <CircleLoader
+              cssOverride={override}
+              color={"white"}
+              size={30}
+              aria-label="Loading Spinner"
+              data-testid="loader"
+            />
+          ) : (
+            "Publish"
+          )}
         </Button>
         <Button className="w-1/3 bg-white border border-[#3800A7] text-black hover:bg-[#1e0846] hover:text-white">
           Save to drafts

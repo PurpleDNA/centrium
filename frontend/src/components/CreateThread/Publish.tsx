@@ -5,11 +5,19 @@ import { Context } from "@/Contexts/Context";
 import DOMpurify from "dompurify";
 import { useCentriumHooks } from "@/AppServices/CentriumHooks";
 import { X } from "lucide-react";
+import CircleLoader from "react-spinners/CircleLoader";
+
+const override = {
+  display: "block",
+  margin: "0 auto",
+  borderColor: "#3800A7",
+  // color: "white",
+};
 
 function Publish() {
   const [selected, setSelected] = useState<string[]>([]);
   const [value, setValue] = useState<string>("");
-  const { createThread } = useCentriumHooks();
+  const { createThread, saveToDrafts, isInteracting } = useCentriumHooks();
   const useSafeContext = () => {
     const context = useContext(Context);
     if (!context) {
@@ -23,6 +31,10 @@ function Publish() {
 
   const publish = () => {
     createThread(title, safepost, selected);
+  };
+
+  const saveDraft = () => {
+    saveToDrafts(title, safepost, selected, "no description", false);
   };
 
   const handleSelected = (tag: string) => {
@@ -123,10 +135,35 @@ function Publish() {
           className="w-full bg-[#3800A7] hover:bg-[#1e0846] mb-2"
           disabled={selected.length < 3 || !title || !safepost}
         >
-          Publish
+          {isInteracting ? (
+            <CircleLoader
+              cssOverride={override}
+              color={"white"}
+              size={30}
+              aria-label="Loading Spinner"
+              data-testid="loader"
+            />
+          ) : (
+            "Publish"
+          )}
         </Button>
-        <Button className="w-full bg-white border border-[#3800A7] text-black hover:bg-[#1e0846] hover:text-white">
-          Save to drafts
+        <Button
+          onClick={saveDraft}
+          disabled={selected.length < 3 || !title || !safepost}
+          variant="outline"
+          className="w-full bg-white border border-[#3800A7] text-black hover:bg-[#1e0846] hover:text-white"
+        >
+          {isInteracting ? (
+            <CircleLoader
+              cssOverride={override}
+              color={"white"}
+              size={30}
+              aria-label="Loading Spinner"
+              data-testid="loader"
+            />
+          ) : (
+            "Save to drafts"
+          )}
         </Button>
       </div>
     </div>

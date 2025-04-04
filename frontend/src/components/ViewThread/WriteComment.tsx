@@ -6,7 +6,7 @@ import { useCentriumHooks } from "@/AppServices/CentriumHooks";
 import { useParams } from "react-router";
 import { useRef, useState } from "react";
 // import MoonLoader from "react-spinners/MoonLoader";
-import ClipLoader from "react-spinners/CircleLoader";
+import CircleLoader from "react-spinners/CircleLoader";
 
 const override = {
   display: "block",
@@ -20,15 +20,13 @@ const override = {
 const WriteComment = () => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const user = useSelector((state: any) => state.userProfile.username);
-  const { createComment, isInteracting, setIsInteracting } = useCentriumHooks();
+  const { createComment, isInteracting } = useCentriumHooks();
   const { thread_id } = useParams();
   const [comment, setComment] = useState("");
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const handleComment = async () => {
-    setIsInteracting(true);
     await createComment(thread_id!, comment);
     inputRef.current!.value = "";
-    setIsInteracting(false);
   };
   return (
     <div className="reply flex flex-col gap-5 border-b-2 border-slate-300 pb-4">
@@ -47,7 +45,7 @@ const WriteComment = () => {
       <div onClick={handleComment} className="flex justify-end">
         <Button disabled={!comment} className="bg-[#3800A7]">
           {isInteracting ? (
-            <ClipLoader
+            <CircleLoader
               cssOverride={override}
               color={"white"}
               size={30}

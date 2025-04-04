@@ -199,6 +199,7 @@ export const useCentriumHooks = () => {
     tags: string[]
   ) => {
     try {
+      setIsInteracting(true);
       const hash = await writeContractAsync(
         {
           abi,
@@ -224,9 +225,12 @@ export const useCentriumHooks = () => {
     } catch (error) {
       console.error("createPost Error >>>>>>>" + error);
       toast.error("Create thread failed");
+    } finally {
+      setIsInteracting(false);
     }
   };
 
+  //Function to create GuidePOst
   const createGuide = async (
     title: string,
     content: (string | number)[][],
@@ -234,6 +238,7 @@ export const useCentriumHooks = () => {
     tags: string[]
   ) => {
     try {
+      setIsInteracting(true);
       const hash = await writeContractAsync(
         {
           abi,
@@ -259,11 +264,15 @@ export const useCentriumHooks = () => {
     } catch (error) {
       console.error("createPost Error >>>>>>>" + error);
       toast.error("create guide failed");
+    } finally {
+      setIsInteracting(false);
     }
   };
 
+  //Function to create comment
   const createComment = async (id: string, content: string) => {
     try {
+      setIsInteracting(true);
       const hash = await writeContractAsync(
         {
           abi,
@@ -290,6 +299,8 @@ export const useCentriumHooks = () => {
     } catch (error) {
       console.error("createComment Error >>>>>>>" + error);
       toast.error("create comment failed");
+    } finally {
+      setIsInteracting(false);
     }
   };
 
@@ -303,6 +314,7 @@ export const useCentriumHooks = () => {
     });
   };
 
+  // Function to get Post Async
   const getPostAsync = async (fileHash: string) => {
     try {
       const post = await readContract(config, {
@@ -314,6 +326,46 @@ export const useCentriumHooks = () => {
       return post;
     } catch (error) {
       console.error("getPostAsync Error >>>>>>>" + error);
+    }
+  };
+
+  //Function to save post to drafts
+  const saveToDrafts = async (
+    title: string,
+    content: string | (string | number)[][],
+    tags: string[],
+    description: string,
+    isGuide: boolean
+  ) => {
+    try {
+      setIsInteracting(true);
+      const hash = await writeContractAsync(
+        {
+          abi,
+          address: address,
+          functionName: "saveToDrafts",
+          args: [title, content, tags, description, isGuide],
+        },
+        {
+          onError: (data) => {
+            const message = data as unknown as { shortMessage: string };
+            throw new Error("Failed: " + message.shortMessage);
+          },
+        }
+      );
+
+      const receipt = await waitForTransactionReceipt(config, { hash });
+
+      if (receipt.status === "reverted") {
+        throw new Error("Save to Drafts Failed");
+      } else {
+        toast.success("Saved to Drafts");
+      }
+    } catch (error) {
+      console.error("createPost Error >>>>>>>" + error);
+      toast.error("Couldn't save to drafts");
+    } finally {
+      setIsInteracting(false);
     }
   };
 
@@ -343,6 +395,7 @@ export const useCentriumHooks = () => {
     getProfile,
     createComment,
     getPostAsync,
+    saveToDrafts,
     // getDocumentCount,
   };
 };
