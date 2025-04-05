@@ -10,12 +10,13 @@ import { useSelector } from "react-redux";
 
 const ViewThread = () => {
   const { thread_id } = useParams();
-  const { useGetPost, getProfile, setIsLoading } = useCentriumHooks();
+  const { useGetPost, getProfile, setIsLoading, follow } = useCentriumHooks();
   const { data: result, status } = useGetPost(thread_id!);
   const [likes, setLikes] = useState(0);
   const [dislikes, setDislikes] = useState(0);
   const [author, setAuthor] = useState("");
-  const [follow, setFollow] = useState(false);
+  const [addr, setAddr] = useState<`0x${string}` | "">("");
+  const [canfollow, setCanFollow] = useState(false);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const user = useSelector((state: any) => state.userProfile.walletAddress);
   function formatbigInt(bigInt: number) {
@@ -28,19 +29,25 @@ const ViewThread = () => {
       if (status === "success" && result) {
         const post = result as never[];
         const authorProfile = await getProfile(post[0]);
-        const authorr = (authorProfile as unknown as { username: string })
-          .username;
+        const authorr = (
+          authorProfile as unknown as { username: `0x${string}` }
+        ).username;
         setLikes(formatbigInt(post[7]));
         setDislikes(formatbigInt(post[8]));
         setAuthor(authorr);
+        setAddr(post[0]);
         if (user && user !== post[0]) {
-          setFollow(true);
+          setCanFollow(true);
         }
       }
     }
     fetchData();
     setIsLoading(false);
   }, [status, result, user]);
+
+  const handleFollow = async () => {
+    if (addr) follow(addr);
+  };
 
   return (
     <div className="flex w-full">
@@ -64,13 +71,13 @@ const ViewThread = () => {
             <span className="text-sm font-sofia">18 Saves</span>
           </div>
         </div>
-        {follow && (
+        {canfollow && (
           <div className="w-full flex gap-4 justify-center items-center">
             <p>
               Enjoyed this post? follow{" "}
               <span className="font-semibold">{author} </span>
             </p>
-            <Button>Follow</Button>
+            <Button onClick={handleFollow}>Follow</Button>
           </div>
         )}
         <div className="flex flex-col gap-5 w-full">

@@ -161,8 +161,9 @@ export const useCentriumHooks = () => {
             age: Number(String(Profile[1]).slice(0, String(Profile[1]).length)),
             online: Boolean(Profile[2]),
             following: (Profile[3] as []).length,
+            followers: (Profile[4] as []).length,
             // following: Number(Array(Profile[3]).length),
-            followers: Number(Array(Profile[4]).length),
+            // followers: Number(Array(Profile[4]).length),
           };
           if (sender === senderAddy) {
             dispatch(updateUserProfile(ProfileData));
@@ -465,6 +466,8 @@ export const useCentriumHooks = () => {
       toast.error("Couldn't Follow");
     }
   };
+
+  //unfollow User
   const unfollow = async (user: `0x${string}`) => {
     try {
       setIsInteracting(true);
