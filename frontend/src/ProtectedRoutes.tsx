@@ -1,5 +1,4 @@
 import { useNavigate } from "react-router-dom";
-// import { useAuth } from "./Auth/AuthContext";
 import { FC, ReactNode, useEffect } from "react";
 import { useAccount } from "wagmi";
 
@@ -8,14 +7,18 @@ interface Props {
 }
 
 const ProtectedRoutes: FC<Props> = ({ children }) => {
-  const { isConnected } = useAccount();
-  //   const { isAuthenticated } = useAuth();
+  const { status } = useAccount();
   const navigate = useNavigate();
   useEffect(() => {
-    if (!isConnected) {
+    if (
+      // status !== "reconnecting" &&
+      // status !== "connecting" &&
+      status === "disconnected"
+    ) {
       navigate("/walletconnect", { replace: true });
+      sessionStorage.removeItem("userSession");
     }
-  }, [navigate, isConnected]);
+  }, [navigate, status]);
 
   return <div>{children}</div>;
 };

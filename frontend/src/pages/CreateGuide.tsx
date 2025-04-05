@@ -51,7 +51,7 @@ function CreateGuide() {
             </Button>
           </div>
         </div>
-        <div className="flex overflow-hidden">
+        <div className="flex overflow-hidden ">
           {activePage === "editing" && <EditGuide />}
           {activePage === "preview" && <PreviewGuide />}
         </div>

@@ -3,6 +3,8 @@ import { createRoot } from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "./index.css";
 import React from "react";
+import store from "./Redux/Store/store.ts";
+import { Provider } from "react-redux";
 import App from "./App.tsx";
 import Home from "./pages/Home.tsx";
 import Search from "./pages/Search.tsx";
@@ -17,6 +19,7 @@ import { Web3Provider } from "./Auth/Web3Provider.tsx";
 import { ContextProvider } from "./Contexts/Context.tsx";
 import Notifications from "./pages/Notifications.tsx";
 import Profile from "./pages/Profile.tsx";
+import NotFound from "./components/NotFound.tsx";
 
 const router = createBrowserRouter([
   {
@@ -26,7 +29,7 @@ const router = createBrowserRouter([
         <App />
       </ProtectedRoutes>
     ),
-    errorElement: <div>404 Not Found</div>,
+    errorElement: <NotFound />,
     children: [
       {
         index: true,
@@ -45,7 +48,7 @@ const router = createBrowserRouter([
         element: <CreateGuide />,
       },
       {
-        path: "post",
+        path: "post/:thread_id",
         element: <ViewThread />,
       },
       {
@@ -73,7 +76,9 @@ createRoot(document.getElementById("root")!).render(
     <Web3Provider>
       <AuthProvider>
         <ContextProvider>
-          <RouterProvider router={router} />
+          <Provider store={store}>
+            <RouterProvider router={router} />
+          </Provider>
         </ContextProvider>
       </AuthProvider>
     </Web3Provider>
