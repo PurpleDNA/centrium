@@ -1,6 +1,7 @@
 // import React from 'react'
 import Following from "@/components/Home/Following";
 import Guides from "@/components/Home/Guides";
+import Drafts from "@/components/Profile/Drafts";
 import Threads from "@/components/Home/Threads";
 import ProfileCard from "../components/Profile/ProfileCard";
 import { useContext, useState } from "react";
@@ -63,7 +64,7 @@ function Profile() {
           {activePage === "saved" && <Following />}
           {activePage === "threads" && <Threads />}
           {activePage === "guides" && <Guides />}
-          {activePage === "drafts" && <Guides />}
+          {activePage === "drafts" && <Drafts />}
         </div>
       </div>
       <div className={`w-1/3 hidden lg:block`}>

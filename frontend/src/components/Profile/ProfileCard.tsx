@@ -4,6 +4,7 @@ import ProfPic from "../../assets/rizzking.svg";
 import { Button } from "../ui/button";
 import { useContext } from "react";
 import { Context } from "../../Contexts/Context";
+import { useSelector } from "react-redux";
 
 function ProfileCard() {
   const useSafeContext = () => {
@@ -14,23 +15,30 @@ function ProfileCard() {
     return context;
   };
   const { setIsEditProfileOpen } = useSafeContext();
+  const truncAddr = (address: string) => {
+    const res = address.slice(0, 6) + "....." + address.slice(-5);
+    return res;
+  };
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const profile = useSelector((state: any) => state.userProfile);
   return (
     <div className="hidden border-l-2 border-l-slate-300 lg:flex flex-col gap-8 w-full scrollbar-hide sticky top-0 h-screen overflow-y-scroll px-3 mt-5">
       <div className="flex flex-col gap-3 border-b-2 border-b-slate-300 pb-2">
         <div className="flex flex-col gap-3">
           <img src={ProfPic} alt="" className="w-20 rounded-full" />
           <h1 className="font-sofia font-semibold text-base text-black">
-            The RizzKing
+            {profile.username ? profile.username : "username"}
           </h1>
           <span className="py-1 w-max px-3 bg-slate-300 rounded-xl text-sm">
-            walletAddy
+            {profile.isAccount ? truncAddr(profile.walletAddress) : "0x000000"}
           </span>
           <div className="flex justify-between w-[80%] text-sm">
             <p className="font-sofia font-semibold">
-              134 <span className="text-slate-500 font-normal"> Followers</span>
+              {profile.followers}{" "}
+              <span className="text-slate-500 font-normal"> Followers</span>
             </p>
             <p className="font-sofia font-semibold">
-              2344{" "}
+              {profile.following}{" "}
               <span className="text-slate-500 font-normal"> Following</span>
             </p>
           </div>

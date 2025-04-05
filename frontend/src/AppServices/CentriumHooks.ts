@@ -160,7 +160,8 @@ export const useCentriumHooks = () => {
             username: String(Profile[0]),
             age: Number(String(Profile[1]).slice(0, String(Profile[1]).length)),
             online: Boolean(Profile[2]),
-            following: Number(Array(Profile[3]).length),
+            following: (Profile[3] as []).length,
+            // following: Number(Array(Profile[3]).length),
             followers: Number(Array(Profile[4]).length),
           };
           if (sender === senderAddy) {
@@ -362,10 +363,136 @@ export const useCentriumHooks = () => {
         toast.success("Saved to Drafts");
       }
     } catch (error) {
-      console.error("createPost Error >>>>>>>" + error);
+      console.error("saveDraft Error >>>>>>>" + error);
       toast.error("Couldn't save to drafts");
     } finally {
       setIsInteracting(false);
+    }
+  };
+
+  //Like post
+  const likePost = async (postHash: string) => {
+    try {
+      setIsInteracting(true);
+      const hash = await writeContractAsync(
+        {
+          abi,
+          address: address,
+          functionName: "likePost",
+          args: [postHash],
+        },
+        {
+          onError: (data) => {
+            const message = data as unknown as { shortMessage: string };
+            throw new Error("Failed: " + message.shortMessage);
+          },
+        }
+      );
+
+      const receipt = await waitForTransactionReceipt(config, { hash });
+
+      if (receipt.status === "reverted") {
+        throw new Error("Like Post Failed");
+      } else {
+        toast.success("Post Liked");
+      }
+    } catch (error) {
+      console.error("likePost Error >>>>>>>" + error);
+      toast.error("Couldn't like post");
+    }
+  };
+
+  //Dislike Post
+  const dislikePost = async (postHash: string) => {
+    try {
+      setIsInteracting(true);
+      const hash = await writeContractAsync(
+        {
+          abi,
+          address: address,
+          functionName: "dislikePost",
+          args: [postHash],
+        },
+        {
+          onError: (data) => {
+            const message = data as unknown as { shortMessage: string };
+            throw new Error("Failed: " + message.shortMessage);
+          },
+        }
+      );
+
+      const receipt = await waitForTransactionReceipt(config, { hash });
+
+      if (receipt.status === "reverted") {
+        throw new Error("Dislike Post Failed");
+      } else {
+        toast.success("Post disLiked");
+      }
+    } catch (error) {
+      console.error("DislikePost Error >>>>>>>" + error);
+      toast.error("Couldn't dislike post");
+    }
+  };
+
+  //Follow User
+  const follow = async (user: `0x${string}`) => {
+    try {
+      setIsInteracting(true);
+      const hash = await writeContractAsync(
+        {
+          abi,
+          address: address,
+          functionName: "follow",
+          args: [user],
+        },
+        {
+          onError: (data) => {
+            const message = data as unknown as { shortMessage: string };
+            throw new Error("Failed: " + message.shortMessage);
+          },
+        }
+      );
+
+      const receipt = await waitForTransactionReceipt(config, { hash });
+
+      if (receipt.status === "reverted") {
+        throw new Error("Follow User Failed");
+      } else {
+        toast.success("Following");
+      }
+    } catch (error) {
+      console.error("Follow User Error >>>>>>>" + error);
+      toast.error("Couldn't Follow");
+    }
+  };
+  const unfollow = async (user: `0x${string}`) => {
+    try {
+      setIsInteracting(true);
+      const hash = await writeContractAsync(
+        {
+          abi,
+          address: address,
+          functionName: "unfollow",
+          args: [user],
+        },
+        {
+          onError: (data) => {
+            const message = data as unknown as { shortMessage: string };
+            throw new Error("Failed: " + message.shortMessage);
+          },
+        }
+      );
+
+      const receipt = await waitForTransactionReceipt(config, { hash });
+
+      if (receipt.status === "reverted") {
+        throw new Error("Unfollow User Failed");
+      } else {
+        toast.success("Unfollowed");
+      }
+    } catch (error) {
+      console.error("Unfollow User Error >>>>>>>" + error);
+      toast.error("Couldn't unfollow");
     }
   };
 
@@ -396,6 +523,10 @@ export const useCentriumHooks = () => {
     createComment,
     getPostAsync,
     saveToDrafts,
+    likePost,
+    dislikePost,
+    follow,
+    unfollow,
     // getDocumentCount,
   };
 };
