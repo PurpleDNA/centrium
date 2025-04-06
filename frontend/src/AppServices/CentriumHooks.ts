@@ -39,6 +39,7 @@ export const useCentriumHooks = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isInteracting, setIsInteracting] = useState(false);
   type profType = (string | number | boolean | string[])[];
+  type postType = (string | number | boolean | string[])[];
 
   useWatchContractEvent({
     abi,
@@ -498,25 +499,33 @@ export const useCentriumHooks = () => {
     }
   };
 
-  const getAllPosts = async (limit: number = 100, offset: number = 1) => {
+  const getAllPosts = async (
+    limit: number = Number(DocumentCount),
+    offset: number = 1
+  ) => {
     try {
-      const posts = await readContract(config, {
+      const posts = (await readContract(config, {
         abi,
         address: address,
         functionName: "getAllDocuments",
         args: [limit, offset],
-      });
-      console.log(posts);
+      })) as postType[];
+      const postArray = [];
+      for (let i = 0; i < posts[0].length; i++) {
+        postArray.push(await getPostAsync(posts[0][i] as string));
+      }
+      console.log(postArray);
     } catch (error) {
       console.error("getAllPosts Error >>>>>>>" + error);
     }
   };
   // Get Document Count
-  // const { data: DocumentCount } = useReadContract({
-  //   abi,
-  //   address: address,
-  //   functionName: "getDocumentCount",
-  // });
+  const { data: DocumentCount } = useReadContract({
+    abi,
+    address: address,
+    functionName: "getDocumentCount",
+  });
+  console.log("Document Count", DocumentCount);
 
   return {
     isLoading,
