@@ -1,5 +1,5 @@
 // import React from 'react'
-import Following from "@/components/Home/Following";
+import Following from "@/components/Home/YourFeed";
 import Guides from "@/components/Home/Guides";
 import Drafts from "@/components/Profile/Drafts";
 import Threads from "@/components/Home/Threads";

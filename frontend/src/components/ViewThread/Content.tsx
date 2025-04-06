@@ -5,7 +5,7 @@ import { useCentriumHooks } from "../../AppServices/CentriumHooks";
 import { useEffect, useState } from "react";
 function Content() {
   const { thread_id } = useParams();
-  const { useGetPost, getProfile } = useCentriumHooks();
+  const { useGetPost, getProfile, formatDate, estTime } = useCentriumHooks();
   const [author, setAuthor] = useState("");
   const [addr, setAddr] = useState("");
   const [content, setContent] = useState("");
@@ -13,26 +13,6 @@ function Content() {
   const [tags, setTags] = useState<string[]>([]);
   const [time, setTime] = useState(0);
   const { data: result, status } = useGetPost(thread_id!);
-  function formatDate(bigInt: number) {
-    const timestamp = Number(String(bigInt).slice(0, String(bigInt).length));
-    const date = new Date(timestamp * 1000); // Convert seconds to milliseconds
-    const day = String(date.getUTCDate()).padStart(2, "0");
-    const month = date.toLocaleString("en-US", {
-      month: "short",
-      timeZone: "UTC",
-    }); // Get short month name
-    const year = date.getUTCFullYear();
-
-    return `${day} ${month} ${year}`;
-  }
-  function estTime(content: string) {
-    const wordNum = content.trim().split(/\s+/).length;
-    if (wordNum / 220 < 1) {
-      return 1;
-    } else {
-      return Math.floor(wordNum / 220);
-    }
-  }
 
   useEffect(() => {
     async function fetchData() {

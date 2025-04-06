@@ -519,13 +519,43 @@ export const useCentriumHooks = () => {
       console.error("getAllPosts Error >>>>>>>" + error);
     }
   };
+
   // Get Document Count
   const { data: DocumentCount } = useReadContract({
     abi,
     address: address,
     functionName: "getDocumentCount",
   });
-  console.log("Document Count", DocumentCount);
+
+  //format date
+  function formatDate(bigInt: number) {
+    const timestamp = Number(String(bigInt).slice(0, String(bigInt).length));
+    const date = new Date(timestamp * 1000); // Convert seconds to milliseconds
+    const day = String(date.getUTCDate()).padStart(2, "0");
+    const month = date.toLocaleString("en-US", {
+      month: "short",
+      timeZone: "UTC",
+    }); // Get short month name
+    const year = date.getUTCFullYear();
+
+    return `${day} ${month} ${year}`;
+  }
+
+  //calculate estimated time to read
+  function estTime(content: string) {
+    const wordNum = content.trim().split(/\s+/).length;
+    if (wordNum / 220 < 1) {
+      return 1;
+    } else {
+      return Math.floor(wordNum / 220);
+    }
+  }
+
+  //format big integer I guess
+  function formatBigInt(bigInt: number) {
+    const formatted = Number(String(bigInt).slice(0, String(bigInt).length));
+    return formatted;
+  }
 
   return {
     isLoading,
@@ -546,6 +576,9 @@ export const useCentriumHooks = () => {
     follow,
     unfollow,
     getAllPosts,
-    // getDocumentCount,
+    DocumentCount,
+    formatDate,
+    estTime,
+    formatBigInt,
   };
 };

@@ -18,6 +18,7 @@ const ViewThread = () => {
     unfollow,
     likePost,
     dislikePost,
+    formatBigInt,
   } = useCentriumHooks();
   const { data: result, status } = useGetPost(thread_id!);
   const [likes, setLikes] = useState(0);
@@ -31,10 +32,7 @@ const ViewThread = () => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const userProfile = useSelector((state: any) => state.userProfile);
   const user = userProfile.walletAddress;
-  function formatbigInt(bigInt: number) {
-    const formatted = Number(String(bigInt).slice(0, String(bigInt).length));
-    return formatted;
-  }
+
   useEffect(() => {
     setIsLoading(true);
     async function fetchData() {
@@ -44,8 +42,8 @@ const ViewThread = () => {
         const authorr = (
           authorProfile as unknown as { username: `0x${string}` }
         ).username;
-        setLikes(formatbigInt(post[7]));
-        setDislikes(formatbigInt(post[8]));
+        setLikes(formatBigInt(post[7]));
+        setDislikes(formatBigInt(post[8]));
         setAuthor(authorr);
         setAddr(post[0]);
         if (userProfile.followingList) {

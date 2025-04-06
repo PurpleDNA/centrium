@@ -3,8 +3,18 @@ import thread from "../../assets/thread.png";
 import guide from "../../assets/guides.png";
 import { motion } from "motion/react";
 import { Link } from "react-router-dom";
+import { useCentriumHooks } from "@/AppServices/CentriumHooks";
+import { useCallback } from "react";
 
 function Following() {
+  const { getAllPosts, DocumentCount } = useCentriumHooks();
+  useCallback(() => {
+    const myfeed = getAllPosts();
+    console.log(myfeed);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [DocumentCount]);
+
+  // const keys = ["username", "date", "title", "demo", "duration","postType"]
   return (
     <motion.div
       initial={{ opacity: 0, x: -100 }}

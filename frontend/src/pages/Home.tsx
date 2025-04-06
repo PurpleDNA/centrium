@@ -1,4 +1,4 @@
-import Following from "@/components/Home/Following";
+import YourFeed from "@/components/Home/YourFeed";
 import Guides from "@/components/Home/Guides";
 import Threads from "@/components/Home/Threads";
 import Connect from "@/components/Static/Connect";
@@ -6,12 +6,9 @@ import { Button } from "@/components/ui/button";
 import { PenLine } from "lucide-react";
 import { useContext, useState } from "react";
 import { Context } from "../Contexts/Context";
-import { useCentriumHooks } from "@/AppServices/CentriumHooks";
 
 function Home() {
   const [activePage, setActivePage] = useState("following");
-  const { getAllPosts } = useCentriumHooks();
-  getAllPosts();
   const handleNavigation = (page: string) => {
     setActivePage(page);
   };
@@ -57,7 +54,7 @@ function Home() {
           </div>
         </div>
         <div className="">
-          {activePage === "following" && <Following />}
+          {activePage === "following" && <YourFeed />}
           {activePage === "threads" && <Threads />}
           {activePage === "guides" && <Guides />}
         </div>

@@ -1,7 +1,7 @@
 // import React from 'react'
 import Connect from "@/components/Search/Connect";
 import RecTags from "@/components/Search/RecTags";
-import Following from "@/components/Home/Following";
+import Following from "@/components/Home/YourFeed";
 import Creators from "@/components/Search/Creators";
 import { motion } from "motion/react";
 
