@@ -144,7 +144,6 @@ export const useCentriumHooks = () => {
   //Function to getProfile
   const getProfile = async (sender: `0x${string}`) => {
     try {
-      setIsLoading(true);
       const Profile = (await readContract(config, {
         abi,
         address,
@@ -152,38 +151,32 @@ export const useCentriumHooks = () => {
         args: [sender],
       })) as profType;
 
-      if (Profile) {
-        if (Profile[0]) {
-          const ProfileData: userProfile = {
-            isAccount: true,
-            walletAddress: sender,
-            username: String(Profile[0]),
-            age: Number(String(Profile[1]).slice(0, String(Profile[1]).length)),
-            online: Boolean(Profile[2]),
-            following: (Profile[3] as []).length,
-            followers: (Profile[4] as []).length,
-            // following: Number(Array(Profile[3]).length),
-            // followers: Number(Array(Profile[4]).length),
-          };
-          if (sender === senderAddy) {
-            dispatch(updateUserProfile(ProfileData));
-            sessionStorage.setItem("userSession", "true");
-            return ProfileData;
-          } else {
-            return ProfileData;
-          }
-        } else {
-          const ProfileData: userProfile = {
-            isAccount: false,
-            walletAddress: "0x",
-            username: "",
-            age: 0,
-            online: false,
-            following: 0,
-            followers: 0,
-          };
+      if (Profile[0]) {
+        const ProfileData: userProfile = {
+          isAccount: true,
+          walletAddress: sender,
+          username: String(Profile[0]),
+          age: Number(String(Profile[1]).slice(0, String(Profile[1]).length)),
+          online: Boolean(Profile[2]),
+          following: (Profile[3] as []).length,
+          followers: (Profile[4] as []).length,
+          followingList: Profile[3] as `0x${string}`[],
+          followersList: Profile[4] as `0x${string}`[],
+          // following: Number(Array(Profile[3]).length),
+          // followers: Number(Array(Profile[4]).length),
+        };
+        if (sender === senderAddy) {
           dispatch(updateUserProfile(ProfileData));
+          sessionStorage.setItem("userSession", "true");
+          return ProfileData;
+        } else {
+          return ProfileData;
         }
+      } else {
+        const ProfileData = {
+          isAccount: false,
+        };
+        dispatch(updateUserProfile(ProfileData));
       }
       // console.log(Profile);
     } catch (error) {
@@ -387,6 +380,9 @@ export const useCentriumHooks = () => {
             const message = data as unknown as { shortMessage: string };
             throw new Error("Failed: " + message.shortMessage);
           },
+          onSuccess: () => {
+            toast.success("Post Liked");
+          },
         }
       );
 
@@ -394,9 +390,10 @@ export const useCentriumHooks = () => {
 
       if (receipt.status === "reverted") {
         throw new Error("Like Post Failed");
-      } else {
-        toast.success("Post Liked");
       }
+      // else {
+      //   toast.success("Post Liked");
+      // }
     } catch (error) {
       console.error("likePost Error >>>>>>>" + error);
       toast.error("Couldn't like post");
@@ -459,6 +456,7 @@ export const useCentriumHooks = () => {
       if (receipt.status === "reverted") {
         throw new Error("Follow User Failed");
       } else {
+        getProfile(senderAddy!);
         toast.success("Following");
       }
     } catch (error) {
@@ -491,6 +489,7 @@ export const useCentriumHooks = () => {
       if (receipt.status === "reverted") {
         throw new Error("Unfollow User Failed");
       } else {
+        getProfile(senderAddy!);
         toast.success("Unfollowed");
       }
     } catch (error) {
@@ -499,18 +498,25 @@ export const useCentriumHooks = () => {
     }
   };
 
+  const getAllPosts = async (limit: number = 100, offset: number = 1) => {
+    try {
+      const posts = await readContract(config, {
+        abi,
+        address: address,
+        functionName: "getAllDocuments",
+        args: [limit, offset],
+      });
+      console.log(posts);
+    } catch (error) {
+      console.error("getAllPosts Error >>>>>>>" + error);
+    }
+  };
   // Get Document Count
-  // const { data } = useReadContract({
+  // const { data: DocumentCount } = useReadContract({
   //   abi,
   //   address: address,
   //   functionName: "getDocumentCount",
   // });
-  // const getDocumentCount = () => {
-  //   if (data) {
-  //     const count = data;
-  //     return count;
-  //   }
-  // };
 
   return {
     isLoading,
@@ -530,6 +536,7 @@ export const useCentriumHooks = () => {
     dislikePost,
     follow,
     unfollow,
+    getAllPosts,
     // getDocumentCount,
   };
 };

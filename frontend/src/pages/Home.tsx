@@ -6,10 +6,12 @@ import { Button } from "@/components/ui/button";
 import { PenLine } from "lucide-react";
 import { useContext, useState } from "react";
 import { Context } from "../Contexts/Context";
+import { useCentriumHooks } from "@/AppServices/CentriumHooks";
 
 function Home() {
   const [activePage, setActivePage] = useState("following");
-
+  const { getAllPosts } = useCentriumHooks();
+  getAllPosts();
   const handleNavigation = (page: string) => {
     setActivePage(page);
   };
@@ -34,7 +36,7 @@ function Home() {
                 activePage === "following" ? "border-b-2 border-[#3800A7]" : ""
               }`}
             >
-              Following
+              Your Feed
             </span>
             <span
               onClick={() => handleNavigation("threads")}

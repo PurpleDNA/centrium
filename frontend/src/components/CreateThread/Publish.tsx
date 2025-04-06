@@ -18,6 +18,7 @@ function Publish() {
   const [selected, setSelected] = useState<string[]>([]);
   const [value, setValue] = useState<string>("");
   const { createThread, saveToDrafts, isInteracting } = useCentriumHooks();
+  const [clicked, setClicked] = useState("neither");
   const useSafeContext = () => {
     const context = useContext(Context);
     if (!context) {
@@ -30,10 +31,12 @@ function Publish() {
   const safepost = DOMpurify.sanitize(post);
 
   const publish = () => {
+    setClicked("publish");
     createThread(title, safepost, selected);
   };
 
   const saveDraft = () => {
+    setClicked("draft");
     saveToDrafts(title, safepost, selected, "no description", false);
   };
 
@@ -135,7 +138,7 @@ function Publish() {
           className="w-full bg-[#3800A7] hover:bg-[#1e0846] mb-2"
           disabled={selected.length < 3 || !title || !safepost}
         >
-          {isInteracting ? (
+          {isInteracting && clicked === "publish" ? (
             <CircleLoader
               cssOverride={override}
               color={"white"}
@@ -153,10 +156,10 @@ function Publish() {
           variant="outline"
           className="w-full bg-white border border-[#3800A7] text-black hover:bg-[#1e0846] hover:text-white"
         >
-          {isInteracting ? (
+          {isInteracting && clicked === "draft" ? (
             <CircleLoader
               cssOverride={override}
-              color={"white"}
+              color={"#3800A7"}
               size={30}
               aria-label="Loading Spinner"
               data-testid="loader"

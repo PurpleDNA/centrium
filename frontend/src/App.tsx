@@ -22,7 +22,7 @@ function App() {
     sessionStorage.removeItem("userSession");
   };
   const [accountModal, setAccountModal] = useState(false);
-  const { getProfile, isLoading } = useCentriumHooks();
+  const { getProfile, isLoading, setIsLoading } = useCentriumHooks();
   const { address } = useAccount();
   const useSafeContext = () => {
     const context = useContext(Context);
@@ -41,6 +41,7 @@ function App() {
 
   useEffect(() => {
     if (!userSession) {
+      setIsLoading(true);
       if (address) {
         getProfile(address);
         if (isAccount === false) {

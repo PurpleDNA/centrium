@@ -10,15 +10,27 @@ import { useSelector } from "react-redux";
 
 const ViewThread = () => {
   const { thread_id } = useParams();
-  const { useGetPost, getProfile, setIsLoading, follow } = useCentriumHooks();
+  const {
+    useGetPost,
+    getProfile,
+    setIsLoading,
+    follow,
+    unfollow,
+    likePost,
+    dislikePost,
+  } = useCentriumHooks();
   const { data: result, status } = useGetPost(thread_id!);
   const [likes, setLikes] = useState(0);
   const [dislikes, setDislikes] = useState(0);
   const [author, setAuthor] = useState("");
   const [addr, setAddr] = useState<`0x${string}` | "">("");
   const [canfollow, setCanFollow] = useState(false);
+  const [following, setFollowing] = useState(false);
+  const [action, setAction] = useState("Following");
+  const [isLiked, setIsLiked] = useState("neither");
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const user = useSelector((state: any) => state.userProfile.walletAddress);
+  const userProfile = useSelector((state: any) => state.userProfile);
+  const user = userProfile.walletAddress;
   function formatbigInt(bigInt: number) {
     const formatted = Number(String(bigInt).slice(0, String(bigInt).length));
     return formatted;
@@ -36,6 +48,12 @@ const ViewThread = () => {
         setDislikes(formatbigInt(post[8]));
         setAuthor(authorr);
         setAddr(post[0]);
+        if (userProfile.followingList) {
+          const followingList = userProfile.followingList as `0x${string}`[];
+          if (followingList.includes(post[0])) {
+            setFollowing(true);
+          } else setFollowing(false);
+        }
         if (user && user !== post[0]) {
           setCanFollow(true);
         }
@@ -43,12 +61,35 @@ const ViewThread = () => {
     }
     fetchData();
     setIsLoading(false);
-  }, [status, result, user]);
+  }, [status, result, user, userProfile.followingList]);
 
   const handleFollow = async () => {
-    if (addr) follow(addr);
+    if (following) {
+      if (addr) unfollow(addr);
+    } else {
+      if (addr) follow(addr);
+    }
   };
-
+  const handleLIke = async () => {
+    if (isLiked === "yes") {
+      setIsLiked("neither");
+      setLikes((prev) => prev - 1);
+    } else {
+      setIsLiked("yes");
+      await likePost(thread_id!);
+      setLikes((prev) => prev + 1);
+    }
+  };
+  const handleDislike = async () => {
+    if (isLiked === "no") {
+      setIsLiked("neither");
+      setLikes((prev) => prev - 1);
+    } else {
+      setIsLiked("no");
+      await dislikePost(thread_id!);
+      setDislikes((prev) => prev + 1);
+    }
+  };
   return (
     <div className="flex w-full">
       <div className="w-full lg:w-2/3 flex flex-col gap-5 border-r-2 border-slate-300">
@@ -59,11 +100,23 @@ const ViewThread = () => {
             <span className="text-sm font-sofia">45 Read</span>
           </div> */}
           <div className="flex gap-2 items-center">
-            <ThumbsUp size={"20px"} />{" "}
+            <ThumbsUp
+              fill={isLiked === "yes" ? "currentColor" : "none"}
+              stroke={isLiked === "yes" ? "white" : "black"}
+              className="cursor-pointer"
+              onClick={handleLIke}
+              size={"20px"}
+            />{" "}
             <span className="text-sm font-sofia">{likes} Likes</span>
           </div>
           <div className="flex gap-2 items-center">
-            <ThumbsDown size={"20px"} />{" "}
+            <ThumbsDown
+              fill={isLiked === "no" ? "currentColor" : "none"}
+              stroke={isLiked === "no" ? "white" : "black"}
+              className="cursor-pointer"
+              onClick={handleDislike}
+              size={"20px"}
+            />{" "}
             <span className="text-sm font-sofia">{dislikes} Dislikes</span>
           </div>
           <div className="flex gap-2 items-center">
@@ -77,7 +130,18 @@ const ViewThread = () => {
               Enjoyed this post? follow{" "}
               <span className="font-semibold">{author} </span>
             </p>
-            <Button onClick={handleFollow}>Follow</Button>
+            {following ? (
+              <Button
+                onMouseOver={() => setAction("Unfollow")}
+                onMouseLeave={() => setAction("Following")}
+                onClick={handleFollow}
+                className=" hover:bg-red-500"
+              >
+                {action}
+              </Button>
+            ) : (
+              <Button onClick={handleFollow}>Follow</Button>
+            )}
           </div>
         )}
         <div className="flex flex-col gap-5 w-full">
