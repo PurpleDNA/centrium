@@ -1,5 +1,5 @@
 // import React from "react";
-import FeedPost from "./FeedPost";
+import FeedPost from "../Home/FeedPost";
 import { motion } from "motion/react";
 import thread from "../../assets/thread.png";
 import { Link } from "react-router-dom";

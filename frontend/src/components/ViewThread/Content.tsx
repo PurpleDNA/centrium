@@ -39,7 +39,7 @@ function Content() {
   return (
     <div className="w-full flex flex-col gap-5 pb-3 border-b-2 border-slate-300">
       <h1 className="font-semibold text-2xl pt-1 md:text-4xl md:mb-4 px-3 break-words">
-        {"wazza"}
+        {"Title Placeholder till Marv Delivers"}
       </h1>
       <div className="flex gap-3 px-3 items-center pb-4 border-b-2 border-slate-300">
         <div>

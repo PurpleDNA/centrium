@@ -1,12 +1,13 @@
 // import React from 'react'
-import Following from "@/components/Home/YourFeed";
+import Bookmarks from "@/components/Home/YourFeed";
 import Guides from "@/components/Home/Guides";
 import Drafts from "@/components/Profile/Drafts";
-import Threads from "@/components/Home/Threads";
+import Threads from "@/components/Profile/ProfileThreads";
 import ProfileCard from "../components/Profile/ProfileCard";
 import { useContext, useState } from "react";
 import EditProfileModal from "@/components/modals/EditProfileModal";
 import { Context } from "../Contexts/Context";
+// import { useCentriumHooks } from "@/AppServices/CentriumHooks";
 
 function Profile() {
   const [activePage, setActivePage] = useState("threads");
@@ -45,7 +46,7 @@ function Profile() {
             <span
               onClick={() => handleNavigation("saved")}
               className={`cursor-pointer ${
-                activePage === "following" ? "border-b-2 border-[#3800A7]" : ""
+                activePage === "saved" ? "border-b-2 border-[#3800A7]" : ""
               }`}
             >
               Saved
@@ -53,7 +54,7 @@ function Profile() {
             <span
               onClick={() => handleNavigation("drafts")}
               className={`cursor-pointer ${
-                activePage === "following" ? "border-b-2 border-[#3800A7]" : ""
+                activePage === "drafts" ? "border-b-2 border-[#3800A7]" : ""
               }`}
             >
               Drafts
@@ -61,9 +62,9 @@ function Profile() {
           </div>
         </div>
         <div className="">
-          {activePage === "saved" && <Following />}
           {activePage === "threads" && <Threads />}
           {activePage === "guides" && <Guides />}
+          {activePage === "saved" && <Bookmarks />}
           {activePage === "drafts" && <Drafts />}
         </div>
       </div>

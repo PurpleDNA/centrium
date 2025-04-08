@@ -60,6 +60,13 @@ export const useCentriumHooks = () => {
     pollingInterval: 1_000,
   });
 
+  // Get Document Count
+  const { data: DocumentCount } = useReadContract({
+    abi,
+    address: address,
+    functionName: "getDocumentCount",
+  });
+
   // Function to create Profile
   const createProfile = async (
     name: string,
@@ -501,12 +508,6 @@ export const useCentriumHooks = () => {
     }
   };
 
-  // Get Document Count
-  const { data: DocumentCount } = useReadContract({
-    abi,
-    address: address,
-    functionName: "getDocumentCount",
-  });
   // Get All Posts
   const getAllPosts = async (offset: number = 1) => {
     try {
@@ -515,13 +516,17 @@ export const useCentriumHooks = () => {
           abi,
           address: address,
           functionName: "getAllDocuments",
-          args: [13, offset],
+          args: [DocumentCount, offset],
         })) as postType[];
         const postArray = [];
         for (let i = 0; i < posts[0].length; i++) {
           postArray.push(await getPostAsync(posts[0][i] as string));
         }
-        return postArray;
+        const finalResult = postArray.map((res, i) => {
+          const post = [...(res as unknown[]), posts[0][i]];
+          return post;
+        });
+        return finalResult;
       }
     } catch (error) {
       console.error("getAllPosts Error >>>>>>>" + error);
@@ -568,6 +573,7 @@ export const useCentriumHooks = () => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [DocumentCount]);
+
   //format date
   function formatDate(bigInt: number) {
     const timestamp = Number(String(bigInt).slice(0, String(bigInt).length));

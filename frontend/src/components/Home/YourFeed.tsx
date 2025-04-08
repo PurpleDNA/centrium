@@ -4,7 +4,8 @@ import guide from "../../assets/guides.png";
 import { motion } from "motion/react";
 import { Link } from "react-router-dom";
 import { useCentriumHooks } from "@/AppServices/CentriumHooks";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
+import { getCachedPosts, setCachedPosts } from "@/AppServices/utils/postsCache";
 
 interface feedPostProps {
   username: string;
@@ -20,18 +21,26 @@ interface feedPostProps {
 function YourFeed() {
   const { formatAllPosts, setIsLoading } = useCentriumHooks();
   const [postFeed, setPostFeed] = useState<feedPostProps[] | null>(null);
-  useEffect(() => {
-    const fetchPosts = async () => {
-      setIsLoading(true);
-      const tarara = await formatAllPosts();
-      console.log(tarara);
-      setPostFeed(tarara as unknown as feedPostProps[]);
-    };
-    fetchPosts();
-    // setIsLoading(false);
-  }, [formatAllPosts, setIsLoading]);
 
-  // const keys = ["username", "date", "title", "demo", "duration","postType"]
+  const fetchPosts = useCallback(async () => {
+    setIsLoading(true);
+    const data = await formatAllPosts();
+    setPostFeed(data as unknown as feedPostProps[]);
+    if (data) {
+      setCachedPosts(data);
+    }
+    setIsLoading(false);
+  }, []);
+
+  useEffect(() => {
+    const cached = getCachedPosts();
+    if (cached) {
+      setPostFeed(cached);
+    } else {
+      fetchPosts();
+    }
+  }, []);
+
   return (
     <motion.div
       initial={{ opacity: 0, x: -100 }}
