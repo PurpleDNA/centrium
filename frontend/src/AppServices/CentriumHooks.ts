@@ -18,10 +18,12 @@ import {
   updateUserProfile,
   userProfile,
 } from "@/Redux/Slices/userProfileSlice";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { useAccount } from "wagmi";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import thread from "../assets/thread.png";
+import guide from "../assets/guides.png";
 
 export const useCentriumHooks = () => {
   const config = createConfig({
@@ -182,9 +184,9 @@ export const useCentriumHooks = () => {
       // console.log(Profile);
     } catch (error) {
       console.error("getProfile Error >>>>>>>" + error);
-      window.location.reload();
+      // window.location.reload();
     } finally {
-      setIsLoading(false);
+      // setIsLoading(false);
     }
   };
 
@@ -499,34 +501,73 @@ export const useCentriumHooks = () => {
     }
   };
 
-  const getAllPosts = async (
-    limit: number = Number(DocumentCount),
-    offset: number = 1
-  ) => {
-    try {
-      const posts = (await readContract(config, {
-        abi,
-        address: address,
-        functionName: "getAllDocuments",
-        args: [limit, offset],
-      })) as postType[];
-      const postArray = [];
-      for (let i = 0; i < posts[0].length; i++) {
-        postArray.push(await getPostAsync(posts[0][i] as string));
-      }
-      console.log(postArray);
-    } catch (error) {
-      console.error("getAllPosts Error >>>>>>>" + error);
-    }
-  };
-
   // Get Document Count
   const { data: DocumentCount } = useReadContract({
     abi,
     address: address,
     functionName: "getDocumentCount",
   });
+  // Get All Posts
+  const getAllPosts = async (offset: number = 1) => {
+    try {
+      if (DocumentCount) {
+        const posts = (await readContract(config, {
+          abi,
+          address: address,
+          functionName: "getAllDocuments",
+          args: [13, offset],
+        })) as postType[];
+        const postArray = [];
+        for (let i = 0; i < posts[0].length; i++) {
+          postArray.push(await getPostAsync(posts[0][i] as string));
+        }
+        return postArray;
+      }
+    } catch (error) {
+      console.error("getAllPosts Error >>>>>>>" + error);
+    }
+  };
 
+  //Format All Posts
+  const formatAllPosts = useCallback(async () => {
+    try {
+      const result = (await getAllPosts()) as postType[];
+      if (result) {
+        const feedObject = result.map(async (post) => {
+          const user = await getProfile(post[0] as `0x${string}`);
+          const username = user!.username;
+          const date = formatDate(post[5] as number);
+          const postType = post[4] ? guide : thread;
+          const title = "Placeholder until Marv delivers";
+          const demo = trimToFirst40Words(post[1] as string);
+          const tags = post[2] as string[];
+          const duration = estTime(post[1] as string);
+          const timestamp = post[5];
+          const postHash = post[post.length - 1];
+
+          return {
+            username,
+            date,
+            postType,
+            title,
+            demo,
+            tags,
+            duration,
+            timestamp,
+            postHash,
+          };
+        });
+        const feed = await Promise.all(feedObject);
+        const reverseIt = feed.sort(
+          (a, b) => Number(b.timestamp) - Number(a.timestamp)
+        );
+        return reverseIt;
+      }
+    } catch (error) {
+      console.error("formatAllPosts Error >>>>>>>" + error);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [DocumentCount]);
   //format date
   function formatDate(bigInt: number) {
     const timestamp = Number(String(bigInt).slice(0, String(bigInt).length));
@@ -540,6 +581,7 @@ export const useCentriumHooks = () => {
 
     return `${day} ${month} ${year}`;
   }
+  formatAllPosts();
 
   //calculate estimated time to read
   function estTime(content: string) {
@@ -555,6 +597,10 @@ export const useCentriumHooks = () => {
   function formatBigInt(bigInt: number) {
     const formatted = Number(String(bigInt).slice(0, String(bigInt).length));
     return formatted;
+  }
+
+  function trimToFirst40Words(essay: string) {
+    return essay.split(/\s+/).slice(0, 40).join(" ");
   }
 
   return {
@@ -580,5 +626,7 @@ export const useCentriumHooks = () => {
     formatDate,
     estTime,
     formatBigInt,
+    formatAllPosts,
+    trimToFirst40Words,
   };
 };

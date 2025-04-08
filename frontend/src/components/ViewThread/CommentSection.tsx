@@ -5,8 +5,8 @@ import Comment from "./Comment";
 import { useParams } from "react-router-dom";
 import { useCentriumHooks } from "@/AppServices/CentriumHooks";
 import { useEffect, useState } from "react";
-import { useWatchContractEvent } from "wagmi";
-import abi from "../../ABI/lock-abi.json";
+// import { useWatchContractEvent } from "wagmi";
+// import abi from "../../ABI/lock-abi.json";
 // import FallbackLoading from "../FallbackLoading";
 
 interface CommentProps {
@@ -17,24 +17,24 @@ interface CommentProps {
 const CommentSection = () => {
   const { thread_id } = useParams();
   const { getPostAsync } = useCentriumHooks();
-  const address = "0x101eB58C3141E309943B256C1680D16e91b12055";
+  // const address = "0x101eB58C3141E309943B256C1680D16e91b12055";
   const [commentsNum, setCommentsNum] = useState(0);
   const [comments, setComments] = useState<CommentProps[]>([]);
 
-  useWatchContractEvent({
-    abi,
-    address,
-    eventName: "CommentAdded",
-    onLogs(logs) {
-      const logArgs = logs[0] as unknown as {
-        args: { postHash: string; commenter: string };
-      };
-      console.log("Return value:", logArgs.args);
-      const args = logArgs.args;
-      if (args.postHash === thread_id) setComments([]);
-    },
-    pollingInterval: 1_000,
-  });
+  // useWatchContractEvent({
+  //   abi,
+  //   address,
+  //   eventName: "CommentAdded",
+  //   onLogs(logs) {
+  //     const logArgs = logs[0] as unknown as {
+  //       args: { postHash: string; commenter: string };
+  //     };
+  //     console.log("Return value:", logArgs.args);
+  //     const args = logArgs.args;
+  //     if (args.postHash === thread_id) setComments([]);
+  //   },
+  //   pollingInterval: 1_000,
+  // });
 
   async function fetchData() {
     const result = await getPostAsync(thread_id!);

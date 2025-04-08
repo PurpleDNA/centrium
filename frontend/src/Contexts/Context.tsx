@@ -1,4 +1,4 @@
-import React, { createContext, useState, ReactNode, FC } from "react";
+import React, { createContext, useState, ReactNode, FC, useMemo } from "react";
 interface ContextType {
   isModalOpen: boolean;
   setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -41,28 +41,42 @@ export const ContextProvider: FC<ContextProviderProps> = ({ children }) => {
   const [steps, setSteps] = useState<[number, string][]>([[1, ""]]);
   const [guideDesc, setGuideDesc] = useState("");
 
-  const contextValue: ContextType = {
-    isModalOpen,
-    setIsModalOpen,
-    isNavOpen,
-    setIsNavOpen,
-    isEditProfileOpen,
-    setIsEditProfileOpen,
-    isPublishOpen,
-    setIsPublishOpen,
-    isPublishGuideOpen,
-    setIsPublishGuideOpen,
-    post,
-    setPost,
-    title,
-    setTitle,
-    steps,
-    setSteps,
-    guideDesc,
-    setGuideDesc,
-    guideTitle,
-    setGuideTitle,
-  };
+  const contextValue = useMemo(
+    () => ({
+      isModalOpen,
+      setIsModalOpen,
+      isNavOpen,
+      setIsNavOpen,
+      isEditProfileOpen,
+      setIsEditProfileOpen,
+      isPublishOpen,
+      setIsPublishOpen,
+      isPublishGuideOpen,
+      setIsPublishGuideOpen,
+      post,
+      setPost,
+      title,
+      setTitle,
+      steps,
+      setSteps,
+      guideDesc,
+      setGuideDesc,
+      guideTitle,
+      setGuideTitle,
+    }),
+    [
+      guideDesc,
+      guideTitle,
+      isEditProfileOpen,
+      isModalOpen,
+      isNavOpen,
+      isPublishGuideOpen,
+      isPublishOpen,
+      post,
+      steps,
+      title,
+    ]
+  );
 
   return <Context.Provider value={contextValue}>{children}</Context.Provider>;
 };

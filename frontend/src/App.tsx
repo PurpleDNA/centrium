@@ -50,6 +50,7 @@ function App() {
           setAccountModal(false);
         }
       }
+      setIsLoading(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [address, isAccount]);
