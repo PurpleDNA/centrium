@@ -134,7 +134,7 @@ function MobilePublish() {
         <Button
           onClick={publish}
           className="w-1/3 bg-[#3800A7] hover:bg-[#1e0846]"
-          disabled={selected.length < 3 || !title || !safepost}
+          disabled={selected.length < 3 || !title || !safepost || isInteracting}
         >
           {isInteracting ? (
             <CircleLoader

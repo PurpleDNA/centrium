@@ -15,8 +15,40 @@ import { NavLink } from "react-router-dom";
 import { Context } from "@/Contexts/Context";
 import { ConnectKitButton } from "connectkit";
 import Landing from "../../assets/Landing.png";
+import { useSelector } from "react-redux";
 
 function Sidebar() {
+  const walletAddress = useSelector(
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (state: any) => state.userProfile.walletAddress
+  );
+  const items = [
+    {
+      title: "Home",
+      url: "/",
+      icon: Home,
+    },
+    {
+      title: "Search",
+      url: "/search",
+      icon: Search,
+    },
+    // {
+    //   title: "Community",
+    //   url: "/community",
+    //   icon: UsersRound,
+    // },
+    {
+      title: "Notifications",
+      url: "/notifications",
+      icon: Megaphone,
+    },
+    {
+      title: "Profile",
+      url: `/profile/${walletAddress}`,
+      icon: User,
+    },
+  ];
   const useSafeContext = () => {
     const context = useContext(Context);
     if (!context) {
@@ -116,33 +148,5 @@ function Sidebar() {
     </div>
   );
 }
-
-const items = [
-  {
-    title: "Home",
-    url: "/",
-    icon: Home,
-  },
-  {
-    title: "Search",
-    url: "/search",
-    icon: Search,
-  },
-  // {
-  //   title: "Community",
-  //   url: "/community",
-  //   icon: UsersRound,
-  // },
-  {
-    title: "Notifications",
-    url: "/notifications",
-    icon: Megaphone,
-  },
-  {
-    title: "Profile",
-    url: "/profile",
-    icon: User,
-  },
-];
 
 export default Sidebar;

@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import { Outlet } from "react-router-dom";
 import "./App.css";
 import Sidebar from "./components/Static/Sidebar";
@@ -35,15 +35,13 @@ function App() {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const isAccount = useSelector((state: any) => state.userProfile.isAccount);
-  console.log(isAccount);
 
   const userSession = sessionStorage.getItem("userSession");
-
-  useEffect(() => {
+  const fetchData = useCallback(async () => {
     if (!userSession) {
       setIsLoading(true);
       if (address) {
-        getProfile(address);
+        await getProfile(address);
         if (isAccount === false) {
           setAccountModal(true);
         } else {
@@ -52,8 +50,11 @@ function App() {
       }
       setIsLoading(false);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [address, isAccount]);
+  }, [userSession, setIsLoading, address, getProfile, isAccount]);
+
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
   return (
     <div>
       <div className="flex w-full">

@@ -136,7 +136,7 @@ function Publish() {
         <Button
           onClick={publish}
           className="w-full bg-[#3800A7] hover:bg-[#1e0846] mb-2"
-          disabled={selected.length < 3 || !title || !safepost}
+          disabled={selected.length < 3 || !title || !safepost || isInteracting}
         >
           {isInteracting && clicked === "publish" ? (
             <CircleLoader
@@ -152,7 +152,7 @@ function Publish() {
         </Button>
         <Button
           onClick={saveDraft}
-          disabled={selected.length < 3 || !title || !safepost}
+          disabled={selected.length < 3 || !title || !safepost || isInteracting}
           variant="outline"
           className="w-full bg-white border border-[#3800A7] text-black hover:bg-[#1e0846] hover:text-white"
         >

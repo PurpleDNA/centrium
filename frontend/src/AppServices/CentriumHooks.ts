@@ -152,50 +152,53 @@ export const useCentriumHooks = () => {
   };
 
   //Function to getProfile
-  const getProfile = async (sender: `0x${string}`) => {
-    try {
-      const Profile = (await readContract(config, {
-        abi,
-        address,
-        functionName: "getProfile",
-        args: [sender],
-      })) as profType;
+  const getProfile = useCallback(
+    async (sender: `0x${string}`) => {
+      try {
+        const Profile = (await readContract(config, {
+          abi,
+          address,
+          functionName: "getProfile",
+          args: [sender],
+        })) as profType;
 
-      if (Profile[0]) {
-        const ProfileData: userProfile = {
-          isAccount: true,
-          walletAddress: sender,
-          username: String(Profile[0]),
-          age: Number(String(Profile[1]).slice(0, String(Profile[1]).length)),
-          online: Boolean(Profile[2]),
-          following: (Profile[3] as []).length,
-          followers: (Profile[4] as []).length,
-          followingList: Profile[3] as `0x${string}`[],
-          followersList: Profile[4] as `0x${string}`[],
-          // following: Number(Array(Profile[3]).length),
-          // followers: Number(Array(Profile[4]).length),
-        };
-        if (sender === senderAddy) {
-          dispatch(updateUserProfile(ProfileData));
-          sessionStorage.setItem("userSession", "true");
-          return ProfileData;
+        if (Profile[0]) {
+          const ProfileData: userProfile = {
+            isAccount: true,
+            walletAddress: sender,
+            username: String(Profile[0]),
+            age: Number(String(Profile[1]).slice(0, String(Profile[1]).length)),
+            online: Boolean(Profile[2]),
+            following: (Profile[3] as []).length,
+            followers: (Profile[4] as []).length,
+            followingList: Profile[3] as `0x${string}`[],
+            followersList: Profile[4] as `0x${string}`[],
+            // following: Number(Array(Profile[3]).length),
+            // followers: Number(Array(Profile[4]).length),
+          };
+          if (sender === senderAddy) {
+            dispatch(updateUserProfile(ProfileData));
+            sessionStorage.setItem("userSession", "true");
+            return ProfileData;
+          } else {
+            return ProfileData;
+          }
         } else {
-          return ProfileData;
+          const ProfileData = {
+            isAccount: false,
+          };
+          dispatch(updateUserProfile(ProfileData));
         }
-      } else {
-        const ProfileData = {
-          isAccount: false,
-        };
-        dispatch(updateUserProfile(ProfileData));
+        // console.log(Profile);
+      } catch (error) {
+        console.error("getProfile Error >>>>>>>" + error);
+        // window.location.reload();
+      } finally {
+        // setIsLoading(false);
       }
-      // console.log(Profile);
-    } catch (error) {
-      console.error("getProfile Error >>>>>>>" + error);
-      // window.location.reload();
-    } finally {
-      // setIsLoading(false);
-    }
-  };
+    },
+    [config, dispatch, senderAddy]
+  );
 
   //Function to create ThreadPost
   const createThread = async (
@@ -320,19 +323,22 @@ export const useCentriumHooks = () => {
   };
 
   // Function to get Post Async
-  const getPostAsync = async (fileHash: string) => {
-    try {
-      const post = await readContract(config, {
-        abi,
-        address: address,
-        functionName: "getDocumentByHash",
-        args: [fileHash],
-      });
-      return post;
-    } catch (error) {
-      console.error("getPostAsync Error >>>>>>>" + error);
-    }
-  };
+  const getPostAsync = useCallback(
+    async (fileHash: string) => {
+      try {
+        const post = await readContract(config, {
+          abi,
+          address: address,
+          functionName: "getDocumentByHash",
+          args: [fileHash],
+        });
+        return post;
+      } catch (error) {
+        console.error("getPostAsync Error >>>>>>>" + error);
+      }
+    },
+    [config, address]
+  );
 
   //Function to save post to drafts
   const saveToDrafts = async (
@@ -509,29 +515,32 @@ export const useCentriumHooks = () => {
   };
 
   // Get All Posts
-  const getAllPosts = async (offset: number = 1) => {
-    try {
-      if (DocumentCount) {
-        const posts = (await readContract(config, {
-          abi,
-          address: address,
-          functionName: "getAllDocuments",
-          args: [DocumentCount, offset],
-        })) as postType[];
-        const postArray = [];
-        for (let i = 0; i < posts[0].length; i++) {
-          postArray.push(await getPostAsync(posts[0][i] as string));
+  const getAllPosts = useCallback(
+    async (offset: number = 1) => {
+      try {
+        if (DocumentCount) {
+          const posts = (await readContract(config, {
+            abi,
+            address: address,
+            functionName: "getAllDocuments",
+            args: [DocumentCount, offset],
+          })) as postType[];
+          const postArray = [];
+          for (let i = 0; i < posts[0].length; i++) {
+            postArray.push(await getPostAsync(posts[0][i] as string));
+          }
+          const finalResult = postArray.map((res, i) => {
+            const post = [...(res as unknown[]), posts[0][i]];
+            return post;
+          });
+          return finalResult;
         }
-        const finalResult = postArray.map((res, i) => {
-          const post = [...(res as unknown[]), posts[0][i]];
-          return post;
-        });
-        return finalResult;
+      } catch (error) {
+        console.error("getAllPosts Error >>>>>>>" + error);
       }
-    } catch (error) {
-      console.error("getAllPosts Error >>>>>>>" + error);
-    }
-  };
+    },
+    [DocumentCount, config, address, getPostAsync]
+  );
 
   //Format All Posts
   const formatAllPosts = useCallback(async () => {
@@ -541,6 +550,7 @@ export const useCentriumHooks = () => {
         const feedObject = result.map(async (post) => {
           const user = await getProfile(post[0] as `0x${string}`);
           const username = user!.username;
+          const userAddr = user!.walletAddress;
           const date = formatDate(post[5] as number);
           const postType = post[4] ? guide : thread;
           const title = "Placeholder until Marv delivers";
@@ -552,6 +562,7 @@ export const useCentriumHooks = () => {
 
           return {
             username,
+            userAddr,
             date,
             postType,
             title,
@@ -571,8 +582,7 @@ export const useCentriumHooks = () => {
     } catch (error) {
       console.error("formatAllPosts Error >>>>>>>" + error);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [DocumentCount]);
+  }, [getAllPosts, getProfile]);
 
   //format date
   function formatDate(bigInt: number) {
@@ -587,7 +597,6 @@ export const useCentriumHooks = () => {
 
     return `${day} ${month} ${year}`;
   }
-  formatAllPosts();
 
   //calculate estimated time to read
   function estTime(content: string) {

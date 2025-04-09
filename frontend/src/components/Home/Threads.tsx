@@ -16,6 +16,7 @@ interface feedPostProps {
   postType: string;
   tags: string[];
   postHash: string;
+  userAddr: string;
 }
 
 function Threads() {

@@ -1,6 +1,7 @@
-import { FC } from "react";
+import { FC, useRef } from "react";
 import rizzKing from "../../assets/rizzking.svg";
 import { Bookmark, Ellipsis } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 interface Props {
   username: string;
@@ -10,6 +11,8 @@ interface Props {
   duration: number;
   postType: string;
   tags: string[];
+  userAddr: string;
+  postHash?: string;
 }
 
 const FeedPost: FC<Props> = ({
@@ -20,12 +23,37 @@ const FeedPost: FC<Props> = ({
   duration,
   postType,
   tags,
+  userAddr,
+  postHash,
 }) => {
+  const navigate = useNavigate();
+  const profileRef = useRef(null);
+  const postRef = useRef(null);
+  interface HandleClickEvent extends React.MouseEvent<HTMLElement> {
+    currentTarget: EventTarget & HTMLElement;
+  }
+
+  const handleClick = (e: HandleClickEvent) => {
+    if (e.currentTarget === profileRef.current) {
+      navigate(`/profile/${userAddr}`);
+    } else if (e.currentTarget === postRef.current) {
+      navigate(`/post/${postHash}`);
+    }
+  };
   return (
-    <div className="w-full rounded-lg md:w-full flex flex-col gap-6 cursor-pointer hover:bg-slate-100 transition-all duration-300 pb-0 p-5">
+    <div
+      ref={postRef}
+      onClick={(e) => handleClick(e)}
+      className="w-full rounded-lg md:w-full flex flex-col gap-6 cursor-pointer hover:bg-slate-100 transition-all duration-300 pb-0 p-5"
+    >
       <div className="flex justify-between items-center">
         <div className="flex gap-2 items-center">
           <img
+            ref={profileRef}
+            onClick={(e) => {
+              e.stopPropagation();
+              handleClick(e);
+            }}
             className=" w-12 h-12"
             src={rizzKing}
             alt="user profile picture"

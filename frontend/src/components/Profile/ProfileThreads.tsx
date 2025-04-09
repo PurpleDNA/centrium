@@ -9,6 +9,7 @@ import { getCachedPosts, setCachedPosts } from "@/AppServices/utils/postsCache";
 
 interface feedPostProps {
   username: string;
+  useraddr: string;
   date: string;
   title: string;
   demo: string;
@@ -16,16 +17,22 @@ interface feedPostProps {
   postType: string;
   tags: string[];
   postHash: string;
+  userAddr: string;
 }
 
-function Threads() {
+interface props {
+  profileAddy: `0x${string}`;
+}
+
+function Threads({ profileAddy }: props) {
   const { formatAllPosts, setIsLoading } = useCentriumHooks();
   const [threadFeed, setThreadFeed] = useState<feedPostProps[] | null>(null);
-
   const fetchPosts = useCallback(async () => {
     setIsLoading(true);
     const data = (await formatAllPosts()) as unknown as feedPostProps[];
-    const onlyThread = data.filter((post) => post.postType === thread);
+    const onlyThread = data.filter(
+      (post) => post.postType === thread && post.userAddr === profileAddy
+    );
     setThreadFeed(onlyThread);
     if (data) {
       setCachedPosts(data);
@@ -36,7 +43,8 @@ function Threads() {
     const cached = getCachedPosts();
     if (cached) {
       const onlyThread = cached.filter(
-        (post: feedPostProps) => post.postType === thread
+        (post: feedPostProps) =>
+          post.postType === thread && post.userAddr === profileAddy
       );
       setThreadFeed(onlyThread);
     } else {

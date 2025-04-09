@@ -16,6 +16,7 @@ interface feedPostProps {
   postType: string;
   tags: string[];
   postHash: string;
+  userAddr: string;
 }
 
 function YourFeed() {
@@ -30,7 +31,7 @@ function YourFeed() {
       setCachedPosts(data);
     }
     setIsLoading(false);
-  }, []);
+  }, [formatAllPosts, setIsLoading]);
 
   useEffect(() => {
     const cached = getCachedPosts();
@@ -39,7 +40,7 @@ function YourFeed() {
     } else {
       fetchPosts();
     }
-  }, []);
+  }, [fetchPosts]);
 
   return (
     <motion.div
@@ -55,9 +56,7 @@ function YourFeed() {
               <FeedPost {...post} />
             </Link>
           ) : (
-            <Link to={`/post/${post.postHash}`}>
-              <FeedPost {...post} />
-            </Link>
+            <FeedPost {...post} />
           )}
         </div>
       ))}

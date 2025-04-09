@@ -4,13 +4,16 @@ import Guides from "@/components/Home/Guides";
 import Drafts from "@/components/Profile/Drafts";
 import Threads from "@/components/Profile/ProfileThreads";
 import ProfileCard from "../components/Profile/ProfileCard";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import EditProfileModal from "@/components/modals/EditProfileModal";
 import { Context } from "../Contexts/Context";
-// import { useCentriumHooks } from "@/AppServices/CentriumHooks";
+import { useParams } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { useCentriumHooks } from "@/AppServices/CentriumHooks";
 
 function Profile() {
   const [activePage, setActivePage] = useState("threads");
+  const { getProfile } = useCentriumHooks();
   const handleNavigation = (page: string) => {
     setActivePage(page);
   };
@@ -21,7 +24,40 @@ function Profile() {
     }
     return context;
   };
+  const { profileAddy } = useParams<{ profileAddy: `0x${string}` }>();
+  const profile = useSelector(
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (state: any) => state.userProfile
+  );
   const { isEditProfileOpen } = useSafeContext();
+  const [username, setUsername] = useState("");
+  const [followers, setFollowers] = useState(0);
+  const [following, setFollowing] = useState(0);
+  const [isFollowing, setIsFollowing] = useState<boolean | null>(null);
+
+  const fetchData = async () => {
+    const mandemaProfile = await getProfile(profileAddy!);
+    if (mandemaProfile) {
+      setUsername(mandemaProfile.username);
+      setFollowers(mandemaProfile.followers);
+      setFollowing(mandemaProfile.following);
+    }
+    if (profile.followingList) {
+      const followingList = profile.followingList as `0x${string}`[];
+      if (followingList.includes(profileAddy!)) {
+        setIsFollowing(true);
+      } else setIsFollowing(false);
+    }
+  };
+  useEffect(() => {
+    if (profile.walletAddress !== profileAddy) {
+      fetchData();
+    } else {
+      setUsername(profile.username);
+      setFollowers(profile.followers);
+      setFollowing(profile.following);
+    }
+  }, []);
   return (
     <div className="flex w-full">
       <div className="w-full lg:w-2/3 flex flex-col gap-5">
@@ -43,33 +79,47 @@ function Profile() {
             >
               Guides
             </span>
-            <span
-              onClick={() => handleNavigation("saved")}
-              className={`cursor-pointer ${
-                activePage === "saved" ? "border-b-2 border-[#3800A7]" : ""
-              }`}
-            >
-              Saved
-            </span>
-            <span
-              onClick={() => handleNavigation("drafts")}
-              className={`cursor-pointer ${
-                activePage === "drafts" ? "border-b-2 border-[#3800A7]" : ""
-              }`}
-            >
-              Drafts
-            </span>
+            {profile.walletAddress === profileAddy && (
+              <span
+                onClick={() => handleNavigation("saved")}
+                className={`cursor-pointer ${
+                  activePage === "saved" ? "border-b-2 border-[#3800A7]" : ""
+                }`}
+              >
+                Saved
+              </span>
+            )}
+            {profile.walletAddress === profileAddy && (
+              <span
+                onClick={() => handleNavigation("drafts")}
+                className={`cursor-pointer ${
+                  activePage === "drafts" ? "border-b-2 border-[#3800A7]" : ""
+                }`}
+              >
+                Drafts
+              </span>
+            )}
           </div>
         </div>
         <div className="">
-          {activePage === "threads" && <Threads />}
+          {activePage === "threads" && <Threads profileAddy={profileAddy!} />}
           {activePage === "guides" && <Guides />}
-          {activePage === "saved" && <Bookmarks />}
-          {activePage === "drafts" && <Drafts />}
+          {activePage === "saved" && profile.walletAddress === profileAddy && (
+            <Bookmarks />
+          )}
+          {activePage === "drafts" && profile.walletAddress === profileAddy && (
+            <Drafts />
+          )}
         </div>
       </div>
       <div className={`w-1/3 hidden lg:block`}>
-        <ProfileCard />
+        <ProfileCard
+          profileAddy={profileAddy!}
+          username={username}
+          followers={followers}
+          following={following}
+          isFollowing={isFollowing}
+        />
       </div>
       {isEditProfileOpen ? <EditProfileModal /> : null}
     </div>

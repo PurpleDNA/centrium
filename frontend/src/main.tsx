@@ -60,7 +60,7 @@ const router = createBrowserRouter([
         element: <Notifications />,
       },
       {
-        path: "profile",
+        path: "profile/:profileAddy",
         element: <Profile />,
       },
     ],

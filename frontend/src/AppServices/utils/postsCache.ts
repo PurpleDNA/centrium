@@ -1,5 +1,5 @@
 const CACHE_KEY = "for_you_posts";
-const STALE_TIME = 1000 * 60 * 5;
+const STALE_TIME = 1000 * 60 * 20;
 
 export function getCachedPosts() {
   const cached = sessionStorage.getItem(CACHE_KEY);
