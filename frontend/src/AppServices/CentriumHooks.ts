@@ -18,7 +18,7 @@ import {
   updateUserProfile,
   userProfile,
 } from "@/Redux/Slices/userProfileSlice";
-import { useCallback, useState } from "react";
+import { useCallback, useState, useMemo } from "react";
 import { useAccount } from "wagmi";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -26,12 +26,16 @@ import thread from "../assets/thread.png";
 import guide from "../assets/guides.png";
 
 export const useCentriumHooks = () => {
-  const config = createConfig({
-    chains: [bscTestnet],
-    transports: {
-      [bscTestnet.id]: http(`https://data-seed-prebsc-2-s1.bnbchain.org:8545`),
-    },
-  });
+  const config = useMemo(() => {
+    return createConfig({
+      chains: [bscTestnet],
+      transports: {
+        [bscTestnet.id]: http(
+          `https://data-seed-prebsc-2-s1.bnbchain.org:8545`
+        ),
+      },
+    });
+  }, []);
   const address = "0x101eB58C3141E309943B256C1680D16e91b12055";
   const navigate = useNavigate();
   const account = useAccount();
@@ -337,7 +341,7 @@ export const useCentriumHooks = () => {
         console.error("getPostAsync Error >>>>>>>" + error);
       }
     },
-    [config, address]
+    [config]
   );
 
   //Function to save post to drafts
@@ -539,7 +543,7 @@ export const useCentriumHooks = () => {
         console.error("getAllPosts Error >>>>>>>" + error);
       }
     },
-    [DocumentCount, config, address, getPostAsync]
+    [DocumentCount, config, getPostAsync]
   );
 
   //Format All Posts
@@ -613,7 +617,7 @@ export const useCentriumHooks = () => {
     const formatted = Number(String(bigInt).slice(0, String(bigInt).length));
     return formatted;
   }
-
+  //Trim to fiest 40 words to get content demo
   function trimToFirst40Words(essay: string) {
     return essay.split(/\s+/).slice(0, 40).join(" ");
   }

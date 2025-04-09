@@ -20,6 +20,7 @@ interface feedPostProps {
 }
 
 function YourFeed() {
+  console.log("Your Feed");
   const { formatAllPosts, setIsLoading } = useCentriumHooks();
   const [postFeed, setPostFeed] = useState<feedPostProps[] | null>(null);
 
@@ -31,7 +32,7 @@ function YourFeed() {
       setCachedPosts(data);
     }
     setIsLoading(false);
-  }, [formatAllPosts, setIsLoading]);
+  }, [setIsLoading, formatAllPosts]);
 
   useEffect(() => {
     const cached = getCachedPosts();
@@ -63,151 +64,5 @@ function YourFeed() {
     </motion.div>
   );
 }
-// const feed: feedPostProps[] = [
-//   {
-//     username: "The Rizz King",
-//     date: "31 jul 2024",
-//     title: "The Scalability Challenge in Web3 and How to Solve It",
-//     demo: "One of the biggest challenges in Web3 is scalability. As blockchain networks grow, they often struggle with slow transaction speeds and high gas fees. Ethereum, for example, can process only about 15 transactions per second, leading to congestion and expensive fees during peak usage.",
-//     duration: 4,
-//     postType: guide,
-//   },
-//   {
-//     username: "PurpleDNA",
-//     date: "31 jul 2024",
-//     title: "The Scalability Challenge in Web3 and How to Solve It",
-//     demo: "One of the biggest challenges in Web3 is scalability. As blockchain networks grow, they often struggle with slow transaction speeds and high gas fees. Ethereum, for example, can process only about 15 transactions per second, leading to congestion and expensive fees during peak usage.",
-//     duration: 4,
-//     postType: thread,
-//   },
-//   {
-//     username: "LAITO",
-//     date: "31 jul 2024",
-//     title: "The Scalability Challenge in Web3 and How to Solve It",
-//     demo: "One of the biggest challenges in Web3 is scalability. As blockchain networks grow, they often struggle with slow transaction speeds and high gas fees. Ethereum, for example, can process only about 15 transactions per second, leading to congestion and expensive fees during peak usage.",
-//     duration: 4,
-//     postType: guide,
-//   },
-//   {
-//     username: "The Rizz King",
-//     date: "31 jul 2024",
-//     title: "The Scalability Challenge in Web3 and How to Solve It",
-//     demo: "One of the biggest challenges in Web3 is scalability. As blockchain networks grow, they often struggle with slow transaction speeds and high gas fees. Ethereum, for example, can process only about 15 transactions per second, leading to congestion and expensive fees during peak usage.",
-//     duration: 4,
-//     postType: thread,
-//   },
-//   {
-//     username: "The Rizz King",
-//     date: "31 jul 2024",
-//     title: "The Scalability Challenge in Web3 and How to Solve It",
-//     demo: "One of the biggest challenges in Web3 is scalability. As blockchain networks grow, they often struggle with slow transaction speeds and high gas fees. Ethereum, for example, can process only about 15 transactions per second, leading to congestion and expensive fees during peak usage.",
-//     duration: 4,
-//     postType: guide,
-//   },
-//   {
-//     username: "The Rizz King",
-//     date: "31 jul 2024",
-//     title: "The Scalability Challenge in Web3 and How to Solve It",
-//     demo: "One of the biggest challenges in Web3 is scalability. As blockchain networks grow, they often struggle with slow transaction speeds and high gas fees. Ethereum, for example, can process only about 15 transactions per second, leading to congestion and expensive fees during peak usage.",
-//     duration: 4,
-//     postType: thread,
-//   },
-//   {
-//     username: "The Rizz King",
-//     date: "31 jul 2024",
-//     title: "The Scalability Challenge in Web3 and How to Solve It",
-//     demo: "One of the biggest challenges in Web3 is scalability. As blockchain networks grow, they often struggle with slow transaction speeds and high gas fees. Ethereum, for example, can process only about 15 transactions per second, leading to congestion and expensive fees during peak usage.",
-//     duration: 4,
-//     postType: guide,
-//   },
-//   {
-//     username: "The Rizz King",
-//     date: "31 jul 2024",
-//     title: "The Scalability Challenge in Web3 and How to Solve It",
-//     demo: "One of the biggest challenges in Web3 is scalability. As blockchain networks grow, they often struggle with slow transaction speeds and high gas fees. Ethereum, for example, can process only about 15 transactions per second, leading to congestion and expensive fees during peak usage.",
-//     duration: 4,
-//     postType: guide,
-//   },
-//   {
-//     username: "The Rizz King",
-//     date: "31 jul 2024",
-//     title: "The Scalability Challenge in Web3 and How to Solve It",
-//     demo: "One of the biggest challenges in Web3 is scalability. As blockchain networks grow, they often struggle with slow transaction speeds and high gas fees. Ethereum, for example, can process only about 15 transactions per second, leading to congestion and expensive fees during peak usage.",
-//     duration: 4,
-//     postType: thread,
-//   },
-//   {
-//     username: "The Rizz King",
-//     date: "31 jul 2024",
-//     title: "The Scalability Challenge in Web3 and How to Solve It",
-//     demo: "One of the biggest challenges in Web3 is scalability. As blockchain networks grow, they often struggle with slow transaction speeds and high gas fees. Ethereum, for example, can process only about 15 transactions per second, leading to congestion and expensive fees during peak usage.",
-//     duration: 4,
-//     postType: guide,
-//   },
-//   {
-//     username: "The Rizz King",
-//     date: "31 jul 2024",
-//     title: "The Scalability Challenge in Web3 and How to Solve It",
-//     demo: "One of the biggest challenges in Web3 is scalability. As blockchain networks grow, they often struggle with slow transaction speeds and high gas fees. Ethereum, for example, can process only about 15 transactions per second, leading to congestion and expensive fees during peak usage.",
-//     duration: 4,
-//     postType: thread,
-//   },
-//   {
-//     username: "The Rizz King",
-//     date: "31 jul 2024",
-//     title: "The Scalability Challenge in Web3 and How to Solve It",
-//     demo: "One of the biggest challenges in Web3 is scalability. As blockchain networks grow, they often struggle with slow transaction speeds and high gas fees. Ethereum, for example, can process only about 15 transactions per second, leading to congestion and expensive fees during peak usage.",
-//     duration: 4,
-//     postType: thread,
-//   },
-//   {
-//     username: "The Rizz King",
-//     date: "31 jul 2024",
-//     title: "The Scalability Challenge in Web3 and How to Solve It",
-//     demo: "One of the biggest challenges in Web3 is scalability. As blockchain networks grow, they often struggle with slow transaction speeds and high gas fees. Ethereum, for example, can process only about 15 transactions per second, leading to congestion and expensive fees during peak usage.",
-//     duration: 4,
-//     postType: thread,
-//   },
-//   {
-//     username: "The Rizz King",
-//     date: "31 jul 2024",
-//     title: "The Scalability Challenge in Web3 and How to Solve It",
-//     demo: "One of the biggest challenges in Web3 is scalability. As blockchain networks grow, they often struggle with slow transaction speeds and high gas fees. Ethereum, for example, can process only about 15 transactions per second, leading to congestion and expensive fees during peak usage.",
-//     duration: 4,
-//     postType: guide,
-//   },
-//   {
-//     username: "The Rizz King",
-//     date: "31 jul 2024",
-//     title: "The Scalability Challenge in Web3 and How to Solve It",
-//     demo: "One of the biggest challenges in Web3 is scalability. As blockchain networks grow, they often struggle with slow transaction speeds and high gas fees. Ethereum, for example, can process only about 15 transactions per second, leading to congestion and expensive fees during peak usage.",
-//     duration: 4,
-//     postType: thread,
-//   },
-//   {
-//     username: "The Rizz King",
-//     date: "31 jul 2024",
-//     title: "The Scalability Challenge in Web3 and How to Solve It",
-//     demo: "One of the biggest challenges in Web3 is scalability. As blockchain networks grow, they often struggle with slow transaction speeds and high gas fees. Ethereum, for example, can process only about 15 transactions per second, leading to congestion and expensive fees during peak usage.",
-//     duration: 4,
-//     postType: guide,
-//   },
-//   {
-//     username: "The Rizz King",
-//     date: "31 jul 2024",
-//     title: "The Scalability Challenge in Web3 and How to Solve It",
-//     demo: "One of the biggest challenges in Web3 is scalability. As blockchain networks grow, they often struggle with slow transaction speeds and high gas fees. Ethereum, for example, can process only about 15 transactions per second, leading to congestion and expensive fees during peak usage.",
-//     duration: 4,
-//     postType: thread,
-//   },
-//   {
-//     username: "The Rizz King",
-//     date: "31 jul 2024",
-//     title: "The Scalability Challenge in Web3 and How to Solve It",
-//     demo: "One of the biggest challenges in Web3 is scalability. As blockchain networks grow, they often struggle with slow transaction speeds and high gas fees. Ethereum, for example, can process only about 15 transactions per second, leading to congestion and expensive fees during peak usage.",
-//     duration: 4,
-//     postType: guide,
-//   },
-// ];
 
 export default YourFeed;
