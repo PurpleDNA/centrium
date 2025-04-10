@@ -26,6 +26,7 @@ import thread from "../assets/thread.png";
 import guide from "../assets/guides.png";
 
 export const useCentriumHooks = () => {
+  // console.log("hooking");
   const config = useMemo(() => {
     return createConfig({
       chains: [bscTestnet],
@@ -546,6 +547,30 @@ export const useCentriumHooks = () => {
     [DocumentCount, config, getPostAsync]
   );
 
+  //format date
+  const formatDate = useCallback((bigInt: number) => {
+    const timestamp = Number(String(bigInt).slice(0, String(bigInt).length));
+    const date = new Date(timestamp * 1000); // Convert seconds to milliseconds
+    const day = String(date.getUTCDate()).padStart(2, "0");
+    const month = date.toLocaleString("en-US", {
+      month: "short",
+      timeZone: "UTC",
+    }); // Get short month name
+    const year = date.getUTCFullYear();
+
+    return `${day} ${month} ${year}`;
+  }, []);
+
+  //calculate estimated time to read
+  const estTime = useCallback((content: string) => {
+    const wordNum = content.trim().split(/\s+/).length;
+    if (wordNum / 220 < 1) {
+      return 1;
+    } else {
+      return Math.floor(wordNum / 220);
+    }
+  }, []);
+
   //Format All Posts
   const formatAllPosts = useCallback(async () => {
     try {
@@ -586,38 +611,14 @@ export const useCentriumHooks = () => {
     } catch (error) {
       console.error("formatAllPosts Error >>>>>>>" + error);
     }
-  }, [getAllPosts, getProfile]);
-
-  //format date
-  function formatDate(bigInt: number) {
-    const timestamp = Number(String(bigInt).slice(0, String(bigInt).length));
-    const date = new Date(timestamp * 1000); // Convert seconds to milliseconds
-    const day = String(date.getUTCDate()).padStart(2, "0");
-    const month = date.toLocaleString("en-US", {
-      month: "short",
-      timeZone: "UTC",
-    }); // Get short month name
-    const year = date.getUTCFullYear();
-
-    return `${day} ${month} ${year}`;
-  }
-
-  //calculate estimated time to read
-  function estTime(content: string) {
-    const wordNum = content.trim().split(/\s+/).length;
-    if (wordNum / 220 < 1) {
-      return 1;
-    } else {
-      return Math.floor(wordNum / 220);
-    }
-  }
+  }, [estTime, formatDate, getAllPosts, getProfile]);
 
   //format big integer I guess
-  function formatBigInt(bigInt: number) {
+  const formatBigInt = useCallback((bigInt: number) => {
     const formatted = Number(String(bigInt).slice(0, String(bigInt).length));
     return formatted;
-  }
-  //Trim to fiest 40 words to get content demo
+  }, []);
+  //Trim to fiest 40 words to get content
   function trimToFirst40Words(essay: string) {
     return essay.split(/\s+/).slice(0, 40).join(" ");
   }

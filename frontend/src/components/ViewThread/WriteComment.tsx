@@ -14,10 +14,11 @@ const override = {
   borderColor: "#3800A7",
   // color: "white",
 };
-// interface props {
-//   setCommentReload: () => void;
-// }
-const WriteComment = () => {
+interface props {
+  setCommentsReload: () => void;
+}
+const WriteComment = ({ setCommentsReload }: props) => {
+  // console.log("write comment negro");
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const user = useSelector((state: any) => state.userProfile.username);
   const { createComment, isInteracting } = useCentriumHooks();
@@ -27,6 +28,7 @@ const WriteComment = () => {
   const handleComment = async () => {
     await createComment(thread_id!, comment);
     inputRef.current!.value = "";
+    setTimeout(() => setCommentsReload(), 600);
   };
   return (
     <div className="reply flex flex-col gap-5 border-b-2 border-slate-300 pb-4">

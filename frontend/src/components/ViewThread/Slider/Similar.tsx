@@ -11,6 +11,7 @@ import SimilarPost from "./SimilarPost";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
 const Similar = () => {
+  // console.log("similar");
   const slider = React.useRef<Slider>(null);
   const settings = {
     dots: true,

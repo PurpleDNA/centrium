@@ -25,7 +25,7 @@ export function getCachedPosts() {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-function stringifyWithBigInt(obj: any) {
+export function stringifyWithBigInt(obj: any) {
   return JSON.stringify(obj, (_key, value) =>
     typeof value === "bigint" ? value.toString() : value
   );

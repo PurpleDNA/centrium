@@ -12,6 +12,7 @@ interface Props {
 }
 
 const Comment = ({ content, commenter }: Props) => {
+  // console.log("rahhhhh");
   const { getProfile } = useCentriumHooks();
   const [commentMaker, setCommentMaker] = useState("");
   useEffect(() => {

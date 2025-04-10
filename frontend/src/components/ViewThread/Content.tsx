@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom";
 import { useCentriumHooks } from "../../AppServices/CentriumHooks";
 import { useEffect, useState } from "react";
 function Content() {
+  // console.log("content");
   const { thread_id } = useParams();
   const { useGetPost, getProfile, formatDate, estTime } = useCentriumHooks();
   const [author, setAuthor] = useState("");
@@ -15,6 +16,7 @@ function Content() {
   const { data: result, status } = useGetPost(thread_id!);
 
   useEffect(() => {
+    console.log("content");
     async function fetchData() {
       if (status === "success" && result) {
         const post = result as never[];
@@ -34,7 +36,7 @@ function Content() {
       }
     }
     fetchData();
-  }, [status, result]);
+  }, [status, result, getProfile, formatDate, estTime]);
 
   return (
     <div className="w-full flex flex-col gap-5 pb-3 border-b-2 border-slate-300">

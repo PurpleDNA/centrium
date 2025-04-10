@@ -1,3 +1,4 @@
+import isEqual from "lodash/isEqual";
 import CommentSection from "@/components/ViewThread/CommentSection";
 import Content from "@/components/ViewThread/Content";
 import { ThumbsDown, ThumbsUp, Bookmark } from "lucide-react";
@@ -5,13 +6,17 @@ import { Button } from "@/components/ui/button";
 import Similar from "@/components/ViewThread/Slider/Similar";
 import { useParams } from "react-router-dom";
 import { useCentriumHooks } from "@/AppServices/CentriumHooks";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
+import { CommentProps } from "@/components/ViewThread/CommentSection";
+// import { stringifyWithBigInt } from "@/AppServices/utils/postsCache";
 
 const ViewThread = () => {
+  console.log("View Thread");
   const { thread_id } = useParams();
   const {
-    useGetPost,
+    // useGetPost,
+    getPostAsync,
     getProfile,
     setIsLoading,
     follow,
@@ -20,7 +25,6 @@ const ViewThread = () => {
     dislikePost,
     formatBigInt,
   } = useCentriumHooks();
-  const { data: result, status } = useGetPost(thread_id!);
   const [likes, setLikes] = useState(0);
   const [dislikes, setDislikes] = useState(0);
   const [author, setAuthor] = useState("");
@@ -29,37 +33,68 @@ const ViewThread = () => {
   const [following, setFollowing] = useState(false);
   const [action, setAction] = useState("Following");
   const [isLiked, setIsLiked] = useState("neither");
+  const [comments, setComments] = useState<CommentProps[]>([]);
+  const [youCommented, setYouCommented] = useState(0);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const userProfile = useSelector((state: any) => state.userProfile);
   const user = userProfile.walletAddress;
 
   useEffect(() => {
+    console.log("running");
     setIsLoading(true);
     async function fetchData() {
-      if (status === "success" && result) {
-        const post = result as never[];
+      const result = await getPostAsync(thread_id!);
+      if (result) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const post = result as any;
         const authorProfile = await getProfile(post[0]);
         const authorr = (
           authorProfile as unknown as { username: `0x${string}` }
         ).username;
-        setLikes(formatBigInt(post[7]));
-        setDislikes(formatBigInt(post[8]));
+        setLikes((prev) =>
+          prev !== formatBigInt(post[7]) ? formatBigInt(post[7]) : prev
+        );
+        setDislikes((prev) =>
+          prev !== formatBigInt(post[8]) ? formatBigInt(post[8]) : prev
+        );
         setAuthor(authorr);
         setAddr(post[0]);
-        if (userProfile.followingList) {
-          const followingList = userProfile.followingList as `0x${string}`[];
-          if (followingList.includes(post[0])) {
-            setFollowing(true);
-          } else setFollowing(false);
-        }
+        const newComments = post[9] as CommentProps[];
+        setComments((prev) =>
+          isEqual(prev, newComments) ? prev : newComments
+        );
+
         if (user && user !== post[0]) {
           setCanFollow(true);
         }
       }
+      setIsLoading(false);
     }
     fetchData();
-    setIsLoading(false);
-  }, [status, result, user, userProfile.followingList]);
+  }, [
+    formatBigInt,
+    getPostAsync,
+    getProfile,
+    setIsLoading,
+    thread_id,
+    user,
+    youCommented,
+  ]);
+
+  const isFollowing = useMemo(() => {
+    return userProfile.followingList?.includes(addr);
+  }, [userProfile.followingList, addr]);
+
+  const setCommentsReload = useCallback(() => {
+    setYouCommented((prev) => prev + 1);
+  }, []);
+
+  useEffect(() => {
+    console.log("running");
+    if (isFollowing !== following) {
+      setFollowing(isFollowing);
+    }
+  }, [following, isFollowing]);
 
   const handleFollow = async () => {
     if (following) {
@@ -152,7 +187,10 @@ const ViewThread = () => {
         </div>
       </div>
       <div className="w-1/3 z-50 hidden lg:block">
-        <CommentSection />
+        <CommentSection
+          comments={comments}
+          setCommentsReload={setCommentsReload}
+        />
       </div>
     </div>
   );
