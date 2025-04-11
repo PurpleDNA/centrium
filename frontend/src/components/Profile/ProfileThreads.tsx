@@ -37,7 +37,7 @@ function Threads({ profileAddy }: props) {
     if (data) {
       setCachedPosts(data);
     }
-  }, []);
+  }, [formatAllPosts, profileAddy, setIsLoading]);
 
   useEffect(() => {
     const cached = getCachedPosts();
@@ -50,7 +50,7 @@ function Threads({ profileAddy }: props) {
     } else {
       fetchPosts();
     }
-  }, []);
+  }, [fetchPosts, profileAddy]);
 
   return (
     <motion.div

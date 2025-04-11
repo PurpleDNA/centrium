@@ -4,7 +4,7 @@ import Guides from "@/components/Home/Guides";
 import Drafts from "@/components/Profile/Drafts";
 import Threads from "@/components/Profile/ProfileThreads";
 import ProfileCard from "../components/Profile/ProfileCard";
-import { useContext, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import EditProfileModal from "@/components/modals/EditProfileModal";
 import { Context } from "../Contexts/Context";
 import { useParams } from "react-router-dom";
@@ -35,7 +35,7 @@ function Profile() {
   const [following, setFollowing] = useState(0);
   const [isFollowing, setIsFollowing] = useState<boolean | null>(null);
 
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     const mandemaProfile = await getProfile(profileAddy!);
     if (mandemaProfile) {
       setUsername(mandemaProfile.username);
@@ -48,7 +48,7 @@ function Profile() {
         setIsFollowing(true);
       } else setIsFollowing(false);
     }
-  };
+  }, [getProfile, profile.followingList, profileAddy]);
   useEffect(() => {
     if (profile.walletAddress !== profileAddy) {
       fetchData();
@@ -57,7 +57,14 @@ function Profile() {
       setFollowers(profile.followers);
       setFollowing(profile.following);
     }
-  }, []);
+  }, [
+    fetchData,
+    profile.followers,
+    profile.following,
+    profile.username,
+    profile.walletAddress,
+    profileAddy,
+  ]);
   return (
     <div className="flex w-full">
       <div className="w-full lg:w-2/3 flex flex-col gap-5">
