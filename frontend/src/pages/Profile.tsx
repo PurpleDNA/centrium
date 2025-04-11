@@ -69,7 +69,13 @@ function Profile() {
     <div className="flex w-full">
       <div className="w-full lg:w-2/3 flex flex-col gap-5">
         <div className="w-full pt-4 md:pt-10 border-b-2 border-slate-300 sticky top-8 md:top-0 bg-white">
-          <div className="flex justify-between mx-auto font-sofia w-full font-semibold px-4 md:px-10">
+          <div
+            className={`flex ${
+              profile.walletAddress === profileAddy
+                ? "justify-between"
+                : "justify-center gap-5"
+            } mx-auto font-sofia w-full font-semibold px-4 md:px-10`}
+          >
             <span
               onClick={() => handleNavigation("threads")}
               className={`cursor-pointer ${

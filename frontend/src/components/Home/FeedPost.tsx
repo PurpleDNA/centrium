@@ -76,7 +76,7 @@ const FeedPost: FC<Props> = ({
         {/* <p className="font-poppins">{demo}</p> */}
       </div>
       <div className="'w-full flex justify-between">
-        <div className="tags flex gap-3 md:gap-5">
+        <div className="tags flex gap-3 md:gap-5 flex-wrap">
           {tags.map((tag, index) => (
             <span
               key={index}
@@ -86,7 +86,7 @@ const FeedPost: FC<Props> = ({
             </span>
           ))}
         </div>
-        <div className="flex gap-2 md:gap-5 items-center">
+        <div className="flex gap-2 md:gap-5 items-center shrink-0">
           <p className="font-poppins text-sm text-gray-600">
             {duration} min read
           </p>

@@ -1,7 +1,7 @@
 import isEqual from "lodash/isEqual";
 import CommentSection from "@/components/ViewThread/CommentSection";
 import Content from "@/components/ViewThread/Content";
-import { ThumbsDown, ThumbsUp, Bookmark } from "lucide-react";
+import { ThumbsDown, ThumbsUp, Bookmark, MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Similar from "@/components/ViewThread/Slider/Similar";
 import { useParams } from "react-router-dom";
@@ -9,6 +9,7 @@ import { useCentriumHooks } from "@/AppServices/CentriumHooks";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 import { CommentProps } from "@/components/ViewThread/CommentSection";
+import { motion } from "motion/react";
 // import { stringifyWithBigInt } from "@/AppServices/utils/postsCache";
 
 const ViewThread = () => {
@@ -35,12 +36,16 @@ const ViewThread = () => {
   const [isLiked, setIsLiked] = useState("neither");
   const [comments, setComments] = useState<CommentProps[]>([]);
   const [youCommented, setYouCommented] = useState(0);
+  const [isMobile, setIsMobile] = useState(false);
+  const [showComments, setShowComments] = useState(false);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const userProfile = useSelector((state: any) => state.userProfile);
   const user = userProfile.walletAddress;
 
+  // window.addEventListener("click", () => {
+  //   if (showComments === true) setShowComments(false);
+  // });
   useEffect(() => {
-    console.log("running");
     setIsLoading(true);
     async function fetchData() {
       const result = await getPostAsync(thread_id!);
@@ -96,6 +101,17 @@ const ViewThread = () => {
     }
   }, [following, isFollowing]);
 
+  useEffect(() => {
+    const getMobile = () => {
+      if (window.innerWidth <= 768) {
+        setIsMobile(true);
+      } else {
+        setIsMobile(false);
+      }
+    };
+    getMobile();
+  }, [window.innerWidth]);
+
   const handleFollow = async () => {
     if (following) {
       if (addr) unfollow(addr);
@@ -133,8 +149,11 @@ const ViewThread = () => {
       setLikes((prev) => prev - 1);
     }
   };
+  const handleShowComments = useCallback(() => {
+    setShowComments(false);
+  }, []);
   return (
-    <div className="flex w-full mb-[70px] md:mb-0">
+    <div className="flex w-full mb-[70px] md:mb-0 flex-col lg:flex-row">
       <div className="w-full lg:w-2/3 flex flex-col gap-5 border-r-2 border-slate-300">
         <Content />
         <div className="flex gap-8 px-3">
@@ -144,28 +163,43 @@ const ViewThread = () => {
           </div> */}
           <div className="flex gap-2 items-center">
             <ThumbsUp
-              fill={isLiked === "liked" ? "currentColor" : "none"}
-              stroke={isLiked === "liked" ? "white" : "black"}
+              fill={isLiked === "liked" ? "#3800A7" : "none"}
+              // stroke={isLiked === "liked" ? "black" : "black"}
               className="cursor-pointer"
               onClick={handleLIke}
               size={"20px"}
-            />{" "}
-            <span className="text-sm font-sofia">{likes} Likes</span>
+            />
+            <span className="text-base font-sofia">
+              {likes} {isMobile ? "" : "Likes"}
+            </span>
           </div>
-          <div className="flex gap-2 items-center">
+          <div className="flex gap-2 items-end">
             <ThumbsDown
-              fill={isLiked === "disliked" ? "currentColor" : "none"}
-              stroke={isLiked === "disliked" ? "white" : "black"}
-              className="cursor-pointer"
+              fill={isLiked === "disliked" ? "#3800A7" : "none"}
+              // stroke={isLiked === "disliked" ? "white" : "black"}
+              className="cursor-pointer "
               onClick={handleDislike}
               size={"20px"}
-            />{" "}
-            <span className="text-sm font-sofia">{dislikes} Dislikes</span>
+            />
+            <span className="text-base font-sofia">
+              {dislikes} {isMobile ? "" : "Dislikes"}
+            </span>
           </div>
           <div className="flex gap-2 items-center">
-            <Bookmark size={"20px"} />{" "}
-            <span className="text-sm font-sofia">0 Saves</span>
+            <Bookmark size={"20px"} className="cursor-pointer" />{" "}
+            <span className="text-base font-sofia">
+              0 {isMobile ? "" : "Saves"}{" "}
+            </span>
           </div>
+          {isMobile && (
+            <div
+              onClick={() => setShowComments(true)}
+              className="flex gap-2 items-center"
+            >
+              <MessageCircle size={"20px"} className="cursor-pointer" />
+              <span className="text-base font-sofia">{comments.length}</span>
+            </div>
+          )}
         </div>
         {canfollow && (
           <div className="w-full flex gap-4 justify-center items-center">
@@ -196,12 +230,21 @@ const ViewThread = () => {
           </div>
         </div>
       </div>
-      <div className="w-1/3 z-50 hidden lg:block ">
-        <CommentSection
-          comments={comments}
-          setCommentsReload={setCommentsReload}
-        />
-      </div>
+      {((isMobile && showComments) || !isMobile) && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.4, ease: "easeInOut" }}
+          exit={{ opacity: 0, x: 100 }}
+          className="w-full lg:w-1/3 z-50  "
+        >
+          <CommentSection
+            comments={comments}
+            setCommentsReload={setCommentsReload}
+            setShowComments={handleShowComments}
+          />
+        </motion.div>
+      )}
     </div>
   );
 };

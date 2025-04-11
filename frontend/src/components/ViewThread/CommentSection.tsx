@@ -4,6 +4,7 @@ import { ChevronDown } from "lucide-react";
 import Comment from "./Comment";
 import { useMemo } from "react";
 import React from "react";
+import { X } from "lucide-react";
 
 // import FallbackLoading from "../FallbackLoading";
 
@@ -15,8 +16,13 @@ export interface CommentProps {
 interface Props {
   comments: CommentProps[];
   setCommentsReload: () => void;
+  setShowComments: () => void;
 }
-const CommentSection = ({ comments, setCommentsReload }: Props) => {
+const CommentSection = ({
+  comments,
+  setCommentsReload,
+  setShowComments,
+}: Props) => {
   // console.log("Comment Section")
   const commentsNum = useMemo(() => {
     return comments.length;
@@ -27,11 +33,14 @@ const CommentSection = ({ comments, setCommentsReload }: Props) => {
   }, [comments]);
 
   return (
-    <div className="hidden gap-5 py-5 px-3 lg:flex flex-col sticky top-0 h-screen overflow-y-scroll bg-white">
+    <div className="gap-5 pb-5 px-3 flex flex-col fixed lg-sticky bottom-0 lg:top-0 lg:bottom-0 h-[80%] rounded-t-3xl lg:rounded-t-none border-t-2 border-[#3800A7] lg:h-screen overflow-y-scroll bg-white">
       {/* {!comments && <FallbackLoading />} */}
-      <h1 className="font-sofia font-semibold px-3 py-3 border-b-2 border-slate-300 w-full">
-        {commentsNum} {commentsNum === 1 ? "Comment" : "Comments"}
-      </h1>
+      <div className="flex justify-between items-center sticky top-0 bg-white pt-5">
+        <h1 className="font-sofia font-semibold px-3 py-3 border-b-2 border-slate-300 w-full">
+          {commentsNum} {commentsNum === 1 ? "Comment" : "Comments"}
+        </h1>
+        <X onClick={setShowComments} className="lg:hidden" />
+      </div>
       <WriteComment setCommentsReload={setCommentsReload} />
       <div className="flex gap-3 items-center">
         <h1 className="font-sofia text-sm">Most Relevant</h1>
