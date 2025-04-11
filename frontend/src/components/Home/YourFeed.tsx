@@ -20,7 +20,6 @@ interface feedPostProps {
 }
 
 function YourFeed() {
-  console.log("Your Feed");
   const { formatAllPosts, setIsLoading } = useCentriumHooks();
   const [postFeed, setPostFeed] = useState<feedPostProps[] | null>(null);
 

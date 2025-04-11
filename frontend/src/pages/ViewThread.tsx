@@ -104,27 +104,37 @@ const ViewThread = () => {
     }
   };
   const handleLIke = async () => {
-    if (isLiked === "yes") {
+    if (isLiked === "liked") {
       setIsLiked("neither");
       setLikes((prev) => prev - 1);
-    } else {
-      setIsLiked("yes");
+    } else if (isLiked === "neither") {
       await likePost(thread_id!);
+      setIsLiked("liked");
       setLikes((prev) => prev + 1);
+    } else {
+      await likePost(thread_id!);
+      setIsLiked("liked");
+      setLikes((prev) => prev + 1);
+      setDislikes((prev) => prev - 1);
     }
   };
   const handleDislike = async () => {
-    if (isLiked === "no") {
+    if (isLiked === "disliked") {
       setIsLiked("neither");
-      setLikes((prev) => prev - 1);
-    } else {
-      setIsLiked("no");
+      setDislikes((prev) => prev - 1);
+    } else if (isLiked === "neither") {
       await dislikePost(thread_id!);
+      setIsLiked("disliked");
       setDislikes((prev) => prev + 1);
+    } else {
+      await dislikePost(thread_id!);
+      setIsLiked("disliked");
+      setDislikes((prev) => prev + 1);
+      setLikes((prev) => prev - 1);
     }
   };
   return (
-    <div className="flex w-full">
+    <div className="flex w-full mb-[70px] md:mb-0">
       <div className="w-full lg:w-2/3 flex flex-col gap-5 border-r-2 border-slate-300">
         <Content />
         <div className="flex gap-8 px-3">
@@ -134,8 +144,8 @@ const ViewThread = () => {
           </div> */}
           <div className="flex gap-2 items-center">
             <ThumbsUp
-              fill={isLiked === "yes" ? "currentColor" : "none"}
-              stroke={isLiked === "yes" ? "white" : "black"}
+              fill={isLiked === "liked" ? "currentColor" : "none"}
+              stroke={isLiked === "liked" ? "white" : "black"}
               className="cursor-pointer"
               onClick={handleLIke}
               size={"20px"}
@@ -144,8 +154,8 @@ const ViewThread = () => {
           </div>
           <div className="flex gap-2 items-center">
             <ThumbsDown
-              fill={isLiked === "no" ? "currentColor" : "none"}
-              stroke={isLiked === "no" ? "white" : "black"}
+              fill={isLiked === "disliked" ? "currentColor" : "none"}
+              stroke={isLiked === "disliked" ? "white" : "black"}
               className="cursor-pointer"
               onClick={handleDislike}
               size={"20px"}
@@ -154,7 +164,7 @@ const ViewThread = () => {
           </div>
           <div className="flex gap-2 items-center">
             <Bookmark size={"20px"} />{" "}
-            <span className="text-sm font-sofia">18 Saves</span>
+            <span className="text-sm font-sofia">0 Saves</span>
           </div>
         </div>
         {canfollow && (
@@ -186,7 +196,7 @@ const ViewThread = () => {
           </div>
         </div>
       </div>
-      <div className="w-1/3 z-50 hidden lg:block">
+      <div className="w-1/3 z-50 hidden lg:block ">
         <CommentSection
           comments={comments}
           setCommentsReload={setCommentsReload}

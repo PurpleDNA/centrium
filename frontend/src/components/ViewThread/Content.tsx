@@ -65,7 +65,7 @@ function Content() {
       </div>
       <div
         style={{
-          padding: "20px",
+          padding: "20px 20px 0px",
           backgroundColor: "#fff",
         }}
         className="w-full"

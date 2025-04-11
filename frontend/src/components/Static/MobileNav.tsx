@@ -10,7 +10,7 @@ import { NavLink } from "react-router";
 
 function MobileNav() {
   return (
-    <div className="w-full fixed bottom-0 bg-white flex md:hidden justify-between px-2 pt-1 border-t-2 border-t-slate-300">
+    <div className="w-full fixed bottom-0 bg-white flex md:hidden justify-between px-2 pt-1 border-t-2 border-t-slate-300 z-20">
       {items.map((item) => (
         <NavLink
           to={item.url}

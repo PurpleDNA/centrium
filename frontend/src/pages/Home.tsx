@@ -6,9 +6,11 @@ import { Button } from "@/components/ui/button";
 import { PenLine } from "lucide-react";
 import { useContext, useState } from "react";
 import { Context } from "../Contexts/Context";
+// import UseScrollRestoration from "@/AppServices/utils/UseScrollRestoration";
 
 function Home() {
-  const [activePage, setActivePage] = useState("following");
+  // UseScrollRestoration("home");
+  const [activePage, setActivePage] = useState("Your Feed");
   const handleNavigation = (page: string) => {
     setActivePage(page);
   };
@@ -28,9 +30,9 @@ function Home() {
         <div className="w-full pt-4 md:pt-10 border-b-2 border-slate-300 sticky top-8 md:top-0 bg-white">
           <div className="flex justify-between px-4 md:px-16 font-sofia w-full font-semibold">
             <span
-              onClick={() => handleNavigation("following")}
+              onClick={() => handleNavigation("Your Feed")}
               className={`cursor-pointer ${
-                activePage === "following" ? "border-b-2 border-[#3800A7]" : ""
+                activePage === "Your Feed" ? "border-b-2 border-[#3800A7]" : ""
               }`}
             >
               Your Feed
@@ -53,8 +55,8 @@ function Home() {
             </span>
           </div>
         </div>
-        <div className="">
-          {activePage === "following" && <YourFeed />}
+        <div className="scrollable_container">
+          {activePage === "Your Feed" && <YourFeed />}
           {activePage === "threads" && <Threads />}
           {activePage === "guides" && <Guides />}
         </div>

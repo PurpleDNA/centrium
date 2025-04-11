@@ -44,8 +44,12 @@ const WriteComment = ({ setCommentsReload }: props) => {
         rows={5}
         onChange={(e) => setComment(e.currentTarget.value)}
       ></textarea>
-      <div onClick={handleComment} className="flex justify-end">
-        <Button disabled={!comment || isInteracting} className="bg-[#3800A7]">
+      <div className="flex justify-end">
+        <Button
+          onClick={handleComment}
+          disabled={!comment || isInteracting}
+          className="bg-[#3800A7]"
+        >
           {isInteracting ? (
             <CircleLoader
               cssOverride={override}
