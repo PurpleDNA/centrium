@@ -5,6 +5,7 @@ import Comment from "./Comment";
 import { useMemo } from "react";
 import React from "react";
 import { X } from "lucide-react";
+import { useCentriumHooks } from "@/AppServices/CentriumHooks";
 
 // import FallbackLoading from "../FallbackLoading";
 
@@ -24,6 +25,7 @@ const CommentSection = ({
   setShowComments,
 }: Props) => {
   // console.log("Comment Section")
+  const { formatDate } = useCentriumHooks();
   const commentsNum = useMemo(() => {
     return comments.length;
   }, [comments.length]);
@@ -33,7 +35,7 @@ const CommentSection = ({
   }, [comments]);
 
   return (
-    <div className="gap-5 pb-5 px-3 flex flex-col fixed lg-sticky bottom-0 lg:top-0 lg:bottom-0 h-[80%] rounded-t-3xl lg:rounded-t-none border-t-2 border-[#3800A7] lg:h-screen overflow-y-scroll bg-white">
+    <div className="gap-5 pb-5 px-3 flex flex-col fixed lg:sticky bottom-0 lg:top-0 lg:bottom-0 h-[80%] rounded-t-3xl lg:rounded-t-none border-t-2 lg:border-t-0 border-[#3800A7] lg:h-screen overflow-y-scroll bg-white">
       {/* {!comments && <FallbackLoading />} */}
       <div className="flex justify-between items-center sticky top-0 bg-white pt-5">
         <h1 className="font-sofia font-semibold px-3 py-3 border-b-2 border-slate-300 w-full">
@@ -52,6 +54,7 @@ const CommentSection = ({
             key={i}
             content={comment.content}
             commenter={comment.commenter}
+            date={formatDate(Number(comment.timestamp))}
           />
         ))}
       </div>

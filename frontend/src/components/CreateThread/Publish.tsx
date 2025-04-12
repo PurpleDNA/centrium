@@ -152,7 +152,7 @@ function Publish() {
         </Button>
         <Button
           onClick={saveDraft}
-          disabled={selected.length < 3 || !title || !safepost || isInteracting}
+          disabled={!title || isInteracting}
           variant="outline"
           className="w-full bg-white border border-[#3800A7] text-black hover:bg-[#1e0846] hover:text-white"
         >

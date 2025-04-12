@@ -9,9 +9,10 @@ interface Props {
   // replies: number;
   commenter: `0x${string}`;
   content: string;
+  date: string;
 }
 
-const Comment = ({ content, commenter }: Props) => {
+const Comment = ({ content, commenter, date }: Props) => {
   // console.log("rahhhhh");
   const { getProfile } = useCentriumHooks();
   const [commentMaker, setCommentMaker] = useState("");
@@ -30,12 +31,12 @@ const Comment = ({ content, commenter }: Props) => {
           <img src={profpic} alt="" />
           <div className="flex flex-col">
             <span className="font-sofia font-semibold">{commentMaker}</span>
-            <span className="text-xs font-light">1 day ago</span>
+            <span className="text-xs font-light">{date}</span>
           </div>
         </div>
         <Ellipsis />
       </div>
-      <p>{content}</p>
+      <p className="display-text">{content}</p>
       {/* <div className="flex justify-between items-center">
         <div className="flex gap-5 items-center">
           <div className="flex items-center gap-1">

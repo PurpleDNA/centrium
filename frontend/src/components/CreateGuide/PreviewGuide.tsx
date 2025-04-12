@@ -4,7 +4,7 @@ import { useContext } from "react";
 import DOMpurify from "dompurify";
 import profpic from "../../assets/rizzking.svg";
 import { Dot } from "lucide-react";
-function PreviewThread() {
+function PreviewGuide() {
   const useSafeContext = () => {
     const context = useContext(Context);
     if (!context) {
@@ -64,4 +64,4 @@ function PreviewThread() {
   );
 }
 
-export default PreviewThread;
+export default PreviewGuide;

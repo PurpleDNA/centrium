@@ -16,8 +16,9 @@ const override = {
 
 function MobilePublish() {
   const [selected, setSelected] = useState<string[]>([]);
-  const { createThread, isInteracting, setIsInteracting } = useCentriumHooks();
+  const { createThread, isInteracting, saveToDrafts } = useCentriumHooks();
   const [value, setValue] = useState<string>("");
+  const [clicked, setClicked] = useState("neither");
   const useSafeContext = () => {
     const context = useContext(Context);
     if (!context) {
@@ -30,9 +31,13 @@ function MobilePublish() {
   const safepost = DOMpurify.sanitize(post);
 
   const publish = () => {
-    setIsInteracting(true);
+    setClicked("publish");
     createThread(title, safepost, selected);
-    setIsInteracting(false);
+  };
+
+  const saveDraft = () => {
+    setClicked("draft");
+    saveToDrafts(title, safepost, selected, "no description", false);
   };
 
   const handleSelected = (tag: string) => {
@@ -136,7 +141,7 @@ function MobilePublish() {
           className="w-1/3 bg-[#3800A7] hover:bg-[#1e0846]"
           disabled={selected.length < 3 || !title || !safepost || isInteracting}
         >
-          {isInteracting ? (
+          {isInteracting && clicked === "publish" ? (
             <CircleLoader
               cssOverride={override}
               color={"white"}
@@ -148,8 +153,23 @@ function MobilePublish() {
             "Publish"
           )}
         </Button>
-        <Button className="w-1/3 bg-white border border-[#3800A7] text-black hover:bg-[#1e0846] hover:text-white">
-          Save to drafts
+        <Button
+          onClick={saveDraft}
+          disabled={!title || isInteracting}
+          variant="outline"
+          className="w-1/3 bg-white border border-[#3800A7] text-black hover:bg-[#1e0846] hover:text-white"
+        >
+          {isInteracting && clicked === "draft" ? (
+            <CircleLoader
+              cssOverride={override}
+              color={"#3800A7"}
+              size={30}
+              aria-label="Loading Spinner"
+              data-testid="loader"
+            />
+          ) : (
+            "Save to drafts"
+          )}
         </Button>
       </div>
     </div>

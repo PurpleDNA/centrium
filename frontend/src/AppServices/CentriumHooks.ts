@@ -564,10 +564,11 @@ export const useCentriumHooks = () => {
   //calculate estimated time to read
   const estTime = useCallback((content: string) => {
     const wordNum = content.trim().split(/\s+/).length;
+    console.log(wordNum);
     if (wordNum / 220 < 1) {
       return 1;
     } else {
-      return Math.floor(wordNum / 220);
+      return Math.round(wordNum / 220);
     }
   }, []);
 
@@ -623,6 +624,12 @@ export const useCentriumHooks = () => {
     return essay.split(/\s+/).slice(0, 40).join(" ");
   }
 
+  //Truncate Address
+  const truncateAddress = useCallback((address: `0x${string}`) => {
+    const result = address.slice(0, 6) + "....." + address.slice(-5);
+    return result;
+  }, []);
+
   return {
     isLoading,
     setIsLoading,
@@ -648,5 +655,6 @@ export const useCentriumHooks = () => {
     formatBigInt,
     formatAllPosts,
     trimToFirst40Words,
+    truncateAddress,
   };
 };

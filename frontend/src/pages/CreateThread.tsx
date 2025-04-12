@@ -22,7 +22,7 @@ function CreateThread() {
   return (
     <div className="flex w-full">
       <div className="lg:w-3/4 w-full">
-        <div className="w-full pt-10 border-b-2 border-slate-300 sticky top-0 bg-white">
+        <div className="w-full pt-10 border-b-2 border-slate-300 sticky top-0 bg-white z-10">
           <div className="flex gap-20 mx-auto font-sofia w-max font-semibold items-baseline">
             <span
               onClick={() => handleNavigation("editing")}

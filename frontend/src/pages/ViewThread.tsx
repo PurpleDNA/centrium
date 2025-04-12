@@ -157,14 +157,9 @@ const ViewThread = () => {
       <div className="w-full lg:w-2/3 flex flex-col gap-5 border-r-2 border-slate-300">
         <Content />
         <div className="flex gap-8 px-3">
-          {/* <div className="flex gap-2 items-center">
-            <BookOpenCheck size={"20px"} />{" "}
-            <span className="text-sm font-sofia">45 Read</span>
-          </div> */}
           <div className="flex gap-2 items-center">
             <ThumbsUp
               fill={isLiked === "liked" ? "#3800A7" : "none"}
-              // stroke={isLiked === "liked" ? "black" : "black"}
               className="cursor-pointer"
               onClick={handleLIke}
               size={"20px"}
@@ -176,7 +171,6 @@ const ViewThread = () => {
           <div className="flex gap-2 items-end">
             <ThumbsDown
               fill={isLiked === "disliked" ? "#3800A7" : "none"}
-              // stroke={isLiked === "disliked" ? "white" : "black"}
               className="cursor-pointer "
               onClick={handleDislike}
               size={"20px"}
@@ -236,7 +230,7 @@ const ViewThread = () => {
           animate={{ opacity: 1 }}
           transition={{ duration: 0.4, ease: "easeInOut" }}
           exit={{ opacity: 0, x: 100 }}
-          className="w-full lg:w-1/3 z-50  "
+          className="w-full lg:w-1/3 z-30 "
         >
           <CommentSection
             comments={comments}

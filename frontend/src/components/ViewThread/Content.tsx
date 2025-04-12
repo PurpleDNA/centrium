@@ -6,7 +6,8 @@ import { useEffect, useState } from "react";
 function Content() {
   // console.log("content");
   const { thread_id } = useParams();
-  const { useGetPost, getProfile, formatDate, estTime } = useCentriumHooks();
+  const { useGetPost, getProfile, formatDate, estTime, truncateAddress } =
+    useCentriumHooks();
   const [author, setAuthor] = useState("");
   const [addr, setAddr] = useState("");
   const [content, setContent] = useState("");
@@ -23,10 +24,7 @@ function Content() {
         const authorProfile = await getProfile(post[0]);
         const authorr = (authorProfile as unknown as { username: string })
           .username;
-        const truncAddr =
-          (post[0] as string).slice(0, 6) +
-          "....." +
-          (post[0] as string).slice(-5);
+        const truncAddr = truncateAddress(post[0]);
         setAddr(truncAddr);
         setAuthor(authorr);
         setContent(post[1]);
@@ -36,7 +34,7 @@ function Content() {
       }
     }
     fetchData();
-  }, [status, result, getProfile, formatDate, estTime]);
+  }, [status, result, getProfile, formatDate, estTime, truncateAddress]);
 
   return (
     <div className="w-full flex flex-col gap-5 pb-3 border-b-2 border-slate-300">

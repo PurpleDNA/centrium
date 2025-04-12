@@ -61,7 +61,7 @@ function Threads({ profileAddy }: props) {
     >
       {threadFeed?.map((post, index) => (
         <div key={index}>
-          <Link to="/post">
+          <Link to={`/post/${post.postHash}`}>
             <FeedPost {...post} />
           </Link>
         </div>
