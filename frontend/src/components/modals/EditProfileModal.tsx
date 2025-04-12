@@ -61,7 +61,7 @@ function EditProfileModal() {
                 type="text"
                 id="name"
                 name="about"
-                className="w-96 bg-[#F1F1F1] p-1 outline-none font-sofia"
+                className="w-72 md:w-96 bg-[#F1F1F1] p-1 outline-none font-sofia"
               />
             </div>
             <div className="bg-[#F1F1F1] flex flex-col px-4 py-2 rounded-md">
@@ -69,11 +69,11 @@ function EditProfileModal() {
                 About Me
               </label>
               <textarea
-                placeholder="Enter Username"
+                placeholder="Enter bio"
                 id="about"
                 name="about"
                 rows={3}
-                className="w-96 bg-[#F1F1F1] p-1 outline-none font-sofia"
+                className="w-72 md:w-96 bg-[#F1F1F1] p-1 outline-none font-sofia"
               />
             </div>
             <div className="flex justify-end w-full">

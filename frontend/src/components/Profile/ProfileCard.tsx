@@ -48,17 +48,21 @@ function ProfileCard({
     setDecoyIsFing(isFollowing);
   }, [followers, isFollowing]);
   return (
-    <div className="hidden border-l-2 border-l-slate-300 lg:flex flex-col gap-8 w-full scrollbar-hide sticky top-0 h-screen overflow-y-scroll px-3 mt-5">
+    <div className=" border-l-2 border-l-slate-300 lg:flex flex-col gap-8 w-full scrollbar-hide sticky top-0 lg:h-screen overflow-y-scroll px-3 mt-5">
       <div className="flex flex-col gap-3 border-b-2 border-b-slate-300 pb-2">
-        <div className="flex flex-col gap-3">
-          <img src={ProfPic} alt="" className="w-20 rounded-full" />
-          <h1 className="font-sofia font-semibold text-base text-black">
-            {username ? username : "username"}
-          </h1>
-          <span className="py-1 w-max px-3 bg-slate-300 rounded-xl text-sm">
-            {profile.isAccount ? truncAddr(profileAddy) : "0x000000"}
-          </span>
-          <div className="flex justify-between w-[80%] text-sm">
+        <div className="flex flex-col gap-5">
+          <div className="flex items-center gap-5 lg:gap-3 lg:flex-col lg:items-start">
+            <img src={ProfPic} alt="" className="w-20 rounded-full" />
+            <div>
+              <h1 className="font-sofia font-semibold text-base text-black mb-2">
+                {username ? username : "username"}
+              </h1>
+              <span className="py-1 w-max px-3 bg-[#9796961A] rounded-xl text-sm border-[#3800A7] border">
+                {profile.isAccount ? truncAddr(profileAddy) : "0x000000"}
+              </span>
+            </div>
+          </div>
+          <div className="flex gap-12 w-[80%] text-sm">
             <p className="font-sofia font-semibold">
               {decoyFws}{" "}
               <span className="text-slate-500 font-normal"> Followers</span>
@@ -101,7 +105,7 @@ function ProfileCard({
             : "Follow"}
         </Button>
       </div>
-      <div className="flex flex-col gap-3 border-b-2 border-b-slate-300 pb-2">
+      <div className="flex-col gap-3 border-b-2 border-b-slate-300 pb-2 hidden lg:flex">
         <div>
           <div className="flex gap-3 w-max items-center">
             <img src="/assets/token.png" alt="" />
@@ -120,7 +124,7 @@ function ProfileCard({
           </div>
         </div>
       </div>
-      <div className="flex flex-col gap-2">
+      <div className="hidden lg:flex flex-col gap-2">
         <h1 className="font-semibold font-sofia text-base">
           Average Guide Rating
         </h1>

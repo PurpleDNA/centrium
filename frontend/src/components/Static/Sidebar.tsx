@@ -57,7 +57,6 @@ function Sidebar() {
     return context;
   };
   const { isNavOpen, setIsNavOpen, setIsModalOpen } = useSafeContext();
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const toggleModal = () => setIsModalOpen((prev: boolean) => !prev);
   const toggleNav = () => setIsNavOpen((prev: boolean) => !prev);
   // const [isNavOpen, setisNavOpen] = useState<boolean | null>(null);
