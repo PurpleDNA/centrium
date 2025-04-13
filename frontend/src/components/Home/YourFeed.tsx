@@ -48,7 +48,7 @@ function YourFeed() {
     if (scrollTop) console.log(scrollTop);
   }, [location.pathname, scrollTop]);
 
-  useScrollRestoration("feed", scrollRef);
+  useScrollRestoration(scrollRef);
   return (
     <motion.div
       ref={scrollRef}
