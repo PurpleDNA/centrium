@@ -1,6 +1,6 @@
-export const saveScrollPosition = (key: string) => {
-  sessionStorage.setItem(`scroll-pos-${key}`, "2000");
-  console.log(sessionStorage.getItem(`scroll-pos-${key}`) + "  home");
+export const saveScrollPosition = (key: string, scrolled: number) => {
+  sessionStorage.setItem(`scroll-pos-${key}`, scrolled.toString());
+  // console.log(scrolled);
 };
 
 export const getScrollPosition = (key: string): number => {

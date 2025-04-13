@@ -1,5 +1,5 @@
 // import React from 'react'
-import { Context } from "@/Contexts/Context";
+import { Context } from "@/Contexts/createPostContext";
 import { useContext } from "react";
 import DOMpurify from "dompurify";
 import profpic from "../../assets/rizzking.svg";

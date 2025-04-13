@@ -564,7 +564,6 @@ export const useCentriumHooks = () => {
   //calculate estimated time to read
   const estTime = useCallback((content: string) => {
     const wordNum = content.trim().split(/\s+/).length;
-    console.log(wordNum);
     if (wordNum / 220 < 1) {
       return 1;
     } else {

@@ -26,7 +26,7 @@ function Home() {
 
   return (
     <div className="flex">
-      <div className="w-full lg:w-3/4 scrollbar-hide">
+      <div className="w-full lg:w-3/4">
         <div className="w-full pt-4 md:pt-10 border-b-2 border-slate-300 sticky top-8 md:top-0 bg-white">
           <div className="flex justify-between px-4 md:px-16 font-sofia w-full font-semibold">
             <span

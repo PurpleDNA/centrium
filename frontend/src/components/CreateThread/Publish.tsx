@@ -1,7 +1,7 @@
 // import React from "react";
 import { useContext, useState, useRef, useEffect } from "react";
 import { Button } from "../ui/button";
-import { Context } from "@/Contexts/Context";
+import { Context } from "@/Contexts/createPostContext";
 import DOMpurify from "dompurify";
 import { useCentriumHooks } from "@/AppServices/CentriumHooks";
 import { X } from "lucide-react";
@@ -27,12 +27,14 @@ function Publish() {
     return context;
   };
 
-  const { post, title } = useSafeContext();
+  const { post, title, setPost, setTitle } = useSafeContext();
   const safepost = DOMpurify.sanitize(post);
 
   const publish = () => {
     setClicked("publish");
     createThread(title, safepost, selected);
+    setPost("");
+    setTitle("");
   };
 
   const saveDraft = () => {

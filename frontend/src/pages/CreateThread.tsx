@@ -5,6 +5,7 @@ import MobilePublish from "@/components/CreateThread/MobilePublish";
 import { Button } from "@/components/ui/button";
 import { useContext, useState } from "react";
 import { Context } from "../Contexts/Context";
+import { CreateThreadProvider } from "@/Contexts/createPostContext";
 function CreateThread() {
   const useSafeContext = () => {
     const context = useContext(Context);
@@ -49,12 +50,16 @@ function CreateThread() {
           </div>
         </div>
         <div className="flex overflow-hidden">
-          {activePage === "editing" && <EditThread />}
-          {activePage === "preview" && <PreviewThread />}
+          <CreateThreadProvider>
+            {activePage === "editing" && <EditThread />}
+            {activePage === "preview" && <PreviewThread />}
+          </CreateThreadProvider>
         </div>
       </div>
       <div className="w-1/3 hidden lg:block">
-        <Publish />
+        <CreateThreadProvider>
+          <Publish />
+        </CreateThreadProvider>
       </div>
       {isPublishOpen && <MobilePublish />}
     </div>
