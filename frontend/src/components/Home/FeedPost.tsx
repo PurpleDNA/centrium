@@ -1,8 +1,11 @@
-import { FC, useRef } from "react";
+import { FC, useEffect, useRef, useState } from "react";
 import rizzKing from "../../assets/rizzking.svg";
 import { Bookmark, Ellipsis } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
+interface HandleClickEvent extends React.MouseEvent<HTMLElement> {
+  currentTarget: EventTarget & HTMLElement;
+}
 interface Props {
   username: string;
   date: string;
@@ -29,9 +32,16 @@ const FeedPost: FC<Props> = ({
   const navigate = useNavigate();
   const profileRef = useRef(null);
   const postRef = useRef(null);
-  interface HandleClickEvent extends React.MouseEvent<HTMLElement> {
-    currentTarget: EventTarget & HTMLElement;
-  }
+  const [localTags, setLocalTags] = useState<string[]>([]);
+
+  useEffect(() => {
+    if (tags.length > 3) {
+      const trunc = tags.slice(0, 3);
+      setLocalTags([...trunc, "   .......   "]);
+    } else {
+      setLocalTags(tags);
+    }
+  }, [tags, tags.length]);
 
   const handleClick = (e: HandleClickEvent) => {
     if (e.currentTarget === profileRef.current) {
@@ -77,10 +87,10 @@ const FeedPost: FC<Props> = ({
       </div>
       <div className="'w-full flex justify-between">
         <div className="tags flex gap-3 md:gap-5 flex-wrap">
-          {tags.map((tag, index) => (
+          {localTags.map((tag, index) => (
             <span
               key={index}
-              className="rounded-lg font-sofia text-xs bg-[#ECECEC] p-1 text-black"
+              className="rounded-lg font-sofia text-xs bg-[#ECECEC] p-1 text-black font-medium"
             >
               {tag}
             </span>

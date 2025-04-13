@@ -1,7 +1,7 @@
 // import React from "react";
 import { useContext, useState, useRef, useEffect } from "react";
 import { Button } from "../ui/button";
-import { Context } from "@/Contexts/Context";
+import { Context } from "@/Contexts/createPostContext";
 import DOMpurify from "dompurify";
 import { X } from "lucide-react";
 import { useCentriumHooks } from "@/AppServices/CentriumHooks";
@@ -13,8 +13,11 @@ const override = {
   borderColor: "#3800A7",
   // color: "white",
 };
+interface props {
+  setIsPublishOpen: () => void;
+}
 
-function MobilePublish() {
+function MobilePublish({ setIsPublishOpen }: props) {
   const [selected, setSelected] = useState<string[]>([]);
   const { createThread, isInteracting, saveToDrafts } = useCentriumHooks();
   const [value, setValue] = useState<string>("");
@@ -26,7 +29,7 @@ function MobilePublish() {
     }
     return context;
   };
-  const { post, title, setIsPublishOpen } = useSafeContext();
+  const { post, title } = useSafeContext();
 
   const safepost = DOMpurify.sanitize(post);
 
@@ -69,7 +72,7 @@ function MobilePublish() {
   return (
     <div className="w-screen h-screen bg-[#E5E5E5] fixed flex flex-col justify-center inset-0 top-0 left-0 z-50 bg-opacity-90 backdrop-blur-sm p-3">
       <div className="bg-white flex flex-col px-5 p-2">
-        <div onClick={() => setIsPublishOpen(false)}>
+        <div onClick={() => setIsPublishOpen()}>
           <X className="ml-auto w-5 mb-4" />
         </div>
         <div className="w-full">

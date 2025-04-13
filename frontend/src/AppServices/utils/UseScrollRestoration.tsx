@@ -21,7 +21,7 @@ import { useLocation, useNavigationType } from "react-router-dom";
 const scrollPositions = new Map<string, number>();
 
 const UseScrollRestoration = (
-  key: string,
+  // key: string,
   ref: React.RefObject<HTMLElement>
 ) => {
   const location = useLocation();

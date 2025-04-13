@@ -2,8 +2,7 @@
 import { ExternalLink } from "lucide-react";
 import ProfPic from "../../assets/rizzking.svg";
 import { Button } from "../ui/button";
-import { useContext, useEffect, useState } from "react";
-import { Context } from "../../Contexts/Context";
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useCentriumHooks } from "@/AppServices/CentriumHooks";
 
@@ -13,6 +12,7 @@ interface props {
   followers: number;
   following: number;
   isFollowing: boolean | null;
+  setIsEditOpen: () => void;
   bio?: string;
   profPic?: string;
 }
@@ -23,19 +23,12 @@ function ProfileCard({
   followers,
   following,
   isFollowing,
+  setIsEditOpen,
 }: props) {
-  const useSafeContext = () => {
-    const context = useContext(Context);
-    if (!context) {
-      throw new Error("useSafeContext must be used within a ContextProvider");
-    }
-    return context;
-  };
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const profile = useSelector((state: any) => state.userProfile);
   const { follow, unfollow, isInteracting, setIsInteracting } =
     useCentriumHooks();
-  const { setIsEditProfileOpen } = useSafeContext();
   const [decoyFws, setDecoyFws] = useState(followers);
   const [decoyIsFing, setDecoyIsFing] = useState(isFollowing);
   console.log(isFollowing);
@@ -81,7 +74,7 @@ function ProfileCard({
           disabled={isInteracting}
           onClick={async () => {
             if (profile.walletAddress === profileAddy) {
-              setIsEditProfileOpen(true);
+              setIsEditOpen();
             } else {
               if (decoyIsFing === null || decoyIsFing === false) {
                 await follow(profileAddy as `0x${string}`);

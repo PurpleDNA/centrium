@@ -4,9 +4,8 @@ import Guides from "@/components/Home/Guides";
 import Drafts from "@/components/Profile/Drafts";
 import Threads from "@/components/Profile/ProfileThreads";
 import ProfileCard from "../components/Profile/ProfileCard";
-import { useCallback, useContext, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import EditProfileModal from "@/components/modals/EditProfileModal";
-import { Context } from "../Contexts/Context";
 import { useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useCentriumHooks } from "@/AppServices/CentriumHooks";
@@ -17,19 +16,14 @@ function Profile() {
   const handleNavigation = (page: string) => {
     setActivePage(page);
   };
-  const useSafeContext = () => {
-    const context = useContext(Context);
-    if (!context) {
-      throw new Error("useSafeContext must be used within a ContextProvider");
-    }
-    return context;
-  };
+
   const { profileAddy } = useParams<{ profileAddy: `0x${string}` }>();
   const profile = useSelector(
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (state: any) => state.userProfile
   );
-  const { isEditProfileOpen } = useSafeContext();
+  const [isEditOpen, setIsEditOpen] = useState<boolean>(false);
+  console.log(isEditOpen);
   const [username, setUsername] = useState("");
   const [followers, setFollowers] = useState(0);
   const [following, setFollowing] = useState(0);
@@ -65,6 +59,14 @@ function Profile() {
     profile.walletAddress,
     profileAddy,
   ]);
+
+  const handleEdit = useCallback(() => {
+    if (isEditOpen) {
+      setIsEditOpen(false);
+    } else {
+      setIsEditOpen(true);
+    }
+  }, [isEditOpen]);
   return (
     <div className="flex w-full flex-col-reverse lg:flex-row">
       <div className="w-full lg:w-2/3 flex flex-col gap-5">
@@ -132,9 +134,10 @@ function Profile() {
           followers={followers}
           following={following}
           isFollowing={isFollowing}
+          setIsEditOpen={() => handleEdit()}
         />
       </div>
-      {isEditProfileOpen ? <EditProfileModal /> : null}
+      {isEditOpen && <EditProfileModal setIsEditOpen={() => handleEdit()} />}
     </div>
   );
 }

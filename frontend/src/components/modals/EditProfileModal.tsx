@@ -2,28 +2,16 @@
 
 import { X } from "lucide-react";
 import ProfPic from "../../assets/rizzking.svg";
-import { useContext } from "react";
-import { Context } from "../../Contexts/Context";
 import { Button } from "../ui/button";
 import { motion } from "motion/react";
 
-// // interface props {
-// //   className: string;
-// }
-function EditProfileModal() {
-  const useSafeContext = () => {
-    const context = useContext(Context);
-    if (!context) {
-      throw new Error("useSafeContext must be used within a ContextProvider");
-    }
-    return context;
-  };
-  const { isEditProfileOpen, setIsEditProfileOpen } = useSafeContext();
+interface props {
+  setIsEditOpen: () => void;
+}
+function EditProfileModal({ setIsEditOpen }: props) {
   return (
     <div
-      className={`${
-        isEditProfileOpen ? "flex" : "hidden"
-      } w-screen h-screen bg-[#222226] fixed inset-0 top-0 left-0 z-50 justify-center items-center bg-opacity-80 backdrop-blur-sm`}
+      className={`flex w-screen h-screen bg-[#222226] fixed inset-0 top-0 left-0 z-50 justify-center items-center bg-opacity-80 backdrop-blur-sm`}
     >
       <motion.div
         initial={{ opacity: 0, scale: 0.5 }}
@@ -35,10 +23,7 @@ function EditProfileModal() {
           <h1 className="font-bold font-sofia text-base mx-auto pl-6">
             Edit Profile
           </h1>
-          <div
-            className=" cursor-pointer"
-            onClick={() => setIsEditProfileOpen(false)}
-          >
+          <div className=" cursor-pointer" onClick={() => setIsEditOpen()}>
             <X />
           </div>
         </div>
@@ -78,7 +63,7 @@ function EditProfileModal() {
             </div>
             <div className="flex justify-end w-full">
               <Button
-                onClick={() => setIsEditProfileOpen(true)}
+                onClick={() => setIsEditOpen()}
                 className="bg-white border-2 border-[#501FB1] rounded-md w-max text-black text-xs hover:bg-[#501FB1] transition-all hover:text-white"
                 type="submit"
               >

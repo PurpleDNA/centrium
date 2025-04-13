@@ -2,7 +2,6 @@
 import FeedPost from "../Home/FeedPost";
 import { motion } from "motion/react";
 import thread from "../../assets/thread.png";
-import { Link } from "react-router-dom";
 import { useCentriumHooks } from "@/AppServices/CentriumHooks";
 import { useState, useEffect, useCallback } from "react";
 import { getCachedPosts, setCachedPosts } from "@/AppServices/utils/postsCache";
@@ -61,9 +60,7 @@ function Threads({ profileAddy }: props) {
     >
       {threadFeed?.map((post, index) => (
         <div key={index}>
-          <Link to={`/post/${post.postHash}`}>
-            <FeedPost {...post} />
-          </Link>
+          <FeedPost {...post} />
         </div>
       ))}
     </motion.div>
