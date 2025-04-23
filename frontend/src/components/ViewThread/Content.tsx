@@ -5,7 +5,7 @@ import { useCentriumHooks } from "../../AppServices/CentriumHooks";
 import { useEffect, useState } from "react";
 function Content() {
   // console.log("content");
-  const { thread_id } = useParams();
+  const { post_id } = useParams();
   const { useGetPost, getProfile, formatDate, estTime, truncateAddress } =
     useCentriumHooks();
   const [author, setAuthor] = useState("");
@@ -14,7 +14,7 @@ function Content() {
   const [date, setDate] = useState("");
   const [tags, setTags] = useState<string[]>([]);
   const [time, setTime] = useState(0);
-  const { data: result, status } = useGetPost(thread_id!);
+  const { data: result, status } = useGetPost(post_id!);
 
   useEffect(() => {
     console.log("content");
@@ -65,6 +65,8 @@ function Content() {
         style={{
           padding: "20px 20px 0px",
           backgroundColor: "#fff",
+          wordBreak: "break-word",
+          overflowWrap: "anywhere",
         }}
         className="w-full"
         dangerouslySetInnerHTML={{ __html: content }}

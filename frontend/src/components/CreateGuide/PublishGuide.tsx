@@ -31,18 +31,18 @@ function Publish() {
     guideTitle,
     guideDesc,
     steps,
-    setSteps,
-    setGuideDesc,
-    setGuideTitle,
+    // setSteps,
+    // setGuideDesc,
+    // setGuideTitle,
   } = useSafeContext();
   const safesteps = steps.map((step) => [step[0], DOMpurify.sanitize(step[1])]);
 
   const publish = () => {
     setClicked("publish");
-    createGuide(guideTitle, safesteps, guideDesc, selected);
-    setGuideDesc("");
-    setGuideTitle("");
-    setSteps([[1, ""]]);
+    createGuide(guideTitle, JSON.stringify(safesteps), guideDesc, selected);
+    // setGuideDesc("");
+    // setGuideTitle("");
+    // setSteps([[1, ""]]);
   };
 
   const saveDraft = () => {

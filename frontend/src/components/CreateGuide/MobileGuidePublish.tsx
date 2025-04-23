@@ -1,15 +1,29 @@
 // import React from "react";
 import { useContext, useState, useRef, useEffect } from "react";
 import { Button } from "../ui/button";
-import { Context } from "@/Contexts/Context";
+import { Context } from "@/Contexts/createGuideContext";
 import DOMpurify from "dompurify";
 import { X } from "lucide-react";
 import { useCentriumHooks } from "@/AppServices/CentriumHooks";
+import CircleLoader from "react-spinners/CircleLoader";
 
-function MobilePublish() {
+const override = {
+  display: "block",
+  margin: "0 auto",
+  borderColor: "#3800A7",
+  // color: "white",
+};
+
+interface props {
+  setIsPublishOpen: () => void;
+}
+
+function MobilePublish({ setIsPublishOpen }: props) {
   const [selected, setSelected] = useState<string[]>([]);
-  const { createGuide } = useCentriumHooks();
+  const { createGuide, isInteracting, saveToDrafts } = useCentriumHooks();
   const [value, setValue] = useState<string>("");
+  const [clicked, setClicked] = useState("neither");
+
   const useSafeContext = () => {
     const context = useContext(Context);
     if (!context) {
@@ -17,12 +31,16 @@ function MobilePublish() {
     }
     return context;
   };
-  const { guideTitle, guideDesc, steps, setIsPublishGuideOpen } =
-    useSafeContext();
+  const { guideTitle, guideDesc, steps } = useSafeContext();
   const safesteps = steps.map((step) => [step[0], DOMpurify.sanitize(step[1])]);
 
   const publish = () => {
-    createGuide(guideTitle, safesteps, guideDesc, selected);
+    setClicked("publish");
+    createGuide(guideTitle, JSON.stringify(safesteps), guideDesc, selected);
+  };
+  const saveDraft = () => {
+    setClicked("draft");
+    saveToDrafts(guideTitle, safesteps, selected, guideDesc, true);
   };
 
   const handleSelected = (tag: string) => {
@@ -54,7 +72,7 @@ function MobilePublish() {
   return (
     <div className="w-screen h-screen bg-[#E5E5E5] fixed flex flex-col justify-center inset-0 top-0 left-0 z-50 bg-opacity-90 backdrop-blur-sm p-3">
       <div className="bg-white flex flex-col px-5 p-2">
-        <div onClick={() => setIsPublishGuideOpen(false)}>
+        <div onClick={() => setIsPublishOpen()}>
           <X className="ml-auto w-5 mb-4" />
         </div>
         <div className="w-full">
@@ -124,12 +142,39 @@ function MobilePublish() {
         <Button
           onClick={publish}
           className="w-1/3 bg-[#3800A7] hover:bg-[#1e0846]"
-          disabled={selected.length < 3 || !guideTitle || !safesteps}
+          disabled={
+            selected.length < 3 || !guideTitle || !safesteps || isInteracting
+          }
         >
-          Publish
+          {isInteracting && clicked === "publish" ? (
+            <CircleLoader
+              cssOverride={override}
+              color={"white"}
+              size={30}
+              aria-label="Loading Spinner"
+              data-testid="loader"
+            />
+          ) : (
+            "Publish"
+          )}
         </Button>
-        <Button className="w-1/3 bg-white border border-[#3800A7] text-black hover:bg-[#1e0846] hover:text-white">
-          Save to drafts
+        <Button
+          onClick={saveDraft}
+          disabled={!guideTitle || isInteracting}
+          variant="outline"
+          className="w-1/3 bg-white border border-[#3800A7] text-black hover:bg-[#1e0846] hover:text-white"
+        >
+          {isInteracting && clicked === "draft" ? (
+            <CircleLoader
+              cssOverride={override}
+              color={"#3800A7"}
+              size={30}
+              aria-label="Loading Spinner"
+              data-testid="loader"
+            />
+          ) : (
+            "Save to drafts"
+          )}
         </Button>
       </div>
     </div>

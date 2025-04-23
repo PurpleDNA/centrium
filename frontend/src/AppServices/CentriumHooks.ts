@@ -245,7 +245,7 @@ export const useCentriumHooks = () => {
   //Function to create GuidePOst
   const createGuide = async (
     title: string,
-    content: (string | number)[][],
+    content: string,
     description: string,
     tags: string[]
   ) => {

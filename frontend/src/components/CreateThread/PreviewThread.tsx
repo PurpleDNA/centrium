@@ -51,6 +51,8 @@ function PreviewThread() {
           padding: "20px",
           borderRadius: "4px",
           backgroundColor: "#fff",
+          wordBreak: "break-word",
+          overflowWrap: "anywhere",
         }}
         className="w-full"
         dangerouslySetInnerHTML={{ __html: safepost }}

@@ -14,7 +14,7 @@ import { motion } from "motion/react";
 
 const ViewThread = () => {
   console.log("View Thread");
-  const { thread_id } = useParams();
+  const { post_id } = useParams();
   const {
     // useGetPost,
     getPostAsync,
@@ -48,7 +48,7 @@ const ViewThread = () => {
   useEffect(() => {
     setIsLoading(true);
     async function fetchData() {
-      const result = await getPostAsync(thread_id!);
+      const result = await getPostAsync(post_id!);
       if (result) {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const post = result as any;
@@ -81,7 +81,7 @@ const ViewThread = () => {
     getPostAsync,
     getProfile,
     setIsLoading,
-    thread_id,
+    post_id,
     user,
     youCommented,
   ]);
@@ -124,11 +124,11 @@ const ViewThread = () => {
       setIsLiked("neither");
       setLikes((prev) => prev - 1);
     } else if (isLiked === "neither") {
-      await likePost(thread_id!);
+      await likePost(post_id!);
       setIsLiked("liked");
       setLikes((prev) => prev + 1);
     } else {
-      await likePost(thread_id!);
+      await likePost(post_id!);
       setIsLiked("liked");
       setLikes((prev) => prev + 1);
       setDislikes((prev) => prev - 1);
@@ -139,11 +139,11 @@ const ViewThread = () => {
       setIsLiked("neither");
       setDislikes((prev) => prev - 1);
     } else if (isLiked === "neither") {
-      await dislikePost(thread_id!);
+      await dislikePost(post_id!);
       setIsLiked("disliked");
       setDislikes((prev) => prev + 1);
     } else {
-      await dislikePost(thread_id!);
+      await dislikePost(post_id!);
       setIsLiked("disliked");
       setDislikes((prev) => prev + 1);
       setLikes((prev) => prev - 1);

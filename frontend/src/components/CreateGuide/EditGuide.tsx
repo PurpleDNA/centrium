@@ -79,7 +79,9 @@ function EditThread() {
       </div>
       <div
         onClick={addStep}
-        className={`pointer-events-none sticky bottom-1 w-4/5 mx-auto rounded-md p-2 cursor-pointer hover:bg-slate-300 bg-slate-50 flex justify-center gap-2 border border-[#3800A7] mb-4 items-center`}
+        className={`sticky bottom-1 w-4/5 mx-auto rounded-md p-2 cursor-pointer hover:bg-slate-300 bg-slate-50 flex justify-center gap-2 border border-[#3800A7] mb-4 items-center ${
+          !steps.at(-1)?.[1] ? "pointer-events-none" : ""
+        }`}
       >
         <div className="rounded-sm border border-black px-1">
           <Plus className="w-4 " />

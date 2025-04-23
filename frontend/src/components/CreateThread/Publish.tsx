@@ -27,14 +27,14 @@ function Publish() {
     return context;
   };
 
-  const { post, title, setPost, setTitle } = useSafeContext();
+  const { post, title } = useSafeContext();
   const safepost = DOMpurify.sanitize(post);
 
   const publish = () => {
     setClicked("publish");
     createThread(title, safepost, selected);
-    setPost("");
-    setTitle("");
+    // setPost("");
+    // setTitle("");
   };
 
   const saveDraft = () => {

@@ -4,7 +4,7 @@ import EditGuide from "@/components/CreateGuide/EditGuide";
 import PreviewGuide from "@/components/CreateGuide/PreviewGuide";
 import PublishGuide from "@/components/CreateGuide/PublishGuide";
 import MobileGuidePublish from "@/components/CreateGuide/MobileGuidePublish";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { CreateGuideProvider } from "@/Contexts/createGuideContext";
 import { Button } from "@/components/ui/button";
 
@@ -15,6 +15,15 @@ function CreateGuide() {
   const handleNavigation = (page: string) => {
     setActivePage(page);
   };
+
+  const handleMobilePublish = useCallback(() => {
+    if (isPublishGuideOpen) {
+      setIsPublishGuideOpen(false);
+    } else {
+      setIsPublishGuideOpen(true);
+    }
+  }, [isPublishGuideOpen]);
+
   return (
     <CreateGuideProvider>
       <div className="flex w-full">
@@ -53,7 +62,9 @@ function CreateGuide() {
         <div className="w-1/3 hidden lg:block">
           <PublishGuide />
         </div>
-        {isPublishGuideOpen && <MobileGuidePublish />}
+        {isPublishGuideOpen && (
+          <MobileGuidePublish setIsPublishOpen={() => handleMobilePublish()} />
+        )}
       </div>
     </CreateGuideProvider>
   );

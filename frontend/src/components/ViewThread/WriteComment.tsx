@@ -22,11 +22,11 @@ const WriteComment = ({ setCommentsReload }: props) => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const user = useSelector((state: any) => state.userProfile.username);
   const { createComment, isInteracting } = useCentriumHooks();
-  const { thread_id } = useParams();
+  const { post_id } = useParams();
   const [comment, setComment] = useState("");
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const handleComment = async () => {
-    await createComment(thread_id!, comment);
+    await createComment(post_id!, comment);
     inputRef.current!.value = "";
     setTimeout(() => setCommentsReload(), 600);
   };

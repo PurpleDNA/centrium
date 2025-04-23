@@ -4,7 +4,10 @@ import { useContext } from "react";
 import DOMpurify from "dompurify";
 import profpic from "../../assets/rizzking.svg";
 import { Dot } from "lucide-react";
+import { useSelector } from "react-redux";
+import { useCentriumHooks } from "@/AppServices/CentriumHooks";
 function PreviewGuide() {
+  const { truncateAddress, formatDate } = useCentriumHooks();
   const useSafeContext = () => {
     const context = useContext(Context);
     if (!context) {
@@ -14,6 +17,8 @@ function PreviewGuide() {
   };
   const { guideTitle, guideDesc, steps } = useSafeContext();
   const safesteps = steps.map((step) => [step[0], DOMpurify.sanitize(step[1])]);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const userProfile = useSelector((state: any) => state.userProfile);
   return (
     <div className="w-full flex flex-col gap-7">
       <h1 className="font-semibold md:text-4xl text-2xl md:mb-4 px-3 break-words font-sofia">
@@ -27,16 +32,19 @@ function PreviewGuide() {
         <div className="flex flex-col justify-between gap-3">
           <div className="flex gap-3 items-center">
             <span className="font-sofia pr-4 border-r-2 border-slate-400">
-              The Rizz King
+              {userProfile.username}
             </span>
             <span className="py-1 px-3 bg-slate-300 rounded-xl text-sm">
-              walletAddy
+              {truncateAddress(userProfile.walletAddress)}
             </span>
           </div>
           <div className="flex gap-1 text-sm items-center font-sofia">
-            <span>31 July 2024</span>
+            <span>
+              {" "}
+              <span>{formatDate(Date.now() / 1000)}</span>
+            </span>
             <Dot />
-            <span>4 minute read</span>
+            {/* <span>            <span>{estTime(safesteps)} minute read</span></span> */}
           </div>
         </div>
       </div>
@@ -52,7 +60,8 @@ function PreviewGuide() {
               </div>
               {typeof safestep[1] === "string" && (
                 <div
-                  className="w-full "
+                  style={{ wordBreak: "break-word", overflowWrap: "anywhere" }}
+                  className="w-full text-clip"
                   dangerouslySetInnerHTML={{ __html: safestep[1] }}
                 />
               )}

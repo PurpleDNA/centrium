@@ -48,11 +48,11 @@ const router = createBrowserRouter([
         element: <CreateGuide />,
       },
       {
-        path: "post/:thread_id",
+        path: "post/:post_id",
         element: <ViewThread />,
       },
       {
-        path: "guide",
+        path: "guide/:post_id",
         element: <ViewGuide />,
       },
       {
