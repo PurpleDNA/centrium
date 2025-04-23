@@ -7,6 +7,7 @@ import { useCentriumHooks } from "@/AppServices/CentriumHooks";
 import { useState, useEffect, useCallback, useRef } from "react";
 import { getCachedPosts, setCachedPosts } from "@/AppServices/utils/postsCache";
 import useScrollRestoration from "@/AppServices/utils/UseScrollRestoration";
+import FallbackLoading from "../FallbackLoading";
 
 interface feedPostProps {
   username: string;
@@ -26,14 +27,18 @@ function YourFeed() {
   const scrollTop = scrollRef.current?.scrollTop ?? 0;
   const { formatAllPosts } = useCentriumHooks();
   const [postFeed, setPostFeed] = useState<feedPostProps[] | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  console.log(isLoading);
 
   const fetchPosts = useCallback(async () => {
+    setIsLoading(true);
     const data = await formatAllPosts();
     setPostFeed(data as unknown as feedPostProps[]);
+    setIsLoading(false);
     if (data) {
       setCachedPosts(data);
     }
-  }, [formatAllPosts]);
+  }, [formatAllPosts, setIsLoading]);
 
   useEffect(() => {
     const cached = getCachedPosts();
@@ -57,6 +62,7 @@ function YourFeed() {
       exit={{ opacity: 0, x: 100 }}
       className=" w-full scrollable h-screen overflow-scroll"
     >
+      {isLoading && <FallbackLoading />}
       {postFeed?.map((post, index) => (
         <div key={index}>
           {post.postType === guide ? (

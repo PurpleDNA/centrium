@@ -1,8 +1,8 @@
-import { useContext, useRef } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import "./editor.css";
-import { Context } from "@/Contexts/Context";
+import { Context } from "@/Contexts/createGuideContext";
 
 interface Props {
   editorIndex: number;
@@ -17,16 +17,30 @@ function Editor({ editorIndex }: Props) {
     }
     return context;
   };
+
   const { steps, setSteps } = useSafeContext();
-  const handleSteps = (event: string, value: number,) => {
-    setSteps((prev) => prev.map((step, i) => {
-      if (i === value) {
-        return [steps?.[editorIndex]?.[0],event]
-      } else {
-        return step;
-      }
-    }));
+  const [localSteps, setLocalSteps] = useState(steps);
+
+  const handleSteps = (event: string, value: number) => {
+    setLocalSteps((prev) =>
+      prev.map((step, i) => {
+        if (i === value) {
+          return [steps?.[editorIndex]?.[0], event];
+        } else {
+          return step;
+        }
+      })
+    );
   };
+
+  useEffect(() => {
+    const send = setTimeout(() => {
+      console.log("sending");
+      setSteps(localSteps);
+    }, 600);
+    return () => clearTimeout(send);
+  }, [localSteps, setSteps]);
+
   const toolbarOptions = [["image"]];
   const modules = {
     toolbar: toolbarOptions,
@@ -36,8 +50,8 @@ function Editor({ editorIndex }: Props) {
       <ReactQuill
         ref={quillref}
         theme="snow"
-        value={steps?.[editorIndex]?.[1]}
-        onChange={(e) => handleSteps(e,editorIndex)}
+        value={localSteps?.[editorIndex]?.[1]}
+        onChange={(e) => handleSteps(e, editorIndex)}
         modules={modules}
       />
     </div>

@@ -2,7 +2,7 @@
 import { X } from "lucide-react";
 import { FC, useContext } from "react";
 import Editor from "../Editor/Editor2";
-import { Context } from "@/Contexts/Context";
+import { Context } from "@/Contexts/createGuideContext";
 interface Props {
   number: number;
 }
@@ -37,7 +37,7 @@ export const Step: FC<Props> = (props) => {
           {props.number}
         </div>
         <div className="w-full">
-          <Editor editorIndex={props.number - 1}/>
+          <Editor editorIndex={props.number - 1} />
         </div>
       </div>
     </div>

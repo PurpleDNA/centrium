@@ -134,7 +134,6 @@ export const useCentriumHooks = () => {
     following,
     bio,
   }: userProfile) => {
-    // setIsLoading(true)
     try {
       dispatch(
         updateUserProfile({

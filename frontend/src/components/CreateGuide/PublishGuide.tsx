@@ -1,15 +1,24 @@
 // import React from "react";
 import { useContext, useState, useRef, useEffect } from "react";
 import { Button } from "../ui/button";
-import { Context } from "@/Contexts/Context";
+import { Context } from "@/Contexts/createGuideContext";
 import DOMpurify from "dompurify";
 import { useCentriumHooks } from "@/AppServices/CentriumHooks";
 import { X } from "lucide-react";
+import CircleLoader from "react-spinners/CircleLoader";
+
+const override = {
+  display: "block",
+  margin: "0 auto",
+  borderColor: "#3800A7",
+  // color: "white",
+};
 
 function Publish() {
   const [selected, setSelected] = useState<string[]>([]);
   const [value, setValue] = useState<string>("");
-  const { createGuide } = useCentriumHooks();
+  const { createGuide, saveToDrafts, isInteracting } = useCentriumHooks();
+  const [clicked, setClicked] = useState("neither");
   const useSafeContext = () => {
     const context = useContext(Context);
     if (!context) {
@@ -18,11 +27,27 @@ function Publish() {
     return context;
   };
 
-  const { guideTitle, guideDesc, steps } = useSafeContext();
+  const {
+    guideTitle,
+    guideDesc,
+    steps,
+    setSteps,
+    setGuideDesc,
+    setGuideTitle,
+  } = useSafeContext();
   const safesteps = steps.map((step) => [step[0], DOMpurify.sanitize(step[1])]);
 
   const publish = () => {
+    setClicked("publish");
     createGuide(guideTitle, safesteps, guideDesc, selected);
+    setGuideDesc("");
+    setGuideTitle("");
+    setSteps([[1, ""]]);
+  };
+
+  const saveDraft = () => {
+    setClicked("draft");
+    saveToDrafts(guideTitle, safesteps, selected, guideDesc, false);
   };
 
   const handleSelected = (tag: string) => {
@@ -121,12 +146,43 @@ function Publish() {
         <Button
           onClick={publish}
           className="w-full bg-[#3800A7] hover:bg-[#1e0846] mb-2"
-          disabled={selected.length < 3 || !guideTitle || !safesteps}
+          disabled={
+            selected.length < 3 ||
+            !guideTitle ||
+            !safesteps ||
+            !guideDesc ||
+            isInteracting
+          }
         >
-          Publish
+          {isInteracting && clicked === "publish" ? (
+            <CircleLoader
+              cssOverride={override}
+              color={"white"}
+              size={30}
+              aria-label="Loading Spinner"
+              data-testid="loader"
+            />
+          ) : (
+            "Publish"
+          )}
         </Button>
-        <Button className="w-full bg-white border border-[#3800A7] text-black hover:bg-[#1e0846] hover:text-white">
-          Save to drafts
+        <Button
+          onClick={saveDraft}
+          disabled={!guideTitle || isInteracting}
+          variant="outline"
+          className="w-full bg-white border border-[#3800A7] text-black hover:bg-[#1e0846] hover:text-white"
+        >
+          {isInteracting && clicked === "draft" ? (
+            <CircleLoader
+              cssOverride={override}
+              color={"#3800A7"}
+              size={30}
+              aria-label="Loading Spinner"
+              data-testid="loader"
+            />
+          ) : (
+            "Save to drafts"
+          )}
         </Button>
       </div>
     </div>

@@ -10,6 +10,7 @@ const ProtectedRoutes: FC<Props> = ({ children }) => {
   const { status } = useAccount();
   console.log(status);
   const navigate = useNavigate();
+
   useEffect(() => {
     if (
       status !== "reconnecting" &&
@@ -20,6 +21,16 @@ const ProtectedRoutes: FC<Props> = ({ children }) => {
       sessionStorage.removeItem("userSession");
     }
   }, [navigate, status]);
+
+  // useEffect(() => {
+  //   if (status === "connecting") {
+  //     setTimeout(() => {
+  //       console.log("taking too long to connect, try again");
+  //       navigate("/walletconnect", { replace: true });
+  //       sessionStorage.removeItem("userSession");
+  //     }, 7000);
+  //   }
+  // }, [navigate, status]);
 
   return <div>{children}</div>;
 };
