@@ -2,7 +2,6 @@
 import FeedPost from "./FeedPost";
 import { motion } from "motion/react";
 import thread from "../../assets/thread.png";
-import { Link } from "react-router-dom";
 import { useCentriumHooks } from "@/AppServices/CentriumHooks";
 import { useState, useEffect, useCallback } from "react";
 import { getCachedPosts, setCachedPosts } from "@/AppServices/utils/postsCache";
@@ -17,6 +16,8 @@ interface feedPostProps {
   tags: string[];
   postHash: string;
   userAddr: string;
+  desc: string;
+  isGuide: boolean;
 }
 
 function Threads() {
@@ -36,9 +37,7 @@ function Threads() {
   useEffect(() => {
     const cached = getCachedPosts();
     if (cached) {
-      const onlyThread = cached.filter(
-        (post: feedPostProps) => post.postType === thread
-      );
+      const onlyThread = cached.filter((post: feedPostProps) => !post.isGuide);
       setThreadFeed(onlyThread);
     } else {
       fetchPosts();
@@ -54,9 +53,7 @@ function Threads() {
     >
       {threadFeed?.map((post, index) => (
         <div key={index}>
-          <Link to="/post">
-            <FeedPost {...post} />
-          </Link>
+          <FeedPost {...post} />
         </div>
       ))}
     </motion.div>

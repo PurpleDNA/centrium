@@ -10,12 +10,14 @@ interface Props {
   username: string;
   date: string;
   title: string;
+  desc: string;
   demo: string;
   duration: number;
   postType: string;
   tags: string[];
   userAddr: string;
   postHash?: string;
+  isGuide: boolean;
 }
 
 const FeedPost: FC<Props> = ({
@@ -23,11 +25,13 @@ const FeedPost: FC<Props> = ({
   date,
   title,
   demo,
+  desc,
   duration,
   postType,
   tags,
   userAddr,
   postHash,
+  isGuide,
 }) => {
   const navigate = useNavigate();
   const profileRef = useRef(null);
@@ -47,7 +51,11 @@ const FeedPost: FC<Props> = ({
     if (e.currentTarget === profileRef.current) {
       navigate(`/profile/${userAddr}`);
     } else if (e.currentTarget === postRef.current) {
-      navigate(`/post/${postHash}`);
+      if (isGuide) {
+        navigate(`/guide/${postHash}`);
+      } else {
+        navigate(`/post/${postHash}`);
+      }
     }
   };
   return (
@@ -82,7 +90,7 @@ const FeedPost: FC<Props> = ({
       </div>
       <div className="flex flex-col gap-2">
         <h3 className="font-bold font-sofia text-2xl">{title}</h3>
-        <div dangerouslySetInnerHTML={{ __html: demo }} />
+        <div dangerouslySetInnerHTML={{ __html: desc ? desc : demo }} />
         {/* <p className="font-poppins">{demo}</p> */}
       </div>
       <div className="'w-full flex justify-between">

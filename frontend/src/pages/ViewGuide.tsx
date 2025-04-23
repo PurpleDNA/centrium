@@ -213,10 +213,6 @@ const ViewGuide = () => {
             )}
           </div>
         )}
-        <div className="w-full flex gap-4 justify-center items-center">
-          <p>Enjoyed this post? follow The RizzKing</p>
-          <Button>Follow</Button>
-        </div>
         <div className="flex flex-col gap-5">
           <div className="flex-start px-3">
             <h2 className="font-semibold font-sofia">More like this</h2>

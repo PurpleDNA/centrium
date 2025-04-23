@@ -1,8 +1,8 @@
 import FeedPost from "./FeedPost";
 // import thread from "../../assets/thread.png";
-import guide from "../../assets/guides.png";
+// import guide from "../../assets/guides.png";
 import { motion } from "motion/react";
-import { Link, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { useCentriumHooks } from "@/AppServices/CentriumHooks";
 import { useState, useEffect, useCallback, useRef } from "react";
 import { getCachedPosts, setCachedPosts } from "@/AppServices/utils/postsCache";
@@ -13,12 +13,14 @@ interface feedPostProps {
   username: string;
   date: string;
   title: string;
+  desc: string;
   demo: string;
   duration: number;
   postType: string;
   tags: string[];
   postHash: string;
   userAddr: string;
+  isGuide: boolean;
 }
 
 function YourFeed() {
@@ -65,13 +67,7 @@ function YourFeed() {
       {isLoading && <FallbackLoading />}
       {postFeed?.map((post, index) => (
         <div key={index}>
-          {post.postType === guide ? (
-            <Link to="/guide">
-              <FeedPost {...post} />
-            </Link>
-          ) : (
-            <FeedPost {...post} />
-          )}
+          <FeedPost {...post} />
         </div>
       ))}
     </motion.div>

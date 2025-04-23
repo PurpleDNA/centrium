@@ -581,7 +581,9 @@ export const useCentriumHooks = () => {
           const userAddr = user!.walletAddress;
           const date = formatDate(post[5] as number);
           const postType = post[4] ? guide : thread;
+          const isGuide = post[4];
           const title = "Placeholder until Marv delivers";
+          const desc = trimToFirst40Words(post[3] as string);
           const demo = trimToFirst40Words(post[1] as string);
           const tags = post[2] as string[];
           const duration = estTime(post[1] as string);
@@ -594,11 +596,13 @@ export const useCentriumHooks = () => {
             date,
             postType,
             title,
+            desc,
             demo,
             tags,
             duration,
             timestamp,
             postHash,
+            isGuide,
           };
         });
         const feed = await Promise.all(feedObject);
