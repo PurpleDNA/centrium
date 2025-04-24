@@ -1,6 +1,6 @@
 // import React from 'react'
 import Bookmarks from "@/components/Home/YourFeed";
-import Guides from "@/components/Home/Guides";
+import Guides from "@/components/Profile/ProfileGuides";
 import Drafts from "@/components/Profile/Drafts";
 import Threads from "@/components/Profile/ProfileThreads";
 import ProfileCard from "../components/Profile/ProfileCard";
@@ -118,7 +118,7 @@ function Profile() {
         </div>
         <div className="">
           {activePage === "threads" && <Threads profileAddy={profileAddy!} />}
-          {activePage === "guides" && <Guides />}
+          {activePage === "guides" && <Guides profileAddy={profileAddy!} />}
           {activePage === "saved" && profile.walletAddress === profileAddy && (
             <Bookmarks />
           )}

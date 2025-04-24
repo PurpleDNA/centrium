@@ -1,7 +1,6 @@
 // import React from "react";
 import FeedPost from "../Home/FeedPost";
 import { motion } from "motion/react";
-import thread from "../../assets/thread.png";
 import { useCentriumHooks } from "@/AppServices/CentriumHooks";
 import { useState, useEffect, useCallback } from "react";
 import { getCachedPosts, setCachedPosts } from "@/AppServices/utils/postsCache";
@@ -27,14 +26,14 @@ interface props {
 
 function Threads({ profileAddy }: props) {
   const { formatAllPosts, setIsLoading } = useCentriumHooks();
-  const [threadFeed, setThreadFeed] = useState<feedPostProps[] | null>(null);
+  const [guideFeed, setguideFeed] = useState<feedPostProps[] | null>(null);
   const fetchPosts = useCallback(async () => {
     setIsLoading(true);
     const data = (await formatAllPosts()) as unknown as feedPostProps[];
-    const onlyThread = data.filter(
-      (post) => post.postType === thread && post.userAddr === profileAddy
+    const onlyGuide = data.filter(
+      (post) => post.isGuide && post.userAddr === profileAddy
     );
-    setThreadFeed(onlyThread);
+    setguideFeed(onlyGuide);
     if (data) {
       setCachedPosts(data);
     }
@@ -43,11 +42,10 @@ function Threads({ profileAddy }: props) {
   useEffect(() => {
     const cached = getCachedPosts();
     if (cached) {
-      const onlyThread = cached.filter(
-        (post: feedPostProps) =>
-          post.postType === thread && post.userAddr === profileAddy
+      const onlyGuide = cached.filter(
+        (post: feedPostProps) => post.isGuide && post.userAddr === profileAddy
       );
-      setThreadFeed(onlyThread);
+      setguideFeed(onlyGuide);
     } else {
       fetchPosts();
     }
@@ -60,7 +58,7 @@ function Threads({ profileAddy }: props) {
       exit={{ opacity: 0, x: 100 }}
       className=" w-full"
     >
-      {threadFeed?.map((post, index) => (
+      {guideFeed?.map((post, index) => (
         <div key={index}>
           <FeedPost {...post} />
         </div>
