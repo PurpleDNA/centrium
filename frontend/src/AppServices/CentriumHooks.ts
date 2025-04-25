@@ -641,6 +641,25 @@ export const useCentriumHooks = () => {
     return result;
   }, []);
 
+  const searchByTag = useCallback(
+    async (tag: string) => {
+      try {
+        console.log("starting");
+        const tagPosts = await readContract(config, {
+          abi,
+          address: address,
+          functionName: "searchByTag",
+          args: [tag],
+        });
+        console.log(tagPosts);
+        return tagPosts;
+      } catch (error) {
+        console.error("searchByTag Error>>>>>>> " + error);
+      }
+    },
+    [config]
+  );
+
   return {
     isLoading,
     setIsLoading,
@@ -667,5 +686,6 @@ export const useCentriumHooks = () => {
     formatAllPosts,
     trimToFirst40Words,
     truncateAddress,
+    searchByTag,
   };
 };
