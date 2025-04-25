@@ -24,6 +24,7 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import thread from "../assets/thread.png";
 import guide from "../assets/guides.png";
+import { feedPostProps } from "@/pages/Home";
 
 export const useCentriumHooks = () => {
   // console.log("hooking");
@@ -571,50 +572,58 @@ export const useCentriumHooks = () => {
   }, []);
 
   //Format All Posts
-  const formatAllPosts = useCallback(async () => {
-    try {
-      const result = (await getAllPosts()) as postType[];
-      if (result) {
-        const feedObject = result.map(async (post) => {
-          const user = await getProfile(post[0] as `0x${string}`);
-          const username = user!.username;
-          const userAddr = user!.walletAddress;
-          const date = formatDate(post[5] as number);
-          const postType = post[4] ? guide : thread;
-          const isGuide = post[4];
-          const title = "Placeholder until Marv delivers";
-          const desc = trimToFirst40Words(post[3] as string);
-          const demo = trimToFirst40Words(post[1] as string);
-          const tags = post[2] as string[];
-          const duration = estTime(post[1] as string);
-          const timestamp = post[5];
-          const postHash = post[post.length - 1];
+  const formatAllPosts: () => Promise<feedPostProps[] | undefined> =
+    useCallback(async () => {
+      try {
+        const result = (await getAllPosts()) as postType[];
+        if (!result) {
+          console.warn("No posts found");
+          throw new Error("No posts found");
+        }
+        if (result) {
+          const feedObject = result.map(async (post) => {
+            const user = await getProfile(post[0] as `0x${string}`);
+            const username = user!.username;
+            const userAddr = user!.walletAddress;
+            const date = formatDate(post[5] as number);
+            const postType = post[4] ? guide : thread;
+            const isGuide = post[4] as boolean;
+            const title = "Placeholder until Marv delivers";
+            const desc = trimToFirst40Words(post[3] as string);
+            const demo = trimToFirst40Words(post[1] as string);
+            const tags = post[2] as string[];
+            const duration = estTime(post[1] as string);
+            const timestamp = post[5];
+            const postHash = String(post[post.length - 1]);
 
-          return {
-            username,
-            userAddr,
-            date,
-            postType,
-            title,
-            desc,
-            demo,
-            tags,
-            duration,
-            timestamp,
-            postHash,
-            isGuide,
-          };
-        });
-        const feed = await Promise.all(feedObject);
-        const reverseIt = feed.sort(
-          (a, b) => Number(b.timestamp) - Number(a.timestamp)
-        );
-        return reverseIt;
+            return {
+              username,
+              userAddr,
+              date,
+              postType,
+              title,
+              desc,
+              demo,
+              tags,
+              duration,
+              timestamp,
+              postHash,
+              isGuide,
+            } as feedPostProps;
+          });
+          const feed = await Promise.all(feedObject);
+          const reverseIt = feed.sort(
+            (a, b) => Number(b.timestamp) - Number(a.timestamp)
+          );
+          console.log("Returning data");
+          return reverseIt;
+        }
+      } catch (error) {
+        console.error("formatAllPosts Error >>>>>>>" + error);
+        throw error;
+        // return [];
       }
-    } catch (error) {
-      console.error("formatAllPosts Error >>>>>>>" + error);
-    }
-  }, [estTime, formatDate, getAllPosts, getProfile]);
+    }, [estTime, formatDate, getAllPosts, getProfile]);
 
   //format big integer I guess
   const formatBigInt = useCallback((bigInt: number) => {

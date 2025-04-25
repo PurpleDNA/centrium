@@ -6,6 +6,33 @@ import { Button } from "@/components/ui/button";
 import { PenLine } from "lucide-react";
 import { useContext, useState } from "react";
 import { Context } from "../Contexts/Context";
+import CircleLoader from "react-spinners/CircleLoader";
+import { useCentriumHooks } from "@/AppServices/CentriumHooks";
+import { useQuery } from "@tanstack/react-query";
+
+export interface feedPostProps {
+  username: string;
+  date: string;
+  title: string;
+  desc: string;
+  demo: string;
+  duration: number;
+  postType: string;
+  tags: string[];
+  postHash: string;
+  userAddr: string;
+  isGuide: boolean;
+  timestamp?: string | number | boolean | string[];
+}
+
+const override = {
+  display: "block",
+  margin: "0 auto",
+  borderColor: "#3800A7",
+  // marginTop: "50px",
+  // color: "white",
+};
+
 // import UseScrollRestoration from "@/AppServices/utils/UseScrollRestoration";
 
 function Home() {
@@ -23,6 +50,18 @@ function Home() {
   };
   const { isNavOpen, setIsModalOpen } = useSafeContext();
   const toggleModal = () => setIsModalOpen((prev: boolean) => !prev);
+  const { formatAllPosts } = useCentriumHooks();
+  const { data: postFeed, isLoading } = useQuery<feedPostProps[]>({
+    queryKey: ["feed"],
+    queryFn: async () => {
+      const result = await formatAllPosts();
+      if (result) {
+        return result;
+      } else {
+        return [];
+      }
+    },
+  });
 
   return (
     <div className="flex">
@@ -55,10 +94,47 @@ function Home() {
             </span>
           </div>
         </div>
-        <div className="scrollable_container">
-          {activePage === "Your Feed" && <YourFeed />}
-          {activePage === "threads" && <Threads />}
-          {activePage === "guides" && <Guides />}
+        <div
+          className={`scrollable_container ${
+            isLoading ? "h-full flex items-center justify-center" : ""
+          }`}
+        >
+          {activePage === "Your Feed" &&
+            (isLoading ? (
+              <CircleLoader
+                cssOverride={override}
+                color={"#3800A7"}
+                size={30}
+                aria-label="Loading Spinner"
+                data-testid="loader"
+              />
+            ) : postFeed ? (
+              <YourFeed postFeed={postFeed} />
+            ) : null)}
+          {activePage === "threads" &&
+            (isLoading ? (
+              <CircleLoader
+                cssOverride={override}
+                color={"#3800A7"}
+                size={30}
+                aria-label="Loading Spinner"
+                data-testid="loader"
+              />
+            ) : postFeed ? (
+              <Threads postFeed={postFeed} />
+            ) : null)}
+          {activePage === "guides" &&
+            (isLoading ? (
+              <CircleLoader
+                cssOverride={override}
+                color={"#3800A7"}
+                size={30}
+                aria-label="Loading Spinner"
+                data-testid="loader"
+              />
+            ) : postFeed ? (
+              <Guides postFeed={postFeed} />
+            ) : null)}
         </div>
       </div>
       <div className="w-1/3 hidden lg:block">

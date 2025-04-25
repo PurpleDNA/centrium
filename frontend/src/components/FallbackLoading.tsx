@@ -7,7 +7,6 @@ const override: CSSProperties = {
   borderColor: "#3800A7",
 };
 function FallbackLoading() {
-  console.log("i am fallbacking");
   return (
     <div className="`w-screen h-screen bg-[#222226] fixed inset-0 top-0 left-0 z-60 flex justify-center items-center bg-opacity-90 backdrop-blur-lg">
       <MoonLoader

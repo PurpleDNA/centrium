@@ -1,47 +1,19 @@
 // import React from "react";
 import FeedPost from "./FeedPost";
 import { motion } from "motion/react";
-import { useCentriumHooks } from "@/AppServices/CentriumHooks";
-import { useState, useEffect, useCallback } from "react";
-import { getCachedPosts, setCachedPosts } from "@/AppServices/utils/postsCache";
-
-interface feedPostProps {
-  username: string;
-  date: string;
-  title: string;
-  demo: string;
-  duration: number;
-  postType: string;
-  tags: string[];
-  postHash: string;
-  userAddr: string;
-  desc: string;
-  isGuide: boolean;
+import { useState, useEffect } from "react";
+import { feedPostProps } from "@/pages/Home";
+interface YourFeedProps {
+  postFeed: feedPostProps[];
 }
 
-function Guides() {
-  const { formatAllPosts, setIsLoading } = useCentriumHooks();
-  const [guideFeed, setGuideFeed] = useState<feedPostProps[] | null>(null);
-
-  const fetchPosts = useCallback(async () => {
-    setIsLoading(true);
-    const data = (await formatAllPosts()) as unknown as feedPostProps[];
-    const onlyGuide = data.filter((post) => post.isGuide);
-    setGuideFeed(onlyGuide);
-    if (data) {
-      setCachedPosts(data);
-    }
-  }, []);
+function Guides({ postFeed }: YourFeedProps) {
+  const [guideFeed, setGuideFeed] = useState<feedPostProps[]>([]);
 
   useEffect(() => {
-    const cached = getCachedPosts();
-    if (cached) {
-      const onlyGuide = cached.filter((post: feedPostProps) => post.isGuide);
-      setGuideFeed(onlyGuide);
-    } else {
-      fetchPosts();
-    }
-  }, []);
+    const onlyGuide = postFeed.filter((post: feedPostProps) => post.isGuide);
+    setGuideFeed(onlyGuide);
+  }, [postFeed]);
 
   return (
     <motion.div

@@ -31,6 +31,10 @@ const ViewGuide = () => {
   const [author, setAuthor] = useState("");
   const [addr, setAddr] = useState<`0x${string}` | "">("");
   const [canfollow, setCanFollow] = useState(false);
+  const [content, setContent] = useState<[number, string][]>([]);
+  const [guideDesc, setGuideDesc] = useState("");
+  const [date, setDate] = useState(0);
+  const [tags, setTags] = useState<string[]>([]);
   const [following, setFollowing] = useState(false);
   const [action, setAction] = useState("Following");
   const [isLiked, setIsLiked] = useState("neither");
@@ -61,6 +65,10 @@ const ViewGuide = () => {
         );
         setAuthor(authorr);
         setAddr(post[0]);
+        setContent(JSON.parse(post[1]));
+        setTags(post[2]);
+        setGuideDesc(post[3]);
+        setDate(post[5]);
         const newComments = post[9] as CommentProps[];
         setComments((prev) =>
           isEqual(prev, newComments) ? prev : newComments
@@ -153,7 +161,14 @@ const ViewGuide = () => {
   return (
     <div className="flex">
       <div className="w-full lg:w-2/3 flex flex-col gap-5 border-r-2 border-slate-300">
-        <GuideContent />
+        <GuideContent
+          author={author}
+          addr={addr}
+          content={content}
+          guideDesc={guideDesc}
+          tags={tags}
+          date={date}
+        />
         <div className="flex gap-8 px-3">
           <div className="flex gap-2 items-center">
             <ThumbsUp

@@ -30,6 +30,9 @@ const ViewThread = () => {
   const [dislikes, setDislikes] = useState(0);
   const [author, setAuthor] = useState("");
   const [addr, setAddr] = useState<`0x${string}` | "">("");
+  const [content, setContent] = useState("");
+  const [date, setDate] = useState(0);
+  const [tags, setTags] = useState<string[]>([]);
   const [canfollow, setCanFollow] = useState(false);
   const [following, setFollowing] = useState(false);
   const [action, setAction] = useState("Following");
@@ -64,6 +67,10 @@ const ViewThread = () => {
         );
         setAuthor(authorr);
         setAddr(post[0]);
+        setAuthor(authorr);
+        setContent(post[1]);
+        setTags(post[2]);
+        setDate(post[5]);
         const newComments = post[9] as CommentProps[];
         setComments((prev) =>
           isEqual(prev, newComments) ? prev : newComments
@@ -155,7 +162,13 @@ const ViewThread = () => {
   return (
     <div className="flex w-full mb-[70px] md:mb-0 flex-col lg:flex-row">
       <div className="w-full lg:w-2/3 flex flex-col gap-5 border-r-2 border-slate-300">
-        <Content />
+        <Content
+          content={content}
+          date={date}
+          tags={tags}
+          author={author}
+          addr={addr}
+        />
         <div className="flex gap-8 px-3">
           <div className="flex gap-2 items-center">
             <ThumbsUp

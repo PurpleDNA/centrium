@@ -1,40 +1,18 @@
 import profpic from "../../assets/rizzking.svg";
 import { Dot } from "lucide-react";
-import { useParams } from "react-router-dom";
 import { useCentriumHooks } from "../../AppServices/CentriumHooks";
-import { useEffect, useState } from "react";
-function Content() {
-  // console.log("content");
-  const { post_id } = useParams();
-  const { useGetPost, getProfile, formatDate, estTime, truncateAddress } =
-    useCentriumHooks();
-  const [author, setAuthor] = useState("");
-  const [addr, setAddr] = useState("");
-  const [content, setContent] = useState("");
-  const [date, setDate] = useState("");
-  const [tags, setTags] = useState<string[]>([]);
-  const [time, setTime] = useState(0);
-  const { data: result, status } = useGetPost(post_id!);
 
-  useEffect(() => {
-    console.log("content");
-    async function fetchData() {
-      if (status === "success" && result) {
-        const post = result as never[];
-        const authorProfile = await getProfile(post[0]);
-        const authorr = (authorProfile as unknown as { username: string })
-          .username;
-        const truncAddr = truncateAddress(post[0]);
-        setAddr(truncAddr);
-        setAuthor(authorr);
-        setContent(post[1]);
-        setTags(post[2]);
-        setDate(formatDate(post[5]));
-        setTime(estTime(post[1]));
-      }
-    }
-    fetchData();
-  }, [status, result, getProfile, formatDate, estTime, truncateAddress]);
+interface contentProps {
+  author: string;
+  addr: "" | `0x${string}`;
+  content: string;
+  date: number;
+  tags: string[];
+}
+
+function Content({ author, addr, content, date, tags }: contentProps) {
+  // console.log("content");
+  const { formatDate, truncateAddress, estTime } = useCentriumHooks();
 
   return (
     <div className="w-full flex flex-col gap-5 pb-3 border-b-2 border-slate-300">
@@ -51,13 +29,13 @@ function Content() {
               {author}
             </span>
             <span className="py-1 px-3 bg-slate-300 rounded-xl text-sm font-sofia">
-              {addr}
+              {addr ? truncateAddress(addr) : ""}{" "}
             </span>
           </div>
           <div className="flex gap-1 text-sm items-center font-sofia">
-            <span>{date}</span>
+            <span>{date === 0 ? "" : formatDate(date)}</span>
             <Dot />
-            <span>{time} minute read</span>
+            <span>{estTime(content)} minute read</span>
           </div>
         </div>
       </div>

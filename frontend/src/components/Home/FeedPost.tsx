@@ -2,6 +2,8 @@ import { FC, useEffect, useRef, useState } from "react";
 import rizzKing from "../../assets/rizzking.svg";
 import { Bookmark, Ellipsis } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 
 interface HandleClickEvent extends React.MouseEvent<HTMLElement> {
   currentTarget: EventTarget & HTMLElement;
@@ -18,6 +20,7 @@ interface Props {
   userAddr: string;
   postHash?: string;
   isGuide: boolean;
+  isLoading?: boolean;
 }
 
 const FeedPost: FC<Props> = ({
@@ -32,6 +35,7 @@ const FeedPost: FC<Props> = ({
   userAddr,
   postHash,
   isGuide,
+  isLoading,
 }) => {
   const navigate = useNavigate();
   const profileRef = useRef(null);
@@ -89,7 +93,9 @@ const FeedPost: FC<Props> = ({
         </div>
       </div>
       <div className="flex flex-col gap-2">
-        <h3 className="font-bold font-sofia text-2xl">{title}</h3>
+        <h3 className="font-bold font-sofia text-2xl">
+          {isLoading ? <Skeleton /> : title}
+        </h3>
         <div dangerouslySetInnerHTML={{ __html: desc ? desc : demo }} />
         {/* <p className="font-poppins">{demo}</p> */}
       </div>

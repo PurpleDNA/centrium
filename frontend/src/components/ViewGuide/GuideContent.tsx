@@ -1,39 +1,25 @@
 import profpic from "../../assets/rizzking.svg";
-import { useParams } from "react-router-dom";
 import { useCentriumHooks } from "../../AppServices/CentriumHooks";
-import { useEffect, useState } from "react";
-function GuideContent() {
-  // console.log("content");
-  const { post_id } = useParams();
-  const { useGetPost, getProfile, formatDate, estTime, truncateAddress } =
-    useCentriumHooks();
-  const [author, setAuthor] = useState("");
-  const [addr, setAddr] = useState("");
-  const [content, setContent] = useState<[number, string][]>([]);
-  const [guideDesc, setGuideDesc] = useState("");
-  const [date, setDate] = useState("");
-  const [tags, setTags] = useState<string[]>([]);
-  const { data: result, status } = useGetPost(post_id!);
 
-  useEffect(() => {
-    console.log("content");
-    async function fetchData() {
-      if (status === "success" && result) {
-        const post = result as never[];
-        const authorProfile = await getProfile(post[0]);
-        const authorr = (authorProfile as unknown as { username: string })
-          .username;
-        const truncAddr = truncateAddress(post[0]);
-        setAddr(truncAddr);
-        setAuthor(authorr);
-        setContent(JSON.parse(post[1]));
-        setTags(post[2]);
-        setGuideDesc(post[3]);
-        setDate(formatDate(post[5]));
-      }
-    }
-    fetchData();
-  }, [status, result, getProfile, formatDate, estTime, truncateAddress]);
+interface contentProps {
+  author: string;
+  addr: "" | `0x${string}`;
+  content: [number, string][];
+  guideDesc: string;
+  date: number;
+  tags: string[];
+}
+
+function GuideContent({
+  author,
+  addr,
+  content,
+  guideDesc,
+  date,
+  tags,
+}: contentProps) {
+  // console.log("guideContent");
+  const { formatDate, truncateAddress } = useCentriumHooks();
 
   return (
     <div className="w-full flex flex-col gap-7 pb-3 border-b border-slate-300">
@@ -53,11 +39,11 @@ function GuideContent() {
               {author}
             </span>
             <span className="py-1 px-3 bg-slate-300 rounded-xl text-sm font-sofia">
-              {addr}
+              {addr ? truncateAddress(addr) : ""}
             </span>
           </div>
           <div className="flex gap-1 text-sm items-center font-sofia">
-            <span>{date}</span>
+            <span>{date === 0 ? "" : formatDate(date)}</span>
           </div>
         </div>
       </div>

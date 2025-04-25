@@ -55,7 +55,7 @@ function EditThread() {
       className="w-full relative"
     >
       <textarea
-        className="md:text-4xl text-2xl font-semibold w-full px-6 mb-4"
+        className="md:text-4xl text-2xl font-semibold w-full px-6 mb-4 outline-none"
         placeholder="Title..."
         rows={3}
         value={localTitle}
@@ -67,7 +67,7 @@ function EditThread() {
         </label>
         <textarea
           id="guideDesc"
-          className="w-4/5 border-b border-slate-300  py-1 px-3"
+          className="w-4/5 border-b border-slate-300  py-1 px-3 outline-none"
           value={localDesc}
           onChange={(e) => setLocalDesc(e.target.value)}
         />
