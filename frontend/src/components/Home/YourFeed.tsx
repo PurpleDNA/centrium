@@ -1,7 +1,7 @@
 // import { useLocation } from "react-router-dom";
 // import thread from "../../assets/thread.png";
 // import guide from "../../assets/guides.png";
-// import useScrollRestoration from "@/AppServices/utils/UseScrollRestoration";
+import useScrollRestoration from "@/AppServices/utils/UseScrollRestoration";
 // import { getCachedPosts, setCachedPosts } from "@/AppServices/utils/postsCache";
 // import FallbackLoading from "../FallbackLoading";
 import FeedPost from "./FeedPost";
@@ -38,7 +38,7 @@ const YourFeed: FC<YourFeedProps> = ({ postFeed }) => {
   //   if (scrollTop) console.log(scrollTop);
   // }, [location.pathname, scrollTop]);
 
-  // useScrollRestoration(scrollRef);
+  useScrollRestoration(scrollRef);
   return (
     <motion.div
       ref={scrollRef}

@@ -4,6 +4,8 @@ interface ContextType {
   setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
   isNavOpen: boolean;
   setIsNavOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  activePage: string;
+  setActivePage: React.Dispatch<React.SetStateAction<string>>;
 }
 
 // eslint-disable-next-line react-refresh/only-export-components
@@ -16,6 +18,7 @@ interface ContextProviderProps {
 export const ContextProvider: FC<ContextProviderProps> = ({ children }) => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [isNavOpen, setIsNavOpen] = useState<boolean>(false);
+  const [activePage, setActivePage] = useState("Your Feed");
 
   const contextValue = useMemo(
     () => ({
@@ -23,8 +26,10 @@ export const ContextProvider: FC<ContextProviderProps> = ({ children }) => {
       setIsModalOpen,
       isNavOpen,
       setIsNavOpen,
+      activePage,
+      setActivePage,
     }),
-    [isModalOpen, isNavOpen]
+    [activePage, isModalOpen, isNavOpen]
   );
 
   return <Context.Provider value={contextValue}>{children}</Context.Provider>;

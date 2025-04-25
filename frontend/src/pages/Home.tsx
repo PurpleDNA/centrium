@@ -4,7 +4,7 @@ import Threads from "@/components/Home/Threads";
 import Connect from "@/components/Static/Connect";
 import { Button } from "@/components/ui/button";
 import { PenLine } from "lucide-react";
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import { Context } from "../Contexts/Context";
 import CircleLoader from "react-spinners/CircleLoader";
 import { useCentriumHooks } from "@/AppServices/CentriumHooks";
@@ -37,7 +37,6 @@ const override = {
 
 function Home() {
   // UseScrollRestoration("home");
-  const [activePage, setActivePage] = useState("Your Feed");
   const handleNavigation = (page: string) => {
     setActivePage(page);
   };
@@ -48,7 +47,8 @@ function Home() {
     }
     return context;
   };
-  const { isNavOpen, setIsModalOpen } = useSafeContext();
+  const { isNavOpen, setIsModalOpen, activePage, setActivePage } =
+    useSafeContext();
   const toggleModal = () => setIsModalOpen((prev: boolean) => !prev);
   const { formatAllPosts } = useCentriumHooks();
   const { data: postFeed, isLoading } = useQuery<feedPostProps[]>({
