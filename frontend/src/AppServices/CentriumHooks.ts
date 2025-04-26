@@ -571,6 +571,49 @@ export const useCentriumHooks = () => {
     }
   }, []);
 
+  //Format Posts
+  const formatPosts = useCallback(
+    async (result: postType[]) => {
+      const feedObject = result.map(async (post) => {
+        const user = await getProfile(post[0] as `0x${string}`);
+        const username = user!.username;
+        const userAddr = user!.walletAddress;
+        const date = formatDate(post[5] as number);
+        const postType = post[4] ? guide : thread;
+        const isGuide = post[4] as boolean;
+        const title = "Placeholder until Marv delivers";
+        const desc = trimToFirst40Words(post[3] as string);
+        const demo = trimToFirst40Words(post[1] as string);
+        const tags = post[2] as string[];
+        const duration = estTime(post[1] as string);
+        const timestamp = post[5];
+        const postHash = String(post[post.length - 1]);
+
+        return {
+          username,
+          userAddr,
+          date,
+          postType,
+          title,
+          desc,
+          demo,
+          tags,
+          duration,
+          timestamp,
+          postHash,
+          isGuide,
+        } as feedPostProps;
+      });
+      const feed = await Promise.all(feedObject);
+      const reverseIt = feed.sort(
+        (a, b) => Number(b.timestamp) - Number(a.timestamp)
+      );
+      console.log("Returning data");
+      return reverseIt;
+    },
+    [estTime, formatDate, getProfile]
+  );
+
   //Format All Posts
   const formatAllPosts: () => Promise<feedPostProps[] | undefined> =
     useCallback(async () => {
@@ -581,49 +624,49 @@ export const useCentriumHooks = () => {
           throw new Error("No posts found");
         }
         if (result) {
-          const feedObject = result.map(async (post) => {
-            const user = await getProfile(post[0] as `0x${string}`);
-            const username = user!.username;
-            const userAddr = user!.walletAddress;
-            const date = formatDate(post[5] as number);
-            const postType = post[4] ? guide : thread;
-            const isGuide = post[4] as boolean;
-            const title = "Placeholder until Marv delivers";
-            const desc = trimToFirst40Words(post[3] as string);
-            const demo = trimToFirst40Words(post[1] as string);
-            const tags = post[2] as string[];
-            const duration = estTime(post[1] as string);
-            const timestamp = post[5];
-            const postHash = String(post[post.length - 1]);
-
-            return {
-              username,
-              userAddr,
-              date,
-              postType,
-              title,
-              desc,
-              demo,
-              tags,
-              duration,
-              timestamp,
-              postHash,
-              isGuide,
-            } as feedPostProps;
-          });
-          const feed = await Promise.all(feedObject);
-          const reverseIt = feed.sort(
-            (a, b) => Number(b.timestamp) - Number(a.timestamp)
-          );
-          console.log("Returning data");
-          return reverseIt;
+          return formatPosts(result);
         }
       } catch (error) {
         console.error("formatAllPosts Error >>>>>>>" + error);
         throw error;
         // return [];
       }
-    }, [estTime, formatDate, getAllPosts, getProfile]);
+    }, [formatPosts, getAllPosts]);
+
+  //fetch Elements by tags
+  const searchByTag = useCallback(
+    async (tag: string) => {
+      try {
+        const tagPosts = (await readContract(config, {
+          abi,
+          address: address,
+          functionName: "searchByTag",
+          args: [tag],
+        })) as string[];
+        if (!tagPosts) {
+          console.warn("No posts found");
+          throw new Error("No posts found");
+        }
+        if (tagPosts) {
+          const postArray = [];
+          for (let i = 0; i < tagPosts.length; i++) {
+            postArray.push(await getPostAsync(tagPosts[i] as string));
+          }
+          const finalResult = postArray.map((res, i) => {
+            const post = [...(res as unknown[]), tagPosts[i]];
+            return post;
+          });
+          const letsgetit = await formatPosts(finalResult as postType[]);
+          return letsgetit;
+          // return formatPosts(finalResult);
+        }
+      } catch (error) {
+        console.error("searchByTag Error>>>>>>> " + error);
+        throw error;
+      }
+    },
+    [config, formatPosts, getPostAsync]
+  );
 
   //format big integer I guess
   const formatBigInt = useCallback((bigInt: number) => {
@@ -640,25 +683,6 @@ export const useCentriumHooks = () => {
     const result = address.slice(0, 6) + "....." + address.slice(-5);
     return result;
   }, []);
-
-  const searchByTag = useCallback(
-    async (tag: string) => {
-      try {
-        console.log("starting");
-        const tagPosts = await readContract(config, {
-          abi,
-          address: address,
-          functionName: "searchByTag",
-          args: [tag],
-        });
-        console.log(tagPosts);
-        return tagPosts;
-      } catch (error) {
-        console.error("searchByTag Error>>>>>>> " + error);
-      }
-    },
-    [config]
-  );
 
   return {
     isLoading,

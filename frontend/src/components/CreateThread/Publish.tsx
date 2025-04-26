@@ -1,5 +1,5 @@
 // import React from "react";
-import { useContext, useState, useRef, useEffect } from "react";
+import { useContext, useState, useRef, useEffect, useCallback } from "react";
 import { Button } from "../ui/button";
 import { Context } from "@/Contexts/createPostContext";
 import DOMpurify from "dompurify";
@@ -42,13 +42,16 @@ function Publish() {
     saveToDrafts(title, safepost, selected, "no description", false);
   };
 
-  const handleSelected = (tag: string) => {
-    if (selected.includes(tag)) {
-      setSelected((prev) => prev.filter((value) => value !== tag));
-    } else if (!selected.includes(tag)) {
-      setSelected((prev) => [...prev, tag]);
-    }
-  };
+  const handleSelected = useCallback(
+    (tag: string) => {
+      if (selected.includes(tag)) {
+        setSelected((prev) => prev.filter((value) => value !== tag));
+      } else if (!selected.includes(tag)) {
+        setSelected((prev) => [...prev, tag]);
+      }
+    },
+    [selected]
+  );
 
   const inputRef = useRef<HTMLInputElement | null>(null);
   useEffect(() => {
@@ -66,7 +69,7 @@ function Publish() {
         inputElement.removeEventListener("keydown", handleKeyDown);
       };
     }
-  }, [value]);
+  }, [handleSelected, value]);
 
   return (
     <div className="hidden border-l-2 gap-5 py-5 border-l-slate-300 lg:flex flex-col scrollbar-hide sticky top-0 h-screen overflow-y-scroll px-3">
