@@ -10,10 +10,10 @@ import { FC, useRef } from "react";
 import { feedPostProps } from "@/pages/Home";
 interface YourFeedProps {
   postFeed: feedPostProps[];
-  style?: string;
+  disableScroll?: boolean;
 }
 
-const YourFeed: FC<YourFeedProps> = ({ postFeed, style }) => {
+const YourFeed: FC<YourFeedProps> = ({ postFeed, disableScroll }) => {
   const scrollRef = useRef<HTMLDivElement | null>(null);
 
   // const fetchPosts = useCallback(async () => {
@@ -46,7 +46,9 @@ const YourFeed: FC<YourFeedProps> = ({ postFeed, style }) => {
       initial={{ opacity: 0, x: -100 }}
       animate={{ opacity: 1, x: 0 }}
       exit={{ opacity: 0, x: 100 }}
-      className={` w-full scrollable h-screen overflow-scroll ${style}`}
+      className={` w-full scrollable h-screen overflow-scroll ${
+        disableScroll ? "" : "overflow-scroll"
+      }`}
     >
       {postFeed?.map((post, index) => (
         <div key={index}>
