@@ -61,6 +61,7 @@ function Home() {
         return [];
       }
     },
+    gcTime: Infinity,
   });
 
   return (

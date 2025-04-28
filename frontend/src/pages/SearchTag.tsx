@@ -1,15 +1,12 @@
 // import React from 'react'
 import Connect from "@/components/Search/Connect";
-import RecTags from "@/components/Search/RecTags";
 import YourSearch from "@/components/Home/YourFeed";
-import Creators from "@/components/Search/Creators";
 import { motion } from "motion/react";
 import CircleLoader from "react-spinners/CircleLoader";
 import { useCentriumHooks } from "@/AppServices/CentriumHooks";
 import { useQuery } from "@tanstack/react-query";
 import { useState, useRef, useEffect } from "react";
-import { feedPostProps } from "./Home";
-import { useSearchParams, useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 const override = {
   display: "block",
@@ -17,44 +14,20 @@ const override = {
   borderColor: "#3800A7",
 };
 function Search() {
-  const [searchParams] = useSearchParams();
-  const navigate = useNavigate();
-  const tag = searchParams.get("tag");
+  const { tag } = useParams();
   const [search, setSearch] = useState("");
-  const { searchByTag, formatAllPosts } = useCentriumHooks();
-
-  const handleSearch = async (tag: string | null) => {
-    if (tag) {
-      const searchFeed = await searchByTag(
-        tag.toLowerCase().replace(/\s+/g, "-")
-      );
-      if (searchFeed) {
-        return searchFeed;
-      } else {
-        return [];
-      }
-    } else {
-      return [];
-    }
-  };
-
+  const [value, setValue] = useState("");
+  const { searchByTag } = useCentriumHooks();
   const { isLoading: isSearching, data: searchFeed } = useQuery({
-    queryKey: ["searchFeed", tag],
-    queryFn: () => handleSearch(tag),
-    gcTime: 0,
-    enabled: !!tag, // only run if tag exists
-  });
-
-  const { data: postFeed, isLoading } = useQuery<feedPostProps[]>({
-    queryKey: ["feed"],
     queryFn: async () => {
-      const result = await formatAllPosts();
-      if (result) {
-        return result;
+      if (tag) {
+        console.log("leggo");
+        return await searchByTag(tag as unknown as string);
       } else {
         return [];
       }
     },
+    queryKey: ["tagFeed"],
   });
 
   const inputRef = useRef<HTMLInputElement>(null);
@@ -65,7 +38,7 @@ function Search() {
       const handleKeyDown = (event: KeyboardEvent) => {
         if (event.key === "Enter") {
           console.log("trigger button pressed");
-          navigate(`/search?tag=${encodeURIComponent(search.toLowerCase())}`);
+          setValue(search);
           setSearch("");
         }
       };
@@ -74,7 +47,7 @@ function Search() {
         inputElement.removeEventListener("keydown", handleKeyDown);
       };
     }
-  }, [navigate, search]);
+  }, [search]);
 
   return (
     <div className="flex w-full">
@@ -82,7 +55,7 @@ function Search() {
         initial={{ opacity: 0, y: -100 }}
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, x: 100 }}
-        className="w-full lg:w-3/4 flex flex-col gap-5 overflow-scroll"
+        className="w-full lg:w-3/4 flex flex-col gap-5"
       >
         <div className="w-full bg-white sticky pt-4 top-8 md:top-0 md:pt-5 flex justify-center">
           <input
@@ -94,20 +67,8 @@ function Search() {
             className="px-3 w-[90%] lg:w-[70%] py-2 border-2 rounded-md  border-gray-700 mx-auto"
           />
         </div>
-        {(isSearching || (searchFeed && searchFeed.length > 0)) && (
-          <div className="w-full py-2 px-3 border-y border-y-[#6078A6]">
-            You searched for <strong>"{tag}"</strong>
-          </div>
-        )}
-        {isSearching || (searchFeed && searchFeed.length > 0) ? null : (
-          <div className="border-t-2 border-slate-300 px-5 py-5">
-            <RecTags />
-          </div>
-        )}
-        {isSearching || (searchFeed && searchFeed.length > 0) ? null : (
-          <div className="border-y-2 border-slate-300 px-5 py-5">
-            <Creators />
-          </div>
+        {searchFeed && (
+          <div className="w-full py-2">You searched for "{value}"</div>
         )}
         <div>
           {isSearching ? (
@@ -118,20 +79,8 @@ function Search() {
               aria-label="Loading Spinner"
               data-testid="loader"
             />
-          ) : searchFeed && searchFeed.length > 0 ? (
-            <YourSearch postFeed={searchFeed} />
-          ) : isLoading ? (
-            <CircleLoader
-              cssOverride={override}
-              color={"#3800A7"}
-              size={30}
-              aria-label="Loading Spinner"
-              data-testid="loader"
-            />
           ) : (
-            postFeed && (
-              <YourSearch postFeed={postFeed} style="overflow-hidden" />
-            )
+            searchFeed && <YourSearch postFeed={searchFeed} />
           )}
         </div>
       </motion.div>

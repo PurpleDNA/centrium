@@ -1,9 +1,9 @@
 import { FC, useEffect, useRef, useState } from "react";
 import rizzKing from "../../assets/rizzking.svg";
 import { Bookmark, Ellipsis } from "lucide-react";
-import { useNavigate } from "react-router-dom";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
+import { useNavigate } from "react-router-dom";
 
 interface HandleClickEvent extends React.MouseEvent<HTMLElement> {
   currentTarget: EventTarget & HTMLElement;
@@ -51,21 +51,34 @@ const FeedPost: FC<Props> = ({
     }
   }, [tags, tags.length]);
 
-  const handleClick = (e: HandleClickEvent) => {
-    if (e.currentTarget === profileRef.current) {
-      navigate(`/profile/${userAddr}`);
-    } else if (e.currentTarget === postRef.current) {
-      if (isGuide) {
-        navigate(`/guide/${postHash}`);
+  const handleTags = (e: HandleClickEvent, index: number, tag: string) => {
+    if (localTags.length > 3) {
+      if (index === localTags.length - 1) {
+        if (isGuide) {
+          navigate(`/guide/${postHash}`);
+        } else {
+          navigate(`/post/${postHash}`);
+        }
       } else {
-        navigate(`/post/${postHash}`);
+        e.stopPropagation();
+        navigate(`/search?tag=${encodeURIComponent(tag)}`);
       }
+    } else {
+      e.stopPropagation();
+      navigate(`/search?tag=${encodeURIComponent(tag)}`);
     }
   };
+
   return (
     <div
       ref={postRef}
-      onClick={(e) => handleClick(e)}
+      onClick={() => {
+        if (isGuide) {
+          navigate(`/guide/${postHash}`);
+        } else {
+          navigate(`/post/${postHash}`);
+        }
+      }}
       className="w-full rounded-lg md:w-full flex flex-col gap-6 cursor-pointer hover:bg-slate-100 transition-all duration-300 pb-0 p-5"
     >
       <div className="flex justify-between items-center">
@@ -74,7 +87,7 @@ const FeedPost: FC<Props> = ({
             ref={profileRef}
             onClick={(e) => {
               e.stopPropagation();
-              handleClick(e);
+              navigate(`/profile/${userAddr}`);
             }}
             className=" w-12 h-12"
             src={rizzKing}
@@ -104,7 +117,8 @@ const FeedPost: FC<Props> = ({
           {localTags.map((tag, index) => (
             <span
               key={index}
-              className="rounded-lg font-sofia text-xs bg-[#ECECEC] p-1 text-black font-medium"
+              className="rounded-lg font-sofia text-xs bg-[#ECECEC] hover:bg-[#cecdcd] p-1 text-black font-medium"
+              onClick={(e) => handleTags(e, index, tag)}
             >
               {tag}
             </span>

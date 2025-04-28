@@ -637,6 +637,7 @@ export const useCentriumHooks = () => {
   const searchByTag = useCallback(
     async (tag: string) => {
       try {
+        console.log(tag);
         const tagPosts = (await readContract(config, {
           abi,
           address: address,
@@ -657,6 +658,7 @@ export const useCentriumHooks = () => {
             return post;
           });
           const letsgetit = await formatPosts(finalResult as postType[]);
+          console.log(letsgetit);
           return letsgetit;
           // return formatPosts(finalResult);
         }

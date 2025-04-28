@@ -47,7 +47,7 @@ function MobilePublish({ setIsPublishOpen }: props) {
     if (selected.includes(tag)) {
       setSelected((prev) => prev.filter((value) => value !== tag));
     } else if (!selected.includes(tag)) {
-      setSelected((prev) => [...prev, tag]);
+      setSelected((prev) => [...prev, tag.toLowerCase().replace(/\s+/g, "-")]);
     }
   };
 
@@ -56,7 +56,7 @@ function MobilePublish({ setIsPublishOpen }: props) {
     const inputElement = inputRef.current;
     if (inputElement) {
       const handleKeyDown = (event: KeyboardEvent) => {
-        if (event.key === " " || event.key === "Enter") {
+        if (event.key === "Enter") {
           console.log("trigger button pressed");
           handleSelected(value);
           inputElement.value = "";
@@ -116,7 +116,7 @@ function MobilePublish({ setIsPublishOpen }: props) {
             <h3 className="font-semibold">Top tags this week</h3>
             <div className="grid grid-cols-3 text-[12px] gap-1">
               {tags.map((tag, i) =>
-                selected.includes(tag) ? (
+                selected.includes(tag.toLowerCase().replace(/\s+/g, "-")) ? (
                   <p
                     onClick={() => handleSelected(tag)}
                     key={i}

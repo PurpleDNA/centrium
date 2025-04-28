@@ -1,6 +1,7 @@
 import profpic from "../../assets/rizzking.svg";
 import { Dot } from "lucide-react";
 import { useCentriumHooks } from "../../AppServices/CentriumHooks";
+import { useNavigate } from "react-router-dom";
 
 interface contentProps {
   author: string;
@@ -13,6 +14,7 @@ interface contentProps {
 function Content({ author, addr, content, date, tags }: contentProps) {
   // console.log("content");
   const { formatDate, truncateAddress, estTime } = useCentriumHooks();
+  const navigate = useNavigate();
 
   return (
     <div className="w-full flex flex-col gap-5 pb-3 border-b-2 border-slate-300">
@@ -54,6 +56,7 @@ function Content({ author, addr, content, date, tags }: contentProps) {
           <span
             key={i}
             className="rounded-md font-sofia text-xs bg-[#ECECEC] hover:bg-[#cecdcd] p-1 inline w-auto text-black cursor-pointer"
+            onClick={() => navigate(`/search?tag=${encodeURIComponent(tag)}`)}
           >
             {tag}
           </span>
