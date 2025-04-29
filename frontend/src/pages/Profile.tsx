@@ -9,10 +9,20 @@ import EditProfileModal from "@/components/modals/EditProfileModal";
 import { useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useCentriumHooks } from "@/AppServices/CentriumHooks";
+import CircleLoader from "react-spinners/CircleLoader";
+import { useQuery } from "@tanstack/react-query";
+import { feedPostProps } from "./Home";
+const override = {
+  display: "block",
+  margin: "0 auto",
+  borderColor: "#3800A7",
+  // marginTop: "50px",
+  // color: "white",
+};
 
 function Profile() {
   const [activePage, setActivePage] = useState("threads");
-  const { getProfile } = useCentriumHooks();
+  const { getProfile, formatAllPosts } = useCentriumHooks();
   const handleNavigation = (page: string) => {
     setActivePage(page);
   };
@@ -28,6 +38,19 @@ function Profile() {
   const [followers, setFollowers] = useState(0);
   const [following, setFollowing] = useState(0);
   const [isFollowing, setIsFollowing] = useState<boolean | null>(null);
+
+  const { data: postFeed, isLoading } = useQuery<feedPostProps[]>({
+    queryKey: ["feed"],
+    queryFn: async () => {
+      const result = await formatAllPosts();
+      if (result) {
+        return result;
+      } else {
+        return [];
+      }
+    },
+    gcTime: 0,
+  });
 
   const fetchData = useCallback(async () => {
     const mandemaProfile = await getProfile(profileAddy!);
@@ -69,8 +92,8 @@ function Profile() {
   }, [isEditOpen]);
   return (
     <div className="flex w-full flex-col-reverse lg:flex-row">
-      <div className="w-full lg:w-2/3 flex flex-col gap-5">
-        <div className="w-full pt-4 md:pt-10 border-b-2 border-slate-300 sticky top-8 md:top-0 bg-white">
+      <div className="w-full lg:w-2/3 flex flex-col gap-5 h-screen overflow-scroll">
+        <div className="w-full pt-4 md:pt-10 border-b-2 border-slate-300 sticky top-8 md:top-0 bg-white h-max">
           <div
             className={`flex ${
               profile.walletAddress === profileAddy
@@ -116,11 +139,41 @@ function Profile() {
             )}
           </div>
         </div>
-        <div className="">
-          {activePage === "threads" && <Threads profileAddy={profileAddy!} />}
-          {activePage === "guides" && <Guides profileAddy={profileAddy!} />}
+        <div className="flex-grow">
+          {activePage === "threads" &&
+            (isLoading ? (
+              <CircleLoader
+                cssOverride={override}
+                color={"#3800A7"}
+                size={30}
+                aria-label="Loading Spinner"
+                data-testid="loader"
+              />
+            ) : (
+              <Threads
+                profileAddy={profileAddy!}
+                postFeed={postFeed!}
+                userProfile={profile.walletAddress}
+              />
+            ))}
+          {activePage === "guides" &&
+            (isLoading ? (
+              <CircleLoader
+                cssOverride={override}
+                color={"#3800A7"}
+                size={30}
+                aria-label="Loading Spinner"
+                data-testid="loader"
+              />
+            ) : (
+              <Guides
+                profileAddy={profileAddy!}
+                postFeed={postFeed!}
+                userProfile={profile.walletAddress}
+              />
+            ))}
           {activePage === "saved" && profile.walletAddress === profileAddy && (
-            <Bookmarks />
+            <Bookmarks postFeed={[]} />
           )}
           {activePage === "drafts" && profile.walletAddress === profileAddy && (
             <Drafts />
