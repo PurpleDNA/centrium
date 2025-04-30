@@ -31,7 +31,7 @@ const WriteComment = ({ setCommentsReload }: props) => {
     setTimeout(() => setCommentsReload(), 600);
   };
   return (
-    <div className="reply flex flex-col gap-5 border-b-2 border-slate-300 pb-4">
+    <div className="reply flex flex-col gap-5 border-b-2 border-slate-300 dark:border-borderr pb-4">
       <div className="flex gap-2  items-center">
         <img src={profpic} alt="" />
         <span className="font-sofia font-semibold">{user}</span>
@@ -39,7 +39,7 @@ const WriteComment = ({ setCommentsReload }: props) => {
       <textarea
         ref={inputRef}
         placeholder="what are your thoughts..."
-        className="w-full px-1 text-sm outline-none overflow-hidden"
+        className="w-full px-1 text-sm outline-none overflow-hidden dark:bg-darkk dark:border dark:border-[#510FB1]"
         id=""
         rows={5}
         onChange={(e) => setComment(e.currentTarget.value)}
@@ -48,7 +48,7 @@ const WriteComment = ({ setCommentsReload }: props) => {
         <Button
           onClick={handleComment}
           disabled={!comment || isInteracting}
-          className="bg-[#3800A7]"
+          className="bg-[#3800A7] dark:text-white"
         >
           {isInteracting ? (
             <CircleLoader

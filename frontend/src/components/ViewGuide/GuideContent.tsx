@@ -38,7 +38,7 @@ function GuideContent({
             <span className="font-sofia pr-4 border-r-2 border-slate-400 font-semibold">
               {author}
             </span>
-            <span className="py-1 px-3 bg-slate-300 rounded-xl text-sm font-sofia">
+            <span className="py-1 px-3 bg-slate-300 rounded-xl text-sm font-sofia dark:bg-slate-900">
               {addr ? truncateAddress(addr) : ""}
             </span>
           </div>
@@ -70,7 +70,7 @@ function GuideContent({
       </div>
       <div className="tags flex gap-1 md:gap-3 px-5">
         {tags.map((tag: string) => (
-          <span className="rounded-md font-sofia text-xs bg-[#ECECEC] p-1 inline w-auto text-black">
+          <span className="rounded-md font-sofia text-xs bg-[#ECECEC] p-1 inline w-auto text-black dark:bg-slate-900 dark:text-white dark:hover:bg-darkk cursor-pointer">
             {tag}
           </span>
         ))}

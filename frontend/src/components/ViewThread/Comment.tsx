@@ -25,7 +25,7 @@ const Comment = ({ content, commenter, date }: Props) => {
     fetchData();
   });
   return (
-    <div className="flex flex-col gap-5 mb-5 pb-3 border-b-2 border-slate-300">
+    <div className="flex flex-col gap-5 mb-5 pb-3 border-b-2 border-slate-300 dark:border-borderr">
       <div className="flex justify-between items-end">
         <div className="flex gap-2  items-center">
           <img src={profpic} alt="" />

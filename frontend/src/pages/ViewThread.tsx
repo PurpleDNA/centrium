@@ -164,7 +164,7 @@ const ViewThread = () => {
   }, []);
   return (
     <div className="flex w-full mb-[70px] md:mb-0 flex-col lg:flex-row">
-      <div className="w-full lg:w-2/3 flex flex-col gap-5 border-r-2 border-slate-300">
+      <div className="w-full lg:w-2/3 flex flex-col gap-5 border-r-2 border-slate-300 dark:border-borderr">
         <Content
           content={content}
           date={date}
@@ -222,7 +222,7 @@ const ViewThread = () => {
                 onMouseOver={() => setAction("Unfollow")}
                 onMouseLeave={() => setAction("Following")}
                 onClick={handleFollow}
-                className=" hover:bg-red-500"
+                className=" hover:bg-red-500 dark:hover:text-white"
                 disabled={interacting}
               >
                 {action}

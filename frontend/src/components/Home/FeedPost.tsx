@@ -119,7 +119,7 @@ const FeedPost: FC<Props> = ({
           {localTags.map((tag, index) => (
             <span
               key={index}
-              className="rounded-lg font-sofia text-xs bg-[#ECECEC] hover:bg-[#cecdcd] p-1 text-black font-medium dark:bg-[#2B2B33] dark:text-white"
+              className="rounded-lg font-sofia text-xs bg-[#ECECEC] hover:bg-[#cecdcd] p-1 text-black font-medium dark:bg-[#2B2B33] dark:text-white hover:dark:bg-slate-900"
               onClick={(e) => handleTags(e, index, tag)}
             >
               {tag}

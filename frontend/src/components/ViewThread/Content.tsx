@@ -18,11 +18,11 @@ function Content({ author, addr, content, date, tags }: contentProps) {
   const navigate = useNavigate();
 
   return (
-    <div className="w-full flex flex-col gap-5 pb-3 border-b-2 border-slate-300">
+    <div className="w-full flex flex-col gap-5 pb-3 border-b-2 border-slate-300 dark:border-borderr">
       <h1 className="font-semibold text-2xl pt-1 md:text-4xl md:mb-4 px-3 break-words">
         {content ? "Title Placeholder till Marv Delivers" : <Skeleton />}
       </h1>
-      <div className="flex gap-3 px-3 items-center pb-4 border-b-2 border-slate-300">
+      <div className="flex gap-3 px-3 items-center pb-4 border-b-2 border-slate-300 dark:border-borderr">
         <div>
           <img
             onClick={(e) => {
@@ -39,7 +39,7 @@ function Content({ author, addr, content, date, tags }: contentProps) {
             <span className="font-sofia pr-4 border-r-2 border-slate-400 font-semibold">
               {author ? author : <Skeleton />}
             </span>
-            <span className="py-1 px-3 bg-slate-300 rounded-xl text-sm font-sofia">
+            <span className="py-1 px-3 bg-slate-300 rounded-xl text-sm font-sofia dark:bg-slate-900">
               {addr ? truncateAddress(addr) : <Skeleton />}
             </span>
           </div>
@@ -55,13 +55,13 @@ function Content({ author, addr, content, date, tags }: contentProps) {
       </div>
       {!content && (
         <div className="w-4/5 mx-auto">
-          <Skeleton count={5} />
+          <Skeleton className="dark:bg-darkk" count={5} />
         </div>
       )}
       <div
         style={{
           padding: "20px 20px 0px",
-          backgroundColor: "#fff",
+          // backgroundColor: "#fff",
           wordBreak: "break-word",
           overflowWrap: "anywhere",
         }}
@@ -72,7 +72,7 @@ function Content({ author, addr, content, date, tags }: contentProps) {
         {tags.map((tag: string, i) => (
           <span
             key={i}
-            className="rounded-md font-sofia text-xs bg-[#ECECEC] hover:bg-[#cecdcd] p-1 inline w-auto text-black cursor-pointer"
+            className="rounded-md font-sofia text-xs bg-[#ECECEC] hover:bg-[#cecdcd] p-1 inline w-auto text-black cursor-pointer dark:bg-[#2B2B33] dark:text-white dark:hover:bg-slate-900"
             onClick={() => navigate(`/search?tag=${encodeURIComponent(tag)}`)}
           >
             {tag}
