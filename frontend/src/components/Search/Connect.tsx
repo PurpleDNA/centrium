@@ -44,7 +44,7 @@ function Connect() {
               <p>{creator.username}</p>
             </div>
             <Button
-              className="bg-[#3800A7] hover:bg-[#1e0846] dark:bg-white"
+              className="bg-[#3800A7] hover:bg-[#1e0846] dark:bg-slate-900 dark:text-white dark:hover:bg-[#510FB1]"
               onClick={() => handleFollowing(index)}
             >
               {following.includes(index) ? "Following" : "Follow"}

@@ -24,7 +24,10 @@ const Creators = () => {
               <p className="hidden lg:block">{creator.bio}</p>
             </div>
           </div>
-          <Button onClick={() => handleFollowing(i)}>
+          <Button
+            className="dark:bg-slate-900 dark:text-white dark:hover:bg-[#510FB1]"
+            onClick={() => handleFollowing(i)}
+          >
             {isFollowing?.includes(i) ? "Following" : "Follow"}
           </Button>
         </div>
