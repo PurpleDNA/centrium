@@ -34,7 +34,7 @@ function PreviewThread() {
             <span className="font-sofia pr-4 border-r-2 border-slate-400 font-semibold">
               {userProfile.username}
             </span>
-            <span className="py-1 px-3 bg-slate-300 rounded-xl text-sm">
+            <span className="py-1 px-3 bg-slate-300 rounded-xl text-sm dark:bg-slate-900">
               {truncateAddress(userProfile.walletAddress)}
             </span>
           </div>
@@ -50,7 +50,7 @@ function PreviewThread() {
           border: "1px solid #ccc",
           padding: "20px",
           borderRadius: "4px",
-          backgroundColor: "#fff",
+          // backgroundColor: "#fff",
           wordBreak: "break-word",
           overflowWrap: "anywhere",
         }}

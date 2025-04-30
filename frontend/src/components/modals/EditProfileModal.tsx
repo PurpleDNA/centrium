@@ -17,7 +17,7 @@ function EditProfileModal({ setIsEditOpen }: props) {
         initial={{ opacity: 0, scale: 0.5 }}
         animate={{ opacity: 1, scale: 1 }}
         exit={{ opacity: 0, x: 100 }}
-        className=" bg-white p-5 rounded-sm flex flex-col gap-3"
+        className=" bg-white p-5 rounded-md flex flex-col gap-3 dark:bg-darkk"
       >
         <div className="flex justify-end w-full">
           <h1 className="font-bold font-sofia text-base mx-auto pl-6">
@@ -37,7 +37,7 @@ function EditProfileModal({ setIsEditOpen }: props) {
         </div>
         <div className="w-full">
           <form action="" className="flex flex-col gap-5">
-            <div className="bg-[#F1F1F1] flex flex-col px-4 py-2 rounded-md">
+            <div className="bg-[#F1F1F1] flex flex-col px-4 py-2 rounded-md dark:bg-darkk">
               <label htmlFor="name" className="text-[#CDCDCD] text-xs ml-1">
                 Name
               </label>
@@ -46,10 +46,10 @@ function EditProfileModal({ setIsEditOpen }: props) {
                 type="text"
                 id="name"
                 name="about"
-                className="w-72 md:w-96 bg-[#F1F1F1] p-1 outline-none font-sofia"
+                className="w-72 md:w-96 bg-[#F1F1F1] p-1 outline-none font-sofia dark:bg-darkk dark:border border-slate-400 rounded-md dark:mt-1"
               />
             </div>
-            <div className="bg-[#F1F1F1] flex flex-col px-4 py-2 rounded-md">
+            <div className="bg-[#F1F1F1] flex flex-col px-4 py-2 rounded-md dark:bg-darkk">
               <label htmlFor="about" className="text-[#CDCDCD] text-xs ml-1">
                 About Me
               </label>
@@ -58,13 +58,13 @@ function EditProfileModal({ setIsEditOpen }: props) {
                 id="about"
                 name="about"
                 rows={3}
-                className="w-72 md:w-96 bg-[#F1F1F1] p-1 outline-none font-sofia"
+                className="w-72 md:w-96 bg-[#F1F1F1] p-1 outline-none font-sofia dark:bg-darkk dark:border border-slate-400 rounded-md dark:mt-1"
               />
             </div>
             <div className="flex justify-end w-full">
               <Button
                 onClick={() => setIsEditOpen()}
-                className="bg-white border-2 border-[#501FB1] rounded-md w-max text-black text-xs hover:bg-[#501FB1] transition-all hover:text-white"
+                className="bg-white border-2 border-[#501FB1] rounded-md w-max text-black text-xs hover:bg-[#501FB1] dark:bg-[#501FB1] dark:text-white transition-all hover:text-white"
                 type="submit"
               >
                 {" "}

@@ -2,6 +2,7 @@ import profpic from "../../assets/rizzking.svg";
 import { Dot } from "lucide-react";
 import { useCentriumHooks } from "../../AppServices/CentriumHooks";
 import { useNavigate } from "react-router-dom";
+import Skeleton from "react-loading-skeleton";
 
 interface contentProps {
   author: string;
@@ -19,28 +20,44 @@ function Content({ author, addr, content, date, tags }: contentProps) {
   return (
     <div className="w-full flex flex-col gap-5 pb-3 border-b-2 border-slate-300">
       <h1 className="font-semibold text-2xl pt-1 md:text-4xl md:mb-4 px-3 break-words">
-        {"Title Placeholder till Marv Delivers"}
+        {content ? "Title Placeholder till Marv Delivers" : <Skeleton />}
       </h1>
       <div className="flex gap-3 px-3 items-center pb-4 border-b-2 border-slate-300">
         <div>
-          <img src={profpic} alt="" />
+          <img
+            onClick={(e) => {
+              e.stopPropagation();
+              navigate(`/profile/${addr}`);
+            }}
+            src={profpic}
+            alt="user profile picture"
+            className="cursor-pointer"
+          />
         </div>
         <div className="flex flex-col justify-between gap-3">
           <div className="flex gap-3 items-center">
             <span className="font-sofia pr-4 border-r-2 border-slate-400 font-semibold">
-              {author}
+              {author ? author : <Skeleton />}
             </span>
             <span className="py-1 px-3 bg-slate-300 rounded-xl text-sm font-sofia">
-              {addr ? truncateAddress(addr) : ""}{" "}
+              {addr ? truncateAddress(addr) : <Skeleton />}
             </span>
           </div>
           <div className="flex gap-1 text-sm items-center font-sofia">
-            <span>{date === 0 ? "" : formatDate(date)}</span>
+            <span>{date === 0 ? <Skeleton /> : formatDate(date)}</span>
             <Dot />
-            <span>{estTime(content)} minute read</span>
+            <span>
+              {content ? estTime(content) : <Skeleton className="inline" />}{" "}
+              minute read
+            </span>
           </div>
         </div>
       </div>
+      {!content && (
+        <div className="w-4/5 mx-auto">
+          <Skeleton count={5} />
+        </div>
+      )}
       <div
         style={{
           padding: "20px 20px 0px",

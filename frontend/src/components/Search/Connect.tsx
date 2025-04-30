@@ -20,7 +20,7 @@ function Connect() {
   };
 
   return (
-    <div className="hidden border-l-2 border-l-slate-300 lg:flex flex-col gap-8 w-full scrollbar-hide sticky top-0 h-screen overflow-y-scroll py-5 px-3">
+    <div className="hidden border-l-2 border-l-slate-300 lg:flex flex-col gap-8 w-full scrollbar-hide sticky top-0 h-screen overflow-y-scroll py-5 px-3 dark:border-borderr">
       <div className="w-full flex flex-col gap-3">
         <h2 className="text-lg font-semibold font-sofia">Trending Tags</h2>
         <div className="flex flex-wrap gap-1">
@@ -28,7 +28,7 @@ function Connect() {
             <button
               key={num}
               onClick={() => navigate(`/search?tag=${encodeURIComponent(tag)}`)}
-              className={` text-sm mb-[6px] rounded-3xl font-sofia  px-4 py-2 inline w-auto bg-cyann border-2 border-slate-100 cursor-pointer transition-all duration-100`}
+              className={` text-sm mb-[6px] rounded-3xl font-sofia  px-4 py-2 inline w-auto bg-cyann border-2 border-slate-100 cursor-pointer transition-all duration-100 dark:bg-slate-900 dark:border-0`}
             >
               {tag}
             </button>
@@ -44,7 +44,7 @@ function Connect() {
               <p>{creator.username}</p>
             </div>
             <Button
-              className="bg-[#3800A7] hover:bg-[#1e0846]"
+              className="bg-[#3800A7] hover:bg-[#1e0846] dark:bg-white"
               onClick={() => handleFollowing(index)}
             >
               {following.includes(index) ? "Following" : "Follow"}

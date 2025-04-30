@@ -71,7 +71,11 @@ function Search() {
         if (event.key === "Enter") {
           if (search) {
             console.log("trigger button pressed");
-            navigate(`/search?tag=${encodeURIComponent(search.toLowerCase())}`);
+            navigate(
+              `/search?tag=${encodeURIComponent(
+                search.toLowerCase().replace(/\s+/g, "-")
+              )}`
+            );
             setSearch("");
           } else return;
         }
@@ -91,14 +95,14 @@ function Search() {
         exit={{ opacity: 0, x: 100 }}
         className="w-full lg:w-3/4 flex flex-col gap-5"
       >
-        <div className="w-full bg-white sticky pt-4 top-0 md:pt-5 flex justify-center">
+        <div className="w-full bg-white sticky pt-4 top-0 md:pt-5 flex justify-center dark:bg-darkk">
           <input
             ref={inputRef}
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             type="text"
             placeholder="Search for any tag..."
-            className="px-3 w-[90%] lg:w-[70%] py-2 border-2 rounded-md  border-gray-700 mx-auto"
+            className="px-3 w-[90%] lg:w-[70%] py-2 border-2 rounded-md  border-gray-700 mx-auto dark:bg-darkk"
           />
         </div>
         {(isSearching || isSuccess) && (
@@ -107,12 +111,12 @@ function Search() {
           </div>
         )}
         {isSearching || isSuccess ? null : (
-          <div className="border-t-2 border-slate-300 px-5 py-5">
+          <div className="border-t-2 border-slate-300 dark:border-borderr px-5 py-5">
             <RecTags />
           </div>
         )}
         {isSearching || isSuccess ? null : (
-          <div className="border-y-2 border-slate-300 px-5 py-5">
+          <div className="border-y-2 border-slate-300 dark:border-borderr px-5 py-5">
             <Creators />
           </div>
         )}

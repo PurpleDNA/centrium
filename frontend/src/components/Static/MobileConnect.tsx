@@ -5,7 +5,7 @@ import { ConnectKitButton } from "connectkit";
 
 function MobileConnect() {
   return (
-    <div className="w-full fixed top-0 bg-white flex md:hidden justify-between px-4 mb-5 z-50">
+    <div className="w-full fixed top-0 bg-white dark:bg-darkk flex md:hidden justify-between px-4 mb-5 z-50">
       <img src={ProfPic} alt="" className="w-8" />
       <ConnectKitButton.Custom>
         {({ show }) => {

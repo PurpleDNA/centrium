@@ -16,12 +16,14 @@ function Notifications() {
   return (
     <div className="flex">
       <div className="w-full lg:w-3/4">
-        <div className="w-full pt-4 md:pt-10 border-b-2 border-slate-300 sticky top-8 md:top-0 bg-white">
+        <div className="w-full pt-4 md:pt-10 border-b-2 border-slate-300 dark:border-borderr sticky top-8 md:top-0 bg-white dark:bg-darkk">
           <div className="flex justify-between px-7 md:px-24 font-sofia w-full font-semibold">
             <span
               onClick={() => handleNavigation("general")}
               className={`cursor-pointer ${
-                activePage === "general" ? "border-b-2 border-[#3800A7]" : ""
+                activePage === "general"
+                  ? "border-b-2 border-[#3800A7]"
+                  : "text-[#9B9B9F]"
               }`}
             >
               General
@@ -29,7 +31,9 @@ function Notifications() {
             <span
               onClick={() => handleNavigation("postNotifs")}
               className={`cursor-pointer ${
-                activePage === "postNotifs" ? "border-b-2 border-[#3800A7]" : ""
+                activePage === "postNotifs"
+                  ? "border-b-2 border-[#3800A7]"
+                  : "text-[#9B9B9F]"
               }`}
             >
               Post Notifications

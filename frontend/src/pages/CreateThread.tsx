@@ -24,12 +24,14 @@ function CreateThread() {
     <div className="flex w-full">
       <CreateThreadProvider>
         <div className="lg:w-3/4 w-full">
-          <div className="w-full pt-10 border-b-2 border-slate-300 sticky top-0 bg-white z-10">
+          <div className="w-full pt-10 border-b-2 border-slate-300 sticky top-0 bg-white z-10 dark:bg-darkk dark:border-borderr ">
             <div className="flex gap-20 mx-auto font-sofia w-max font-semibold items-baseline">
               <span
                 onClick={() => handleNavigation("editing")}
                 className={`cursor-pointer ${
-                  activePage === "editing" ? "border-b-2 border-[#3800A7]" : ""
+                  activePage === "editing"
+                    ? "border-b-2 border-[#3800A7]"
+                    : "dark:text-[#9B9B9F]"
                 }`}
               >
                 Editing
@@ -37,7 +39,9 @@ function CreateThread() {
               <span
                 onClick={() => handleNavigation("preview")}
                 className={`cursor-pointer ${
-                  activePage === "preview" ? "border-b-2 border-[#3800A7]" : ""
+                  activePage === "preview"
+                    ? "border-b-2 border-[#3800A7]"
+                    : "dark:text-[#9B9B9F]"
                 }`}
               >
                 Preview

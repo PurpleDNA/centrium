@@ -79,7 +79,7 @@ const FeedPost: FC<Props> = ({
           navigate(`/post/${postHash}`);
         }
       }}
-      className="w-full rounded-lg md:w-full flex flex-col gap-6 cursor-pointer hover:bg-slate-100 transition-all duration-300 pb-0 p-5"
+      className="w-full rounded-lg md:w-full flex flex-col gap-6 cursor-pointer hover:bg-slate-100 transition-all duration-300 pb-0 p-5 dark:hover:bg-slate-900"
     >
       <div className="flex justify-between items-center">
         <div className="flex gap-2 items-center">
@@ -94,8 +94,10 @@ const FeedPost: FC<Props> = ({
             alt="user profile picture"
           />
           <div className="flex flex-col gap-1">
-            <p className="font-semibold text-black font-sofia ">{username}</p>
-            <p className="text-slate-800 text-sm">{date}</p>
+            <p className="font-semibold text-black font-sofia dark:text-white">
+              {username}
+            </p>
+            <p className="text-slate-800 text-sm dark:text-[#9B9B9F]">{date}</p>
           </div>
         </div>
         <div className="flex gap-10 items-center">
@@ -117,7 +119,7 @@ const FeedPost: FC<Props> = ({
           {localTags.map((tag, index) => (
             <span
               key={index}
-              className="rounded-lg font-sofia text-xs bg-[#ECECEC] hover:bg-[#cecdcd] p-1 text-black font-medium"
+              className="rounded-lg font-sofia text-xs bg-[#ECECEC] hover:bg-[#cecdcd] p-1 text-black font-medium dark:bg-[#2B2B33] dark:text-white"
               onClick={(e) => handleTags(e, index, tag)}
             >
               {tag}
@@ -125,14 +127,14 @@ const FeedPost: FC<Props> = ({
           ))}
         </div>
         <div className="flex gap-2 md:gap-5 items-center shrink-0">
-          <p className="font-poppins text-sm text-gray-600">
+          <p className="font-poppins text-sm text-gray-600 dark:text-white">
             {duration} min read
           </p>
           <Bookmark />
         </div>
       </div>
       <div>
-        <hr className="w-full border-slate-300 border-b-2" />
+        <hr className="w-full border-slate-300 border-b-2 dark:border-borderr" />
       </div>
     </div>
   );

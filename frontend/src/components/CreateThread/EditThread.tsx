@@ -36,7 +36,7 @@ function EditThread() {
       className="w-full"
     >
       <textarea
-        className="text-2xl md:text-4xl font-semibold mb-5 px-6 w-full"
+        className="text-2xl md:text-4xl font-semibold mb-5 px-6 w-full dark:bg-darkk focus:outline-none"
         placeholder="Title..."
         value={localTitle}
         onChange={(e) => setLocalTitle(e.target.value)}

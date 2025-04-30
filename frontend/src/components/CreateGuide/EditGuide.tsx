@@ -55,7 +55,7 @@ function EditThread() {
       className="w-full relative"
     >
       <textarea
-        className="md:text-4xl text-2xl font-semibold w-full px-6 mb-4 outline-none"
+        className="md:text-4xl text-2xl font-semibold w-full px-6 mb-4 outline-none dark:bg-darkk"
         placeholder="Title..."
         rows={3}
         value={localTitle}
@@ -67,19 +67,19 @@ function EditThread() {
         </label>
         <textarea
           id="guideDesc"
-          className="w-4/5 border-b border-slate-300  py-1 px-3 outline-none"
+          className="w-4/5 border-b border-slate-300  py-1 px-3 outline-none dark:bg-darkk dark:border-borderr"
           value={localDesc}
           onChange={(e) => setLocalDesc(e.target.value)}
         />
       </div>
-      <div className="w-full flex justify-center flex-col border-t-2 border-slate-300 pt-5">
+      <div className="w-full flex justify-center flex-col border-t-2 border-slate-300 pt-5 dark:border-borderr">
         {steps.map((_step, index) => (
           <Step key={index} number={index + 1} />
         ))}
       </div>
       <div
         onClick={addStep}
-        className={`sticky bottom-1 w-4/5 mx-auto rounded-md p-2 cursor-pointer hover:bg-slate-300 bg-slate-50 flex justify-center gap-2 border border-[#3800A7] mb-4 items-center ${
+        className={`sticky bottom-1 w-4/5 mx-auto rounded-md p-2 cursor-pointer hover:bg-slate-300 bg-slate-50 dark:bg-darkk dark:hover:bg-slate-900 flex justify-center gap-2 border border-[#3800A7] mb-4 items-center ${
           !steps.at(-1)?.[1] ? "pointer-events-none" : ""
         }`}
       >

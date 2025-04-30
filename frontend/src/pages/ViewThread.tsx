@@ -26,6 +26,7 @@ const ViewThread = () => {
     dislikePost,
     formatBigInt,
   } = useCentriumHooks();
+  const [interacting, setInteracting] = useState(false);
   const [likes, setLikes] = useState(0);
   const [dislikes, setDislikes] = useState(0);
   const [author, setAuthor] = useState("");
@@ -120,11 +121,13 @@ const ViewThread = () => {
   }, [window.innerWidth]);
 
   const handleFollow = async () => {
+    setInteracting(true);
     if (following) {
       if (addr) unfollow(addr);
     } else {
       if (addr) follow(addr);
     }
+    setInteracting(false);
   };
   const handleLIke = async () => {
     if (isLiked === "liked") {
@@ -220,11 +223,14 @@ const ViewThread = () => {
                 onMouseLeave={() => setAction("Following")}
                 onClick={handleFollow}
                 className=" hover:bg-red-500"
+                disabled={interacting}
               >
                 {action}
               </Button>
             ) : (
-              <Button onClick={handleFollow}>Follow</Button>
+              <Button disabled={interacting} onClick={handleFollow}>
+                Follow
+              </Button>
             )}
           </div>
         )}

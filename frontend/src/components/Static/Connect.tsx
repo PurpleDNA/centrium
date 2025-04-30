@@ -1,6 +1,6 @@
 // import React from "react";
 // import { Button } from "../../components/LandingPage/Buttons";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import rizzKing from "../../assets/rizzking.svg";
 import { Button } from "../ui/button";
 import { useNavigate } from "react-router-dom";
@@ -20,13 +20,40 @@ function Connect() {
     }
   };
 
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    const inputElement = inputRef.current;
+    if (inputElement) {
+      const handleKeyDown = (event: KeyboardEvent) => {
+        if (inputRef) {
+          if (event.key === "Enter" && inputRef.current) {
+            if (inputRef.current.value) {
+              console.log("trigger button pressed");
+              navigate(
+                `/search?tag=${encodeURIComponent(
+                  inputRef.current.value.toLowerCase().replace(/\s+/g, "-")
+                )}`
+              );
+            } else return;
+          }
+        }
+      };
+      inputElement.addEventListener("keydown", handleKeyDown);
+      return () => {
+        inputElement.removeEventListener("keydown", handleKeyDown);
+      };
+    }
+  }, [navigate]);
+
   return (
-    <div className="hidden border-l-2 border-l-slate-300 lg:flex flex-col gap-8 w-full scrollbar-hide sticky top-0 h-screen overflow-y-scroll px-3">
-      <div className="w-full bg-white sticky top-0 pt-5">
+    <div className="hidden border-l-2 border-l-slate-300 dark:border-borderr lg:flex flex-col gap-8 w-full scrollbar-hide sticky top-0 h-screen overflow-y-scroll px-3">
+      <div className="w-full bg-white sticky top-0 pt-5 dark:bg-darkk">
         <input
+          ref={inputRef}
           type="text"
           placeholder="Search for anything..."
-          className="px-3 py-2 w-full border-2 rounded-md  border-gray-700 mx-auto md:mx-0"
+          className="px-3 py-2 w-full border-2 rounded-md  border-gray-700 mx-auto md:mx-0 dark:bg-darkk"
         />
       </div>
       <div className="w-full flex flex-col gap-3">
@@ -36,7 +63,7 @@ function Connect() {
             <button
               key={num}
               onClick={() => navigate(`/search?tag=${encodeURIComponent(tag)}`)}
-              className={` text-sm mb-[6px] rounded-3xl font-sofia  px-4 py-2 inline w-auto bg-cyann border-2 border-slate-100 cursor-pointer transition-all duration-100`}
+              className={` text-sm mb-[6px] rounded-3xl font-sofia  px-4 py-2 inline w-auto bg-cyann border-2 border-slate-100 dark:border-0 cursor-pointer transition-all duration-100 dark:bg-slate-900`}
             >
               {tag}
             </button>
@@ -70,7 +97,7 @@ function Connect() {
               <p>{creator.username}</p>
             </div>
             <Button
-              className="bg-[#3800A7] hover:bg-[#1e0846]"
+              className="bg-[#3800A7] hover:bg-[#1e0846] dark:bg-white "
               onClick={() => handleFollowing(index)}
             >
               {following.includes(index) ? "Following" : "Follow"}

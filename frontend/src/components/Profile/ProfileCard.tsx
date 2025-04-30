@@ -41,7 +41,7 @@ function ProfileCard({
     setDecoyIsFing(isFollowing);
   }, [followers, isFollowing]);
   return (
-    <div className=" border-l-2 border-l-slate-300 lg:flex flex-col gap-8 w-full scrollbar-hide sticky top-0 lg:h-screen overflow-y-scroll px-3 mt-5">
+    <div className=" border-l-2 border-l-slate-300 lg:flex flex-col gap-8 w-full scrollbar-hide sticky top-0 lg:h-screen overflow-y-scroll px-3 mt-5 dark:border-borderr">
       <div className="flex flex-col gap-3 border-b-2 border-b-slate-300 pb-2">
         <div className="flex flex-col gap-5">
           <div className="flex items-center gap-5 lg:gap-3 lg:flex-col lg:items-start">
@@ -89,7 +89,7 @@ function ProfileCard({
               }
             }
           }}
-          className="bg-white border-2 border-[#501FB1] rounded-md w-max text-black text-xs hover:bg-[#501FB1] transition-all hover:text-white"
+          className="bg-white border-2 border-[#501FB1] rounded-md w-max text-black text-xs hover:bg-[#501FB1] transition-all hover:text-white dark:bg-darkk dark:text-white dark:hover:bg-[#501FB1]"
         >
           {profile.walletAddress === profileAddy
             ? "Edit Profile"

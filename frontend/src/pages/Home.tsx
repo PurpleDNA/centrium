@@ -67,12 +67,14 @@ function Home() {
   return (
     <div className="flex">
       <div className="w-full lg:w-3/4">
-        <div className="w-full pt-4 md:pt-10 border-b-2 border-slate-300 sticky top-8 md:top-0 bg-white">
+        <div className="w-full pt-4 md:pt-10 border-b-2 border-slate-300 dark:border-borderr sticky top-8 md:top-0 bg-white dark:bg-[#060610]">
           <div className="flex justify-between px-4 md:px-16 font-sofia w-full font-semibold">
             <span
               onClick={() => handleNavigation("Your Feed")}
               className={`cursor-pointer ${
-                activePage === "Your Feed" ? "border-b-2 border-[#3800A7]" : ""
+                activePage === "Your Feed"
+                  ? "border-b-2 border-[#3800A7]"
+                  : "text-[#9B9B9F]"
               }`}
             >
               Your Feed
@@ -80,7 +82,9 @@ function Home() {
             <span
               onClick={() => handleNavigation("threads")}
               className={`cursor-pointer ${
-                activePage === "threads" ? "border-b-2 border-[#3800A7]" : ""
+                activePage === "threads"
+                  ? "border-b-2 border-[#3800A7]"
+                  : "text-[#9B9B9F]"
               }`}
             >
               Threads
@@ -88,7 +92,9 @@ function Home() {
             <span
               onClick={() => handleNavigation("guides")}
               className={`cursor-pointer ${
-                activePage === "guides" ? "border-b-2 border-[#3800A7]" : ""
+                activePage === "guides"
+                  ? "border-b-2 border-[#3800A7]"
+                  : "text-[#9B9B9F]"
               }`}
             >
               Guides
@@ -146,7 +152,9 @@ function Home() {
         className={`bg-[#3800A7] mt-12 hover:bg-[#1e0846] py-6 w-max md:hidden fixed bottom-16 right-8`}
       >
         {" "}
-        <PenLine className={`${isNavOpen ? "mr-4" : "mx-auto"}`} />
+        <PenLine
+          className={`dark:text-white ${isNavOpen ? "mr-4" : "mx-auto"}`}
+        />
       </Button>
     </div>
   );

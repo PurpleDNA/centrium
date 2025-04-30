@@ -16,6 +16,7 @@ import { Context } from "@/Contexts/Context";
 import { ConnectKitButton } from "connectkit";
 import Landing from "../../assets/Landing.png";
 import { useSelector } from "react-redux";
+import Toggle from "@/AppServices/utils/DarkToggle/Toggle";
 
 function Sidebar() {
   const walletAddress = useSelector(
@@ -65,9 +66,9 @@ function Sidebar() {
   };
   return (
     <div
-      className={`bg-white hidden md:flex flex-col gap-8 h-screen top-0 sticky left-0 pt-2 border-r-2 border-r-slate-300 px-5 ${
+      className={`bg-white dark:bg-[#060610] hidden md:flex flex-col gap-8 h-screen top-0 sticky left-0 pt-2 border-r-2 border-r-slate-300 dark:border-r-[#64779F] px-5 ${
         isNavOpen ? "" : "items-center"
-      } transition-all duration-1000 overflow-hidden`}
+      } overflow-hidden`}
       style={{ width: isNavOpen ? "20%" : "max-content" }}
     >
       <div
@@ -96,7 +97,7 @@ function Sidebar() {
           />
         )}
       </div>
-      <div></div>
+      <Toggle />
       <div className="flex flex-col justify-between gap-4">
         {items.map((item) => (
           <NavLink
@@ -104,8 +105,8 @@ function Sidebar() {
             key={item.title}
             className={({ isActive }: { isActive: boolean }) => {
               return isActive
-                ? "font-semibold bg-slate-200 rounded-full flex gap-3 cursor-pointer hover:font-semibold hover:bg-slate-200 hover:rounded-full w-max py-2 px-3"
-                : "flex gap-3 cursor-pointer hover:font-semibold hover:bg-slate-200 hover:rounded-full w-max py-2 px-3";
+                ? "font-semibold bg-slate-200 rounded-full flex gap-3 cursor-pointer hover:font-semibold hover:bg-slate-200  dark:bg-slate-900 [#13131C] border- white border hover:rounded-full w-max py-2 px-3"
+                : "flex gap-3 cursor-pointer hover:font-semibold hover:bg-slate-200 dark:hover:bg-[#13131C] hover:rounded-full w-max py-2 px-3";
             }}
           >
             <item.icon />
@@ -135,12 +136,14 @@ function Sidebar() {
       <div>
         <Button
           onClick={toggleModal}
-          className={`bg-[#3800A7] mt-12 hover:bg-[#1e0846] py-6 ${
+          className={`bg-[#3800A7] mt-12 hover:bg-[#1e0846] py-6 dark:text-white ${
             isNavOpen ? "w-44" : "w-max"
           }`}
         >
           {" "}
-          <PenLine className={`${isNavOpen ? "mr-4" : "mx-auto"}`} />
+          <PenLine
+            className={`dark:text-white ${isNavOpen ? "mr-4" : "mx-auto"}`}
+          />
           {isNavOpen ? "Create Post" : ""}
         </Button>
       </div>

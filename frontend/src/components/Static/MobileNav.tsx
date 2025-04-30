@@ -42,14 +42,14 @@ function MobileNav() {
     },
   ];
   return (
-    <div className="w-full fixed bottom-0 bg-white flex md:hidden justify-between px-2 pt-1 border-t-2 border-t-slate-300 z-20">
+    <div className="w-full fixed bottom-0 bg-white flex md:hidden justify-between px-2 pt-1 border-t-2 border-t-slate-300 z-20 dark:bg-darkk dark:border-borderr">
       {items.map((item) => (
         <NavLink
           to={item.url}
           key={item.title}
           className={({ isActive }: { isActive: boolean }) => {
             return isActive
-              ? "font-semibold bg-slate-200 rounded-full flex gap-3 cursor-pointer hover:font-semibold hover:bg-slate-200 hover:rounded-full w-max py-2 px-3"
+              ? "font-semibold bg-slate-200 rounded-full flex gap-3 cursor-pointer hover:font-semibold hover:bg-slate-200  hover:rounded-full w-max py-2 px-3 dark:bg-slate-900"
               : "flex gap-3 cursor-pointer hover:font-semibold hover:bg-slate-200 hover:rounded-full w-max py-2 px-3";
           }}
         >

@@ -25,7 +25,7 @@ function PreviewGuide() {
         {guideTitle}
       </h1>
       <p className="px-3">{guideDesc}</p>
-      <div className="flex gap-3 px-3 items-center pb-7 border-b-2 border-slate-300">
+      <div className="flex gap-3 px-3 items-center pb-7 border-b-2 border-slate-300 dark:border-borderr">
         <div>
           <img src={profpic} alt="" />
         </div>
@@ -34,7 +34,7 @@ function PreviewGuide() {
             <span className="font-sofia pr-4 border-r-2 border-slate-400">
               {userProfile.username}
             </span>
-            <span className="py-1 px-3 bg-slate-300 rounded-xl text-sm">
+            <span className="py-1 px-3 bg-slate-300 rounded-xl text-sm dark:bg-slate-900">
               {truncateAddress(userProfile.walletAddress)}
             </span>
           </div>

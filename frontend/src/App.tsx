@@ -2,8 +2,6 @@ import { useCallback, useContext, useEffect, useState } from "react";
 import { Outlet } from "react-router-dom";
 import "./App.css";
 import Sidebar from "./components/Static/Sidebar";
-// import Connect from "./components/Static/Connect";
-// import { ContextProvider } from "./Contexts/Context";
 import CreatePostModal from "./components/modals/CreatePostModal";
 import { Context } from "./Contexts/Context";
 import MobileNav from "./components/Static/MobileNav";
@@ -15,6 +13,7 @@ import { useAccount } from "wagmi";
 import FallbackLoading from "@/components/FallbackLoading";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { ThemeProvider } from "./AppServices/utils/ThemeProvider";
 
 function App() {
   // const ModalOpen = useModal()
@@ -56,32 +55,34 @@ function App() {
     fetchData();
   }, [fetchData]);
   return (
-    <div>
-      <div className="flex w-full">
-        <Sidebar />
-        <div
-          className={`${
-            isNavOpen ? "w-[80%]" : "w-full"
-          } h-screen overflow-y-scroll`}
-        >
-          <MobileConnect />
-          <div className="mt-8 md:mt-0 mb-8 md:mb-0">
-            <Outlet />
+    <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+      <div className="transition-all duration-300">
+        <div className="flex w-full">
+          <Sidebar />
+          <div
+            className={`${
+              isNavOpen ? "w-[80%]" : "w-full"
+            } h-screen overflow-y-scroll`}
+          >
+            <MobileConnect />
+            <div className="mt-8 md:mt-0 mb-8 md:mb-0">
+              <Outlet />
+            </div>
           </div>
         </div>
+        {isLoading && <FallbackLoading />}
+        {isModalOpen && <CreatePostModal />}
+        {accountModal && <CreateProfileModal />}
+        <MobileNav />
+        <ToastContainer
+          position="top-center"
+          autoClose={3000}
+          hideProgressBar={false}
+          closeOnClick={true}
+          pauseOnHover={true}
+        />
       </div>
-      {isLoading && <FallbackLoading />}
-      {isModalOpen && <CreatePostModal />}
-      {accountModal && <CreateProfileModal />}
-      <MobileNav />
-      <ToastContainer
-        position="top-center"
-        autoClose={3000}
-        hideProgressBar={false}
-        closeOnClick={true}
-        pauseOnHover={true}
-      />
-    </div>
+    </ThemeProvider>
   );
 }
 

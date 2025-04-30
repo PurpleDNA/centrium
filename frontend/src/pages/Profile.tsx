@@ -93,7 +93,7 @@ function Profile() {
   return (
     <div className="flex w-full flex-col-reverse lg:flex-row">
       <div className="w-full lg:w-2/3 flex flex-col gap-5 h-screen overflow-scroll">
-        <div className="w-full pt-4 md:pt-10 border-b-2 border-slate-300 sticky top-8 md:top-0 bg-white h-max">
+        <div className="w-full pt-4 md:pt-10 border-b-2 border-slate-300 sticky top-8 md:top-0 bg-white h-max dark:bg-darkk dark:border-borderr">
           <div
             className={`flex ${
               profile.walletAddress === profileAddy
@@ -104,7 +104,9 @@ function Profile() {
             <span
               onClick={() => handleNavigation("threads")}
               className={`cursor-pointer ${
-                activePage === "threads" ? "border-b-2 border-[#3800A7]" : ""
+                activePage === "threads"
+                  ? "border-b-2 border-[#3800A7]"
+                  : "dark:text-[#9B9B9F]"
               }`}
             >
               Threads
@@ -112,7 +114,9 @@ function Profile() {
             <span
               onClick={() => handleNavigation("guides")}
               className={`cursor-pointer ${
-                activePage === "guides" ? "border-b-2 border-[#3800A7]" : ""
+                activePage === "guides"
+                  ? "border-b-2 border-[#3800A7]"
+                  : "dark:text-[#9B9B9F]"
               }`}
             >
               Guides
@@ -121,7 +125,9 @@ function Profile() {
               <span
                 onClick={() => handleNavigation("saved")}
                 className={`cursor-pointer ${
-                  activePage === "saved" ? "border-b-2 border-[#3800A7]" : ""
+                  activePage === "saved"
+                    ? "border-b-2 border-[#3800A7]"
+                    : "dark:text-[#9B9B9F]"
                 }`}
               >
                 Saved
@@ -131,7 +137,9 @@ function Profile() {
               <span
                 onClick={() => handleNavigation("drafts")}
                 className={`cursor-pointer ${
-                  activePage === "drafts" ? "border-b-2 border-[#3800A7]" : ""
+                  activePage === "drafts"
+                    ? "border-b-2 border-[#3800A7]"
+                    : "dark:text-[#9B9B9F]"
                 }`}
               >
                 Drafts
