@@ -41,7 +41,7 @@ function ProfileCard({
     setDecoyIsFing(isFollowing);
   }, [followers, isFollowing]);
   return (
-    <div className=" md:border-l-2 md:border-l-slate-300 lg:flex flex-col gap-8 w-full scrollbar-hide sticky top-0 lg:h-screen overflow-y-scroll px-3 mt-5 dark:border-borderr">
+    <div className=" md:border-l-2 md:border-l-slate-300 lg:flex flex-col gap-8 w-full scrollbar-hide lg:h-screen overflow-y-scroll px-3 mt-5 dark:border-borderr">
       <div className="flex flex-col gap-3 lg:border-b-2 border-b-slate-300 pb-2 ">
         <div className="flex flex-col gap-5">
           <div className="flex items-center gap-5 lg:gap-3 lg:flex-col lg:items-start">
@@ -124,7 +124,6 @@ function ProfileCard({
         <p className="text-sm font-poppins">
           Average guide ratings from <strong>200</strong> ratings
         </p>
-        <div></div>
       </div>
     </div>
   );

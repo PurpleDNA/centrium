@@ -14,6 +14,7 @@ const Similar = () => {
   // console.log("similar");
   const slider = React.useRef<Slider>(null);
   const settings = {
+    arrows: false,
     dots: true,
     infinite: true,
     speed: 500,

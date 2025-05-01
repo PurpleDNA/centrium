@@ -12,14 +12,14 @@ interface Props {
   username: string;
   date: string;
   title: string;
-  desc: string;
+  desc?: string;
   demo: string;
   duration: number;
   postType: string;
   tags: string[];
   userAddr: string;
   postHash?: string;
-  isGuide: boolean;
+  isGuide?: boolean;
   isLoading?: boolean;
 }
 
