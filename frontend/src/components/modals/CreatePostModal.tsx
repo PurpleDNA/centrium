@@ -22,7 +22,7 @@ function CreatePostModal() {
       initial={{ opacity: 0, scale: 0.5 }}
       animate={{ opacity: 1, scale: 1 }}
       exit={{ opacity: 0, x: 100 }}
-      className={`w-screen h-screen fixed inset-0 items-center justify-center bg-slate-300/50 z-10 flex`}
+      className={`w-screen h-screen fixed inset-0 items-center justify-center bg-slate-300/50 z-10 flex dark:bg-[#222226]`}
       // onClick={toggleModal}
     >
       <div className="flex flex-col px-8 py-5 rounded-md bg-white border-2 border-black dark:bg-darkk">

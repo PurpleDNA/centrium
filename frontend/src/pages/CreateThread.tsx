@@ -48,7 +48,7 @@ function CreateThread() {
               </span>
               <Button
                 onClick={() => setIsPublishOpen(true)}
-                className="w-max lg:hidden bg-[#3800A7] hover:bg-[#1e0846] mb-1"
+                className="w-max lg:hidden bg-[#3800A7] hover:bg-[#1e0846] mb-1 dark:text-white"
               >
                 Finish
               </Button>

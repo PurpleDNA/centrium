@@ -91,9 +91,9 @@ function Profile() {
     }
   }, [isEditOpen]);
   return (
-    <div className="flex w-full flex-col-reverse lg:flex-row">
+    <div className="flex w-full flex-col-reverse lg:flex-row ">
       <div className="w-full lg:w-2/3 flex flex-col gap-5 h-screen overflow-scroll">
-        <div className="w-full pt-4 md:pt-10 border-b-2 border-slate-300 sticky top-8 md:top-0 bg-white h-max dark:bg-darkk dark:border-borderr">
+        <div className="w-full pt-4 md:pt-10 border-b-2 border-slate-300 sticky top-0 md:top-0 bg-white h-max dark:bg-darkk dark:border-borderr">
           <div
             className={`flex ${
               profile.walletAddress === profileAddy

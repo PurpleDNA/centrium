@@ -70,13 +70,13 @@ function MobilePublish({ setIsPublishOpen }: props) {
   }, [value]);
 
   return (
-    <div className="w-screen h-screen bg-[#E5E5E5] fixed flex flex-col justify-center inset-0 top-0 left-0 z-50 bg-opacity-90 backdrop-blur-sm p-3">
-      <div className="bg-white flex flex-col px-5 p-2">
+    <div className="w-screen h-screen bg-[#E5E5E5] dark:bg-[#222226] fixed flex flex-col justify-center inset-0 top-0 left-0 z-50 bg-opacity-90 backdrop-blur-sm p-3">
+      <div className="bg-white flex flex-col px-5 p-2 dark:bg-darkk">
         <div onClick={() => setIsPublishOpen()}>
           <X className="ml-auto w-5 mb-4" />
         </div>
         <div className="w-full">
-          <div className="w-full flex gap-3 justify-between pr-1 py-1 border-2 border-gray-200  cursor-pointer items-center rounded-md mb-2 bg-slate-100">
+          <div className="w-full flex gap-3 justify-between pr-1 py-1 border-2  dark:bg-darkk dark:border-borderrborder-gray-200  cursor-pointer items-center rounded-md mb-2 bg-slate-100">
             <div
               className={`flex flex-wrap gap-1 ${
                 selected.length > 0 ? "" : "py-1 px-1"
@@ -90,7 +90,7 @@ function MobilePublish({ setIsPublishOpen }: props) {
                 selected.map((select, i) => (
                   <span
                     key={i}
-                    className="text-[11px] rounded-3xl font-sofia px-2 py-1 w-max bg-[#E8E7EA] border-2 border-slate-100 flex justify-between items-center gap-1"
+                    className="text-[11px] rounded-3xl font-sofia px-2 py-1 w-max bg-[#E8E7EA] border-2 border-slate-100 flex justify-between items-center gap-1 dark:bg-[#3C3C45] dark:border-0"
                   >
                     {select}
                     <X
@@ -108,10 +108,10 @@ function MobilePublish({ setIsPublishOpen }: props) {
             type="text"
             placeholder="Input tags here"
             onChange={(e) => setValue(e.currentTarget.value)}
-            className="w-full justify-between px-1 py-1 border-2 border-gray-200 cursor-pointer font-sofia text-sm rounded-md mb-2 bg-slate-100"
+            className="w-full justify-between px-1 py-1 border-2 border-gray-200 cursor-pointer font-sofia text-sm rounded-md mb-2 bg-slate-100 dark:bg-darkk dark:border-borderr"
           />
           <div
-            className={`w-full bg-[#ECECEC] border-2 border-slate-200   flex-col gap-2 p-2 flex mb-3`}
+            className={`w-full bg-[#ECECEC] border-2 border-slate-200   flex-col gap-2 p-2 flex mb-3 dark:bg-slate-900 dark:border-borderr`}
           >
             <h3 className="font-semibold">Top tags this week</h3>
             <div className="grid grid-cols-3 text-[12px] gap-1">
@@ -120,7 +120,7 @@ function MobilePublish({ setIsPublishOpen }: props) {
                   <p
                     onClick={() => handleSelected(tag)}
                     key={i}
-                    className="break-words cursor-pointer text-[#0000004D]"
+                    className="break-words cursor-pointer text-[#0000004D] dark:text-[#C4C4C6] dark:font-semibold"
                   >
                     {tag}
                   </p>
@@ -128,7 +128,7 @@ function MobilePublish({ setIsPublishOpen }: props) {
                   <p
                     onClick={() => handleSelected(tag)}
                     key={i}
-                    className="break-words cursor-pointer"
+                    className="break-words cursor-pointer ark:text-[#C4C4C6]"
                   >
                     {tag}
                   </p>
@@ -141,7 +141,7 @@ function MobilePublish({ setIsPublishOpen }: props) {
       <div className="flex flex-row-reverse justify-around mt-5">
         <Button
           onClick={publish}
-          className="w-1/3 bg-[#3800A7] hover:bg-[#1e0846]"
+          className="w-1/3 bg-[#3800A7] hover:bg-[#1e0846] dark:text-white"
           disabled={
             selected.length < 3 || !guideTitle || !safesteps || isInteracting
           }
