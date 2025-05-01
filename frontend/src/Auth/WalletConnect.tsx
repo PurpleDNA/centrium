@@ -157,7 +157,7 @@ const WalletConnect = () => {
               return (
                 <Button
                   onClick={show}
-                  className="py-2 lg:py-5 text-xs lg:text-base bg-[#3801A7] hover:bg-[#1e0846]"
+                  className="py-2 lg:py-5 text-xs lg:text-base bg-[#3801A7] hover:bg-[#1e0846] dark:text-white"
                 >
                   {" "}
                   Get Started
@@ -172,7 +172,7 @@ const WalletConnect = () => {
         <h1 className="font-sofia font-semibold text-[#051314] text-2xl lg:text-7xl text-center">
           Discover, Learn, and Grow in Web3 – All in One Place
         </h1>
-        <p className="font-poppins text-sm lg:text-lg text-center">
+        <p className="font-poppins text-sm lg:text-lg text-center dark:text-darkk">
           Centrium bridges the gap in Web3 content discovery by providing
           structured threads, step-by-step guides, and tailored community
           spaces. Whether you're new or experienced, Centrium makes navigating
@@ -184,11 +184,11 @@ const WalletConnect = () => {
               return (
                 <Button
                   onClick={show}
-                  className="py-5 bg-[#3801A7] hover:bg-[#1e0846]"
+                  className="py-5 bg-[#3801A7] hover:bg-[#1e0846] dark:text-white"
                 >
                   {" "}
                   Connect Wallet
-                  <Wallet className="ml-4" />
+                  <Wallet className="ml-4 dark:text-white" />
                 </Button>
               );
             }}
