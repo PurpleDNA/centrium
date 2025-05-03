@@ -1,9 +1,9 @@
 import React, { createContext, useState, ReactNode, FC, useMemo } from "react";
-import { ImagePreview } from "@/components/Editor/Editor3";
+import { MediaPreview } from "@/components/Editor/Editor2";
 interface ContextType {
-  steps: [number, string, ImagePreview[]][];
+  steps: [number, string, MediaPreview[]][];
   setSteps: React.Dispatch<
-    React.SetStateAction<[number, string, ImagePreview[]][]>
+    React.SetStateAction<[number, string, MediaPreview[]][]>
   >;
   guideTitle: string;
   setGuideTitle: React.Dispatch<React.SetStateAction<string>>;
@@ -20,7 +20,7 @@ interface ContextProviderProps {
 
 export const CreateGuideProvider: FC<ContextProviderProps> = ({ children }) => {
   const [guideTitle, setGuideTitle] = useState("");
-  const [steps, setSteps] = useState<[number, string, ImagePreview[]][]>([
+  const [steps, setSteps] = useState<[number, string, MediaPreview[]][]>([
     [1, "", []],
   ]);
   const [guideDesc, setGuideDesc] = useState("");

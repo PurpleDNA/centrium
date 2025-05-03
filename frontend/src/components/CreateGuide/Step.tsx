@@ -1,7 +1,7 @@
 // import React from 'react'
 import { X } from "lucide-react";
 import { FC, useContext } from "react";
-import Editor from "../Editor/Editor3";
+import Editor from "../Editor/Editor2";
 import { Context } from "@/Contexts/createGuideContext";
 interface Props {
   number: number;
