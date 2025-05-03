@@ -111,7 +111,10 @@ const FeedPost: FC<Props> = ({
         <h3 className="font-bold font-sofia text-2xl">
           {isLoading ? <Skeleton /> : title}
         </h3>
-        <div dangerouslySetInnerHTML={{ __html: desc ? desc : demo }} />
+        <div
+          style={{ wordBreak: "break-word", overflowWrap: "anywhere" }}
+          dangerouslySetInnerHTML={{ __html: desc ? desc : demo }}
+        />
         {/* <p className="font-poppins">{demo}</p> */}
       </div>
       <div className="'w-full flex justify-between">

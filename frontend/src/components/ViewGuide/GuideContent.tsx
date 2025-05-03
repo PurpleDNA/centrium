@@ -4,6 +4,7 @@ import { Step } from "@/Contexts/createGuideContext";
 import video from "@/assets/Video.png";
 import { useState } from "react";
 import { ChevronLeft, ChevronRight, X } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 interface contentProps {
   author: string;
@@ -23,6 +24,7 @@ function GuideContent({
   tags,
 }: contentProps) {
   // console.log("guideContent");
+  const navigate = useNavigate();
   const { formatDate, truncateAddress } = useCentriumHooks();
   const [enlargedView, setEnlargedView] = useState<boolean>(false);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -57,7 +59,12 @@ function GuideContent({
         <h1 className="font-semibold text-2xl pt-1 md:text-4xl md:mb-4 px-3 break-words">
           {"Title Placeholder till Marv Delivers"}
         </h1>
-        <p className="px-3">{guideDesc}</p>
+        <p
+          className="px-3"
+          style={{ wordBreak: "break-word", overflowWrap: "anywhere" }}
+        >
+          {guideDesc}
+        </p>
       </div>
       <div className="flex gap-3 px-3 items-center pb-4 border-b-2 border-slate-300">
         <div>
@@ -202,7 +209,10 @@ function GuideContent({
       </div>
       <div className="tags flex gap-1 md:gap-3 px-5">
         {tags.map((tag: string) => (
-          <span className="rounded-md font-sofia text-xs bg-[#ECECEC] p-1 inline w-auto text-black dark:bg-slate-900 dark:text-white dark:hover:bg-darkk cursor-pointer">
+          <span
+            onClick={() => navigate(`/search?tag=${encodeURIComponent(tag)}`)}
+            className="rounded-md font-sofia text-xs bg-[#ECECEC] p-1 inline w-auto text-black dark:bg-slate-900 dark:text-white dark:hover:bg-darkk cursor-pointer"
+          >
             {tag}
           </span>
         ))}
