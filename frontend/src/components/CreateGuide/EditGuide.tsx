@@ -27,7 +27,7 @@ function EditThread() {
 
   const addStep = () => {
     setSteps((prev) => {
-      return [...prev, [prev.length + 1, ""]];
+      return [...prev, [prev.length + 1, "", []]];
     });
   };
 

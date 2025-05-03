@@ -16,7 +16,11 @@ function PreviewGuide() {
     return context;
   };
   const { guideTitle, guideDesc, steps } = useSafeContext();
-  const safesteps = steps.map((step) => [step[0], DOMpurify.sanitize(step[1])]);
+  const safesteps = steps.map((step) => [
+    step[0],
+    DOMpurify.sanitize(step[1]),
+    step[2],
+  ]);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const userProfile = useSelector((state: any) => state.userProfile);
   return (
@@ -54,16 +58,35 @@ function PreviewGuide() {
             key={i}
             className="px-4 pt-1 pb-4 w-4/5 flex flex-col gap-3 mx-auto border border-[#3800A7] rounded-md mb-5"
           >
-            <div className="flex gap-2 items-start py-2">
-              <div className="w-max  rounded-sm px-1 bg-slate-300 text-sm font-sofia text-[#FA9631] mt-[0.375rem]">
-                {i + 1}
+            <div className="flex gap-3 flex-col">
+              <div className="flex gap-2 items-start py-2">
+                <div className="w-max  rounded-sm px-1 bg-slate-300 text-sm font-sofia text-[#FA9631] mt-[0.375rem]">
+                  {i + 1}
+                </div>
+                {typeof safestep[1] === "string" && (
+                  <div
+                    style={{
+                      wordBreak: "break-word",
+                      overflowWrap: "anywhere",
+                    }}
+                    className="w-full text-clip"
+                    dangerouslySetInnerHTML={{ __html: safestep[1] }}
+                  />
+                )}
               </div>
-              {typeof safestep[1] === "string" && (
-                <div
-                  style={{ wordBreak: "break-word", overflowWrap: "anywhere" }}
-                  className="w-full text-clip"
-                  dangerouslySetInnerHTML={{ __html: safestep[1] }}
-                />
+              {safestep[2] && (
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+                  {Array.isArray(safestep[2]) &&
+                    safestep[2].map((img) => (
+                      <div key={img.id} className="relative group">
+                        <img
+                          src={img.url}
+                          alt="Preview"
+                          className="w-full h-32 object-cover rounded-lg cursor-pointer "
+                        />
+                      </div>
+                    ))}
+                </div>
               )}
             </div>
           </div>
