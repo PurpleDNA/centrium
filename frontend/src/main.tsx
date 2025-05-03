@@ -21,6 +21,7 @@ import { ContextProvider } from "./Contexts/Context.tsx";
 import Notifications from "./pages/Notifications.tsx";
 import Profile from "./pages/Profile.tsx";
 import NotFound from "./components/NotFound.tsx";
+import { ThemeProvider } from "./AppServices/utils/ThemeProvider";
 
 const router = createBrowserRouter([
   {
@@ -80,7 +81,9 @@ createRoot(document.getElementById("root")!).render(
         <ContextProvider>
           <Provider store={store}>
             <QueryClientProvider client={queryClient}>
-              <RouterProvider router={router} />
+              <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+                <RouterProvider router={router} />
+              </ThemeProvider>
             </QueryClientProvider>
           </Provider>
         </ContextProvider>

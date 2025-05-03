@@ -348,7 +348,7 @@ export const useCentriumHooks = () => {
   //Function to save post to drafts
   const saveToDrafts = async (
     title: string,
-    content: string | (string | number)[][],
+    content: string,
     tags: string[],
     description: string,
     isGuide: boolean

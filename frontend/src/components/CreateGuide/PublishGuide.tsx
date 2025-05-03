@@ -35,7 +35,11 @@ function Publish() {
     // setGuideDesc,
     // setGuideTitle,
   } = useSafeContext();
-  const safesteps = steps.map((step) => [step[0], DOMpurify.sanitize(step[1])]);
+  const safesteps = steps.map((step) => [
+    step[0],
+    DOMpurify.sanitize(step[1]),
+    step[2],
+  ]);
 
   const publish = () => {
     setClicked("publish");
@@ -47,7 +51,13 @@ function Publish() {
 
   const saveDraft = () => {
     setClicked("draft");
-    saveToDrafts(guideTitle, safesteps, selected, guideDesc, false);
+    saveToDrafts(
+      guideTitle,
+      JSON.stringify(safesteps),
+      selected,
+      guideDesc,
+      false
+    );
   };
 
   const handleSelected = (tag: string) => {

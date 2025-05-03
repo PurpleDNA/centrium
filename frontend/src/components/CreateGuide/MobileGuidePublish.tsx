@@ -40,7 +40,13 @@ function MobilePublish({ setIsPublishOpen }: props) {
   };
   const saveDraft = () => {
     setClicked("draft");
-    saveToDrafts(guideTitle, safesteps, selected, guideDesc, true);
+    saveToDrafts(
+      guideTitle,
+      JSON.stringify(safesteps),
+      selected,
+      guideDesc,
+      true
+    );
   };
 
   const handleSelected = (tag: string) => {

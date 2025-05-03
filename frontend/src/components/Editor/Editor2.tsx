@@ -1,6 +1,7 @@
 // import React from 'react'
 import TextareaAutosize from "react-textarea-autosize";
-import { X, Image, Film } from "lucide-react";
+import { X, Image, ChevronLeft, ChevronRight } from "lucide-react";
+import video from "@/assets/Video.png";
 import { useContext, useEffect, useRef, useState } from "react";
 import { Context } from "@/Contexts/createGuideContext";
 import { useTheme } from "../../AppServices/utils/ThemeProvider";
@@ -33,12 +34,18 @@ const Editor2 = ({ editorIndex }: Props) => {
   const [localSteps, setLocalSteps] = useState(steps);
   const [media, setMedia] = useState<MediaPreview[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [enlargedView, setEnlargedView] = useState<boolean>(false);
+  const [currentIndex, setCurrentIndex] = useState(0);
 
   const handleSteps = (value: string) => {
     setLocalSteps((prev) =>
       prev.map((step, i) => {
         if (i === editorIndex) {
-          return [steps?.[editorIndex]?.[0], value, media];
+          return [
+            localSteps[editorIndex][0],
+            value,
+            localSteps[editorIndex][2],
+          ];
         } else {
           return step;
         }
@@ -86,6 +93,7 @@ const Editor2 = ({ editorIndex }: Props) => {
       })
     );
   };
+
   const removeImage = (id: string) => {
     setMedia((prev) => {
       // Clean up object URLs to prevent memory leaks
@@ -104,6 +112,30 @@ const Editor2 = ({ editorIndex }: Props) => {
           return step;
         }
       })
+    );
+  };
+
+  const openEnlargedView = (id: string) => {
+    const index = localSteps[editorIndex][2].findIndex(
+      (media) => media.id === id
+    );
+    setCurrentIndex(index);
+    setEnlargedView(true);
+  };
+
+  const closeEnlargedView = () => {
+    setEnlargedView(false);
+  };
+
+  const goToNext = () => {
+    setCurrentIndex((prev) => (prev + 1) % localSteps[editorIndex][2].length);
+  };
+
+  const goToPrevious = () => {
+    setCurrentIndex(
+      (prev) =>
+        (prev - 1 + localSteps[editorIndex][2].length) %
+        localSteps[editorIndex][2].length
     );
   };
 
@@ -141,18 +173,22 @@ const Editor2 = ({ editorIndex }: Props) => {
         <div className="image-preview-container mt-3">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
             {localSteps[editorIndex][2].map((media) => (
-              <div key={media.id} className="relative group">
+              <div
+                key={media.id}
+                className="relative group"
+                onClick={() => openEnlargedView(media.id)}
+              >
                 {media.type === "image" ? (
                   <img
                     src={media.url}
                     alt="Preview"
-                    className="w-full h-32 object-cover rounded-lg"
+                    className="w-full h-32 object-cover rounded-lg cursor-pointer"
                   />
                 ) : (
                   <div className="relative w-full h-32">
                     <video
                       src={media.url}
-                      className="w-full h-full object-cover rounded-lg"
+                      className="w-full h-full object-cover rounded-lg cursor-pointer"
                     />
                     <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
                       <div className="bg-black bg-opacity-20 rounded-full p-2">
@@ -160,7 +196,7 @@ const Editor2 = ({ editorIndex }: Props) => {
                       </div>
                     </div>
                     <div className="absolute bottom-1 left-1 bg-black bg-opacity-60 text-white text-xs px-1 rounded">
-                      <Film size={12} className="inline mr-1" />
+                      <img src={video} alt="" className="w-6" />
                     </div>
                   </div>
                 )}
@@ -173,6 +209,71 @@ const Editor2 = ({ editorIndex }: Props) => {
                 </button>
               </div>
             ))}
+          </div>
+        </div>
+      )}
+      {enlargedView && localSteps[editorIndex][2].length > 0 && (
+        <div className="fixed inset-0 bg-black bg-opacity-90 z-50 flex items-center justify-center">
+          <div className="relative w-full h-full flex items-center justify-center">
+            {/* Close button */}
+            <button
+              onClick={closeEnlargedView}
+              className="absolute top-4 right-4 text-white bg-black bg-opacity-50 rounded-full p-2 z-10"
+            >
+              <X size={24} />
+            </button>
+
+            {/* Navigation arrows */}
+            {localSteps[editorIndex][2].length > 1 && (
+              <>
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    goToPrevious();
+                  }}
+                  className="absolute left-4 text-white bg-black bg-opacity-50 rounded-full p-2 z-10"
+                >
+                  <ChevronLeft size={24} />
+                </button>
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    goToNext();
+                  }}
+                  className="absolute right-4 text-white bg-black bg-opacity-50 rounded-full p-2 z-10"
+                >
+                  <ChevronRight size={24} />
+                </button>
+              </>
+            )}
+
+            {/* Media content */}
+            <div
+              className="max-w-4xl max-h-4xl"
+              onClick={(e) => e.stopPropagation()}
+            >
+              {localSteps[editorIndex][2][currentIndex].type === "image" ? (
+                <img
+                  src={localSteps[editorIndex][2][currentIndex].url}
+                  alt="Enlarged view"
+                  className="max-h-screen max-w-full object-contain"
+                />
+              ) : (
+                <video
+                  src={localSteps[editorIndex][2][currentIndex].url}
+                  className="max-h-screen max-w-full"
+                  controls
+                  autoPlay
+                />
+              )}
+            </div>
+
+            {/* Media count indicator */}
+            {localSteps[editorIndex][2].length > 1 && (
+              <div className="absolute bottom-4 left-0 right-0 text-center text-white">
+                {currentIndex + 1} / {localSteps[editorIndex][2].length}
+              </div>
+            )}
           </div>
         </div>
       )}

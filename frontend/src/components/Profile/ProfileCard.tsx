@@ -47,7 +47,7 @@ function ProfileCard({
           <div className="flex items-center gap-5 lg:gap-3 lg:flex-col lg:items-start">
             <img src={ProfPic} alt="" className="w-20 rounded-full" />
             <div>
-              <h1 className="font-sofia font-semibold text-base text-black mb-2">
+              <h1 className="font-sofia font-semibold text-base text-black mb-2 dark:text-white">
                 {username ? username : "username"}
               </h1>
               <span className="py-1 w-max px-3 bg-[#9796961A] rounded-xl text-sm border-[#3800A7] border">
