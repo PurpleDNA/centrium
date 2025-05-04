@@ -47,10 +47,9 @@ function PreviewThread() {
       </div>
       <div
         style={{
-          border: "1px solid #ccc",
+          borderTop: "1px solid #ccc",
+          borderBottom: "1px solid #ccc",
           padding: "20px",
-          borderRadius: "4px",
-          // backgroundColor: "#fff",
           wordBreak: "break-word",
           overflowWrap: "anywhere",
         }}

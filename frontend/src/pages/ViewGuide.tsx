@@ -11,6 +11,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 import { CommentProps } from "@/components/ViewThread/CommentSection";
 import { motion } from "motion/react";
+import { Step } from "@/Contexts/createGuideContext";
 
 const ViewGuide = () => {
   console.log("View Guide");
@@ -31,7 +32,7 @@ const ViewGuide = () => {
   const [author, setAuthor] = useState("");
   const [addr, setAddr] = useState<`0x${string}` | "">("");
   const [canfollow, setCanFollow] = useState(false);
-  const [content, setContent] = useState<[number, string][]>([]);
+  const [content, setContent] = useState<Step[]>([]);
   const [guideDesc, setGuideDesc] = useState("");
   const [date, setDate] = useState(0);
   const [tags, setTags] = useState<string[]>([]);

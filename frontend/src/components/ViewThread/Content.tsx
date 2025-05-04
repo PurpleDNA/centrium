@@ -61,7 +61,8 @@ function Content({ author, addr, content, date, tags }: contentProps) {
       <div
         style={{
           padding: "20px 20px 0px",
-          // backgroundColor: "#fff",
+          borderTop: "1px solid #ccc",
+          borderBottom: "1px solid #ccc",
           wordBreak: "break-word",
           overflowWrap: "anywhere",
         }}

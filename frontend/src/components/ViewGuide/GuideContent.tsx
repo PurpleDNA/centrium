@@ -96,7 +96,13 @@ function GuideContent({
                   {index + 1}
                 </div>
                 <div
-                  style={{ wordBreak: "break-word", overflowWrap: "anywhere" }}
+                  style={{
+                    borderTop: "1px solid #ccc",
+                    borderBottom: "1px solid #ccc",
+                    padding: "20px",
+                    wordBreak: "break-word",
+                    overflowWrap: "anywhere",
+                  }}
                   className="w-full"
                   dangerouslySetInnerHTML={{ __html: safestep[1] }}
                 />

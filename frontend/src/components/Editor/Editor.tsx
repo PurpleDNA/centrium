@@ -2,6 +2,7 @@ import { useContext, useEffect, useRef, useState } from "react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import { Context } from "@/Contexts/createPostContext";
+import "./editor.css";
 
 function Editor() {
   const quillref = useRef(null);
@@ -44,6 +45,7 @@ function Editor() {
         value={localPost}
         onChange={(e) => setLocalPost(e)}
         modules={modules}
+        placeholder="Write your text here"
       />
     </div>
   );

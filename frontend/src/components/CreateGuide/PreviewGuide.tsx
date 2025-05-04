@@ -98,6 +98,9 @@ function PreviewGuide() {
                 </div>
                 <div
                   style={{
+                    borderTop: "1px solid #ccc",
+                    borderBottom: "1px solid #ccc",
+                    padding: "20px",
                     wordBreak: "break-word",
                     overflowWrap: "anywhere",
                   }}
