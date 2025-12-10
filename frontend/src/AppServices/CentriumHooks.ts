@@ -18,24 +18,36 @@ import {
   updateUserProfile,
   userProfile,
 } from "@/Redux/Slices/userProfileSlice";
-import { useState } from "react";
+import { useCallback, useState, useMemo } from "react";
 import { useAccount } from "wagmi";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import thread from "../assets/thread.png";
+import guide from "../assets/guides.png";
+import { feedPostProps } from "@/pages/Home";
 
 export const useCentriumHooks = () => {
+  // console.log("hooking");
+  const config = useMemo(() => {
+    return createConfig({
+      chains: [bscTestnet],
+      transports: {
+        [bscTestnet.id]: http(
+          `https://data-seed-prebsc-2-s1.bnbchain.org:8545`
+        ),
+      },
+    });
+  }, []);
+  const address = "0x101eB58C3141E309943B256C1680D16e91b12055";
   const navigate = useNavigate();
   const account = useAccount();
   const senderAddy = account.address;
-  type profType = (string | number | boolean | string[])[];
   const { writeContractAsync } = useWriteContract();
-  const address = "0x101eB58C3141E309943B256C1680D16e91b12055";
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(false);
-  const config = createConfig({
-    chains: [bscTestnet],
-    transports: {
-      [bscTestnet.id]: http(`https://data-seed-prebsc-2-s1.bnbchain.org:8545`),
-    },
-  });
+  const [isInteracting, setIsInteracting] = useState(false);
+  type profType = (string | number | boolean | string[])[];
+  type postType = (string | number | boolean | string[])[];
 
   useWatchContractEvent({
     abi,
@@ -52,6 +64,13 @@ export const useCentriumHooks = () => {
       }
     },
     pollingInterval: 1_000,
+  });
+
+  // Get Document Count
+  const { data: DocumentCount } = useReadContract({
+    abi,
+    address: address,
+    functionName: "getDocumentCount",
   });
 
   // Function to create Profile
@@ -81,6 +100,8 @@ export const useCentriumHooks = () => {
 
       if (receipt.status === "reverted") {
         throw new Error("Create Profile Failed");
+      } else {
+        toast.success("Profile created successfully");
       }
 
       if (receipt.status === "success") {
@@ -97,6 +118,7 @@ export const useCentriumHooks = () => {
       }
     } catch (error) {
       console.error("createProfile Error >>>>>>>" + error);
+      toast.error("Create Profile Failed");
     } finally {
       setIsLoading(false);
     }
@@ -113,7 +135,6 @@ export const useCentriumHooks = () => {
     following,
     bio,
   }: userProfile) => {
-    // setIsLoading(true)
     try {
       dispatch(
         updateUserProfile({
@@ -136,17 +157,16 @@ export const useCentriumHooks = () => {
   };
 
   //Function to getProfile
-  const getProfile = async (sender: `0x${string}`) => {
-    try {
-      setIsLoading(true);
-      const Profile = (await readContract(config, {
-        abi,
-        address,
-        functionName: "getProfile",
-        args: [sender],
-      })) as profType;
+  const getProfile = useCallback(
+    async (sender: `0x${string}`) => {
+      try {
+        const Profile = (await readContract(config, {
+          abi,
+          address,
+          functionName: "getProfile",
+          args: [sender],
+        })) as profType;
 
-      if (Profile) {
         if (Profile[0]) {
           const ProfileData: userProfile = {
             isAccount: true,
@@ -154,32 +174,36 @@ export const useCentriumHooks = () => {
             username: String(Profile[0]),
             age: Number(String(Profile[1]).slice(0, String(Profile[1]).length)),
             online: Boolean(Profile[2]),
-            following: Number(Array(Profile[3]).length),
-            followers: Number(Array(Profile[4]).length),
+            following: (Profile[3] as []).length,
+            followers: (Profile[4] as []).length,
+            followingList: Profile[3] as `0x${string}`[],
+            followersList: Profile[4] as `0x${string}`[],
+            // following: Number(Array(Profile[3]).length),
+            // followers: Number(Array(Profile[4]).length),
           };
-          dispatch(updateUserProfile(ProfileData));
-          sessionStorage.setItem("userSession", "true");
+          if (sender === senderAddy) {
+            dispatch(updateUserProfile(ProfileData));
+            sessionStorage.setItem("userSession", "true");
+            return ProfileData;
+          } else {
+            return ProfileData;
+          }
         } else {
-          const ProfileData: userProfile = {
+          const ProfileData = {
             isAccount: false,
-            walletAddress: "0x",
-            username: "",
-            age: 0,
-            online: false,
-            following: 0,
-            followers: 0,
           };
           dispatch(updateUserProfile(ProfileData));
         }
+        // console.log(Profile);
+      } catch (error) {
+        console.error("getProfile Error >>>>>>>" + error);
+        // window.location.reload();
+      } finally {
+        // setIsLoading(false);
       }
-      // console.log(Profile);
-    } catch (error) {
-      console.error("getProfile Error >>>>>>>" + error);
-      window.location.reload();
-    } finally {
-      setIsLoading(false);
-    }
-  };
+    },
+    [config, dispatch, senderAddy]
+  );
 
   //Function to create ThreadPost
   const createThread = async (
@@ -188,6 +212,7 @@ export const useCentriumHooks = () => {
     tags: string[]
   ) => {
     try {
+      setIsInteracting(true);
       const hash = await writeContractAsync(
         {
           abi,
@@ -207,19 +232,26 @@ export const useCentriumHooks = () => {
 
       if (receipt.status === "reverted") {
         throw new Error("Create Thread Failed");
+      } else {
+        toast.success("Thread created successfully");
       }
     } catch (error) {
       console.error("createPost Error >>>>>>>" + error);
+      toast.error("Create thread failed");
+    } finally {
+      setIsInteracting(false);
     }
   };
 
+  //Function to create GuidePOst
   const createGuide = async (
     title: string,
-    content: (string | number)[][],
+    content: string,
     description: string,
     tags: string[]
   ) => {
     try {
+      setIsInteracting(true);
       const hash = await writeContractAsync(
         {
           abi,
@@ -239,9 +271,49 @@ export const useCentriumHooks = () => {
 
       if (receipt.status === "reverted") {
         throw new Error("Create Guide Failed");
+      } else {
+        toast.success("Guide created successfully");
       }
     } catch (error) {
       console.error("createPost Error >>>>>>>" + error);
+      toast.error("create guide failed");
+    } finally {
+      setIsInteracting(false);
+    }
+  };
+
+  //Function to create comment
+  const createComment = async (id: string, content: string) => {
+    try {
+      setIsInteracting(true);
+      const hash = await writeContractAsync(
+        {
+          abi,
+          address: address,
+          functionName: "commentOnPost",
+          args: [id, content],
+        },
+        {
+          onError: (data) => {
+            const message = data as unknown as { shortMessage: string };
+            throw new Error("Failed: " + message.shortMessage);
+          },
+        }
+      );
+      // return "comment created";
+
+      const receipt = await waitForTransactionReceipt(config, { hash });
+
+      if (receipt.status === "reverted") {
+        throw new Error("Create Comment Failed");
+      } else {
+        toast.success("comment created");
+      }
+    } catch (error) {
+      console.error("createComment Error >>>>>>>" + error);
+      toast.error("create comment failed");
+    } finally {
+      setIsInteracting(false);
     }
   };
 
@@ -255,28 +327,391 @@ export const useCentriumHooks = () => {
     });
   };
 
-  // Get Document Count
-  // const { data } = useReadContract({
-  //   abi,
-  //   address: address,
-  //   functionName: "getDocumentCount",
-  // });
-  // const getDocumentCount = () => {
-  //   if (data) {
-  //     const count = data;
-  //     return count;
-  //   }
-  // };
+  // Function to get Post Async
+  const getPostAsync = useCallback(
+    async (fileHash: string) => {
+      try {
+        const post = await readContract(config, {
+          abi,
+          address: address,
+          functionName: "getDocumentByHash",
+          args: [fileHash],
+        });
+        return post;
+      } catch (error) {
+        console.error("getPostAsync Error >>>>>>>" + error);
+      }
+    },
+    [config]
+  );
+
+  //Function to save post to drafts
+  const saveToDrafts = async (
+    title: string,
+    content: string,
+    tags: string[],
+    description: string,
+    isGuide: boolean
+  ) => {
+    try {
+      setIsInteracting(true);
+      const hash = await writeContractAsync(
+        {
+          abi,
+          address: address,
+          functionName: "saveToDrafts",
+          args: [title, content, tags, description, isGuide],
+        },
+        {
+          onError: (data) => {
+            const message = data as unknown as { shortMessage: string };
+            throw new Error("Failed: " + message.shortMessage);
+          },
+        }
+      );
+
+      const receipt = await waitForTransactionReceipt(config, { hash });
+
+      if (receipt.status === "reverted") {
+        throw new Error("Save to Drafts Failed");
+      } else {
+        toast.success("Saved to Drafts");
+      }
+    } catch (error) {
+      console.error("saveDraft Error >>>>>>>" + error);
+      toast.error("Couldn't save to drafts");
+    } finally {
+      setIsInteracting(false);
+    }
+  };
+
+  //Like post
+  const likePost = async (postHash: string) => {
+    try {
+      setIsInteracting(true);
+      const hash = await writeContractAsync(
+        {
+          abi,
+          address: address,
+          functionName: "likePost",
+          args: [postHash],
+        },
+        {
+          onError: (data) => {
+            const message = data as unknown as { shortMessage: string };
+            throw new Error("Failed: " + message.shortMessage);
+          },
+          onSuccess: () => {
+            toast.success("Post Liked");
+          },
+        }
+      );
+
+      const receipt = await waitForTransactionReceipt(config, { hash });
+
+      if (receipt.status === "reverted") {
+        throw new Error("Like Post Failed");
+      }
+      // else {
+      //   toast.success("Post Liked");
+      // }
+    } catch (error) {
+      console.error("likePost Error >>>>>>>" + error);
+      toast.error("Couldn't like post");
+    }
+  };
+
+  //Dislike Post
+  const dislikePost = async (postHash: string) => {
+    try {
+      setIsInteracting(true);
+      const hash = await writeContractAsync(
+        {
+          abi,
+          address: address,
+          functionName: "dislikePost",
+          args: [postHash],
+        },
+        {
+          onError: (data) => {
+            const message = data as unknown as { shortMessage: string };
+            throw new Error("Failed: " + message.shortMessage);
+          },
+        }
+      );
+
+      const receipt = await waitForTransactionReceipt(config, { hash });
+
+      if (receipt.status === "reverted") {
+        throw new Error("Dislike Post Failed");
+      } else {
+        toast.success("Post disLiked");
+      }
+    } catch (error) {
+      console.error("DislikePost Error >>>>>>>" + error);
+      toast.error("Couldn't dislike post");
+    }
+  };
+
+  //Follow User
+  const follow = async (user: `0x${string}`) => {
+    try {
+      setIsInteracting(true);
+      const hash = await writeContractAsync(
+        {
+          abi,
+          address: address,
+          functionName: "follow",
+          args: [user],
+        },
+        {
+          onError: (data) => {
+            const message = data as unknown as { shortMessage: string };
+            throw new Error("Failed: " + message.shortMessage);
+          },
+        }
+      );
+
+      const receipt = await waitForTransactionReceipt(config, { hash });
+
+      if (receipt.status === "reverted") {
+        throw new Error("Follow User Failed");
+      } else {
+        getProfile(senderAddy!);
+        toast.success("Following");
+      }
+    } catch (error) {
+      console.error("Follow User Error >>>>>>>" + error);
+      toast.error("Couldn't Follow");
+    }
+  };
+
+  //unfollow User
+  const unfollow = async (user: `0x${string}`) => {
+    try {
+      setIsInteracting(true);
+      const hash = await writeContractAsync(
+        {
+          abi,
+          address: address,
+          functionName: "unfollow",
+          args: [user],
+        },
+        {
+          onError: (data) => {
+            const message = data as unknown as { shortMessage: string };
+            throw new Error("Failed: " + message.shortMessage);
+          },
+        }
+      );
+
+      const receipt = await waitForTransactionReceipt(config, { hash });
+
+      if (receipt.status === "reverted") {
+        throw new Error("Unfollow User Failed");
+      } else {
+        getProfile(senderAddy!);
+        toast.success("Unfollowed");
+      }
+    } catch (error) {
+      console.error("Unfollow User Error >>>>>>>" + error);
+      toast.error("Couldn't unfollow");
+    }
+  };
+
+  // Get All Posts
+  const getAllPosts = useCallback(
+    async (offset: number = 1) => {
+      try {
+        if (DocumentCount) {
+          const posts = (await readContract(config, {
+            abi,
+            address: address,
+            functionName: "getAllDocuments",
+            args: [DocumentCount, offset],
+          })) as postType[];
+          const postArray = [];
+          for (let i = 0; i < posts[0].length; i++) {
+            postArray.push(await getPostAsync(posts[0][i] as string));
+          }
+          const finalResult = postArray.map((res, i) => {
+            const post = [...(res as unknown[]), posts[0][i]];
+            return post;
+          });
+          return finalResult;
+        }
+      } catch (error) {
+        console.error("getAllPosts Error >>>>>>>" + error);
+      }
+    },
+    [DocumentCount, config, getPostAsync]
+  );
+
+  //format date
+  const formatDate = useCallback((bigInt: number) => {
+    const timestamp = Number(String(bigInt).slice(0, String(bigInt).length));
+    const date = new Date(timestamp * 1000); // Convert seconds to milliseconds
+    const day = String(date.getUTCDate()).padStart(2, "0");
+    const month = date.toLocaleString("en-US", {
+      month: "short",
+      timeZone: "UTC",
+    }); // Get short month name
+    const year = date.getUTCFullYear();
+
+    return `${day} ${month} ${year}`;
+  }, []);
+
+  //calculate estimated time to read
+  const estTime = useCallback((content: string) => {
+    const wordNum = content.trim().split(/\s+/).length;
+    if (wordNum / 220 < 1) {
+      return 1;
+    } else {
+      return Math.round(wordNum / 220);
+    }
+  }, []);
+
+  //Format Posts
+  const formatPosts = useCallback(
+    async (result: postType[]) => {
+      const feedObject = result.map(async (post) => {
+        const user = await getProfile(post[0] as `0x${string}`);
+        const username = user!.username;
+        const userAddr = user!.walletAddress;
+        const date = formatDate(post[5] as number);
+        const postType = post[4] ? guide : thread;
+        const isGuide = post[4] as boolean;
+        const title = "Placeholder until Marv delivers";
+        const desc = trimToFirst40Words(post[3] as string);
+        const demo = trimToFirst40Words(post[1] as string);
+        const tags = post[2] as string[];
+        const duration = estTime(post[1] as string);
+        const timestamp = post[5];
+        const postHash = String(post[post.length - 1]);
+
+        return {
+          username,
+          userAddr,
+          date,
+          postType,
+          title,
+          desc,
+          demo,
+          tags,
+          duration,
+          timestamp,
+          postHash,
+          isGuide,
+        } as feedPostProps;
+      });
+      const feed = await Promise.all(feedObject);
+      const reverseIt = feed.sort(
+        (a, b) => Number(b.timestamp) - Number(a.timestamp)
+      );
+      console.log("Returning data");
+      return reverseIt;
+    },
+    [estTime, formatDate, getProfile]
+  );
+
+  //Format All Posts
+  const formatAllPosts: () => Promise<feedPostProps[] | undefined> =
+    useCallback(async () => {
+      try {
+        const result = (await getAllPosts()) as postType[];
+        if (!result) {
+          console.warn("No posts found");
+          throw new Error("No posts found");
+        }
+        if (result) {
+          return formatPosts(result);
+        }
+      } catch (error) {
+        console.error("formatAllPosts Error >>>>>>>" + error);
+        throw error;
+        // return [];
+      }
+    }, [formatPosts, getAllPosts]);
+
+  //fetch Elements by tags
+  const searchByTag = useCallback(
+    async (tag: string) => {
+      try {
+        console.log(tag);
+        const tagPosts = (await readContract(config, {
+          abi,
+          address: address,
+          functionName: "searchByTag",
+          args: [tag],
+        })) as string[];
+        if (!tagPosts) {
+          console.warn("No posts found");
+          throw new Error("No posts found");
+        }
+        if (tagPosts) {
+          const postArray = [];
+          for (let i = 0; i < tagPosts.length; i++) {
+            postArray.push(await getPostAsync(tagPosts[i] as string));
+          }
+          const finalResult = postArray.map((res, i) => {
+            const post = [...(res as unknown[]), tagPosts[i]];
+            return post;
+          });
+          const letsgetit = await formatPosts(finalResult as postType[]);
+          console.log(letsgetit);
+          return letsgetit;
+          // return formatPosts(finalResult);
+        }
+      } catch (error) {
+        console.error("searchByTag Error>>>>>>> " + error);
+        throw error;
+      }
+    },
+    [config, formatPosts, getPostAsync]
+  );
+
+  //format big integer I guess
+  const formatBigInt = useCallback((bigInt: number) => {
+    const formatted = Number(String(bigInt).slice(0, String(bigInt).length));
+    return formatted;
+  }, []);
+  //Trim to fiest 40 words to get content
+  function trimToFirst40Words(essay: string) {
+    return essay.split(/\s+/).slice(0, 40).join(" ");
+  }
+
+  //Truncate Address
+  const truncateAddress = useCallback((address: `0x${string}`) => {
+    const result = address.slice(0, 6) + "....." + address.slice(-5);
+    return result;
+  }, []);
 
   return {
     isLoading,
     setIsLoading,
+    isInteracting,
+    setIsInteracting,
     createProfile,
     updateProfile,
     createThread,
     createGuide,
     useGetPost,
     getProfile,
-    // getDocumentCount,
+    createComment,
+    getPostAsync,
+    saveToDrafts,
+    likePost,
+    dislikePost,
+    follow,
+    unfollow,
+    getAllPosts,
+    DocumentCount,
+    formatDate,
+    estTime,
+    formatBigInt,
+    formatAllPosts,
+    trimToFirst40Words,
+    truncateAddress,
+    searchByTag,
   };
 };

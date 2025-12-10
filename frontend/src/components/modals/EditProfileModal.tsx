@@ -2,43 +2,28 @@
 
 import { X } from "lucide-react";
 import ProfPic from "../../assets/rizzking.svg";
-import { useContext } from "react";
-import { Context } from "../../Contexts/Context";
 import { Button } from "../ui/button";
 import { motion } from "motion/react";
 
-// // interface props {
-// //   className: string;
-// }
-function EditProfileModal() {
-  const useSafeContext = () => {
-    const context = useContext(Context);
-    if (!context) {
-      throw new Error("useSafeContext must be used within a ContextProvider");
-    }
-    return context;
-  };
-  const { isEditProfileOpen, setIsEditProfileOpen } = useSafeContext();
+interface props {
+  setIsEditOpen: () => void;
+}
+function EditProfileModal({ setIsEditOpen }: props) {
   return (
     <div
-      className={`${
-        isEditProfileOpen ? "flex" : "hidden"
-      } w-screen h-screen bg-[#222226] fixed inset-0 top-0 left-0 z-50 justify-center items-center bg-opacity-80 backdrop-blur-sm`}
+      className={`flex w-screen h-screen bg-[#222226] fixed inset-0 top-0 left-0 z-50 justify-center items-center bg-opacity-80 backdrop-blur-sm`}
     >
       <motion.div
         initial={{ opacity: 0, scale: 0.5 }}
         animate={{ opacity: 1, scale: 1 }}
         exit={{ opacity: 0, x: 100 }}
-        className=" bg-white p-5 rounded-sm flex flex-col gap-3"
+        className=" bg-white p-5 rounded-md flex flex-col gap-3 dark:bg-darkk"
       >
         <div className="flex justify-end w-full">
           <h1 className="font-bold font-sofia text-base mx-auto pl-6">
             Edit Profile
           </h1>
-          <div
-            className=" cursor-pointer"
-            onClick={() => setIsEditProfileOpen(false)}
-          >
+          <div className=" cursor-pointer" onClick={() => setIsEditOpen()}>
             <X />
           </div>
         </div>
@@ -52,7 +37,7 @@ function EditProfileModal() {
         </div>
         <div className="w-full">
           <form action="" className="flex flex-col gap-5">
-            <div className="bg-[#F1F1F1] flex flex-col px-4 py-2 rounded-md">
+            <div className="bg-[#F1F1F1] flex flex-col px-4 py-2 rounded-md dark:bg-darkk">
               <label htmlFor="name" className="text-[#CDCDCD] text-xs ml-1">
                 Name
               </label>
@@ -61,25 +46,25 @@ function EditProfileModal() {
                 type="text"
                 id="name"
                 name="about"
-                className="w-96 bg-[#F1F1F1] p-1 outline-none font-sofia"
+                className="w-72 md:w-96 bg-[#F1F1F1] p-1 outline-none font-sofia dark:bg-darkk dark:border border-slate-400 rounded-md dark:mt-1"
               />
             </div>
-            <div className="bg-[#F1F1F1] flex flex-col px-4 py-2 rounded-md">
+            <div className="bg-[#F1F1F1] flex flex-col px-4 py-2 rounded-md dark:bg-darkk">
               <label htmlFor="about" className="text-[#CDCDCD] text-xs ml-1">
                 About Me
               </label>
               <textarea
-                placeholder="Enter Username"
+                placeholder="Enter bio"
                 id="about"
                 name="about"
                 rows={3}
-                className="w-96 bg-[#F1F1F1] p-1 outline-none font-sofia"
+                className="w-72 md:w-96 bg-[#F1F1F1] p-1 outline-none font-sofia dark:bg-darkk dark:border border-slate-400 rounded-md dark:mt-1"
               />
             </div>
             <div className="flex justify-end w-full">
               <Button
-                onClick={() => setIsEditProfileOpen(true)}
-                className="bg-white border-2 border-[#501FB1] rounded-md w-max text-black text-xs hover:bg-[#501FB1] transition-all hover:text-white"
+                onClick={() => setIsEditOpen()}
+                className="bg-white border-2 border-[#501FB1] rounded-md w-max text-black text-xs hover:bg-[#501FB1] dark:bg-[#501FB1] dark:text-white transition-all hover:text-white"
                 type="submit"
               >
                 {" "}

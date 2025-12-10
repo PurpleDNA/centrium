@@ -3,22 +3,14 @@
 import { useState } from "react";
 import rizzKing from "../../assets/rizzking.svg";
 import { Button } from "../ui/button";
+import { useNavigate } from "react-router-dom";
 // import fire from "../../assets/trendy_fire.png"
 // import { useDispatch, useSelector } from "react-redux";
 // import { RootState } from "../../features/exploreSlice";
 
 function Connect() {
-  const [state, setState] = useState<number[]>([]);
-
   const [following, setFollowing] = useState<number[]>([]);
-
-  const handleTag = (num: number) => {
-    if (!state.includes(num)) {
-      setState((prev) => [...prev, num]);
-    } else {
-      setState((prev) => prev.filter((value) => value !== num));
-    }
-  };
+  const navigate = useNavigate();
   const handleFollowing = (num: number) => {
     if (!following.includes(num)) {
       setFollowing((prev) => [...prev, num]);
@@ -28,29 +20,19 @@ function Connect() {
   };
 
   return (
-    <div className="hidden border-l-2 border-l-slate-300 lg:flex flex-col gap-8 w-full scrollbar-hide sticky top-0 h-screen overflow-y-scroll py-5 px-3">
+    <div className="hidden border-l-2 border-l-slate-300 lg:flex flex-col gap-8 w-full scrollbar-hide sticky top-0 h-screen overflow-y-scroll py-5 px-3 dark:border-borderr">
       <div className="w-full flex flex-col gap-3">
         <h2 className="text-lg font-semibold font-sofia">Trending Tags</h2>
         <div className="flex flex-wrap gap-1">
-          {trendTags.map((tag, num) =>
-            state.includes(num) ? (
-              <button
-                key={num}
-                onClick={() => handleTag(num)}
-                className={` text-sm mb-[6px] rounded-3xl font-sofia px-4 py-2 inline w-auto bg-[#5F5F5F26] border-2 border-[#3800A7] cursor-pointer`}
-              >
-                {tag}
-              </button>
-            ) : (
-              <button
-                key={num}
-                onClick={() => handleTag(num)}
-                className={` text-sm mb-[6px] rounded-3xl font-sofia  px-4 py-2 inline w-auto bg-cyann border-2 border-slate-100 cursor-pointer transition-all duration-100`}
-              >
-                {tag}
-              </button>
-            )
-          )}
+          {trendTags.map((tag, num) => (
+            <button
+              key={num}
+              onClick={() => navigate(`/search?tag=${encodeURIComponent(tag)}`)}
+              className={` text-sm mb-[6px] rounded-3xl font-sofia  px-4 py-2 inline w-auto bg-cyann border-2 border-slate-100 cursor-pointer transition-all duration-100 dark:bg-slate-900 dark:border-0`}
+            >
+              {tag}
+            </button>
+          ))}
         </div>
       </div>
       <div className="w-full flex flex-col gap-5">
@@ -62,7 +44,7 @@ function Connect() {
               <p>{creator.username}</p>
             </div>
             <Button
-              className="bg-[#3800A7] hover:bg-[#1e0846]"
+              className="bg-[#3800A7] hover:bg-[#1e0846] dark:bg-slate-900 dark:text-white dark:hover:bg-[#510FB1]"
               onClick={() => handleFollowing(index)}
             >
               {following.includes(index) ? "Following" : "Follow"}

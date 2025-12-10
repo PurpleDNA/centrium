@@ -2,7 +2,7 @@
 import { X } from "lucide-react";
 import { FC, useContext } from "react";
 import Editor from "../Editor/Editor2";
-import { Context } from "@/Contexts/Context";
+import { Context } from "@/Contexts/createGuideContext";
 interface Props {
   number: number;
 }
@@ -25,7 +25,7 @@ export const Step: FC<Props> = (props) => {
     }
   };
   return (
-    <div className="px-4 pt-1 pb-4 w-4/5 flex flex-col gap-3 mx-auto bg-slate-50 border border-[#3800A7] rounded-md mb-5">
+    <div className="px-4 pt-1 pb-4 w-4/5 flex flex-col gap-3 mx-auto dark:bg-darkk bg-slate-50 border border-[#3800A7] rounded-md mb-5">
       <div className="flex justify-end">
         <X
           onClick={() => removeStep(props.number)}
@@ -33,11 +33,11 @@ export const Step: FC<Props> = (props) => {
         />
       </div>
       <div className="flex gap-2 items-start">
-        <div className="w-max  rounded-sm px-1 bg-slate-300 text-sm font-sofia text-[#FA9631]">
+        <div className="w-max  rounded-sm px-1 bg-slate-300 dark:bg-slate-900 text-sm font-sofia text-[#FA9631]">
           {props.number}
         </div>
         <div className="w-full">
-          <Editor editorIndex={props.number - 1}/>
+          <Editor editorIndex={props.number - 1} />
         </div>
       </div>
     </div>

@@ -1,6 +1,7 @@
 // import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import "./index.css";
 import React from "react";
 import store from "./Redux/Store/store.ts";
@@ -20,6 +21,7 @@ import { ContextProvider } from "./Contexts/Context.tsx";
 import Notifications from "./pages/Notifications.tsx";
 import Profile from "./pages/Profile.tsx";
 import NotFound from "./components/NotFound.tsx";
+import { ThemeProvider } from "./AppServices/utils/ThemeProvider";
 
 const router = createBrowserRouter([
   {
@@ -48,11 +50,11 @@ const router = createBrowserRouter([
         element: <CreateGuide />,
       },
       {
-        path: "post/:thread_id",
+        path: "post/:post_id",
         element: <ViewThread />,
       },
       {
-        path: "guide",
+        path: "guide/:post_id",
         element: <ViewGuide />,
       },
       {
@@ -60,7 +62,7 @@ const router = createBrowserRouter([
         element: <Notifications />,
       },
       {
-        path: "profile",
+        path: "profile/:profileAddy",
         element: <Profile />,
       },
     ],
@@ -70,6 +72,7 @@ const router = createBrowserRouter([
     element: <WalletConnect />,
   },
 ]);
+const queryClient = new QueryClient();
 
 createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
@@ -77,7 +80,11 @@ createRoot(document.getElementById("root")!).render(
       <AuthProvider>
         <ContextProvider>
           <Provider store={store}>
-            <RouterProvider router={router} />
+            <QueryClientProvider client={queryClient}>
+              <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+                <RouterProvider router={router} />
+              </ThemeProvider>
+            </QueryClientProvider>
           </Provider>
         </ContextProvider>
       </AuthProvider>

@@ -1,15 +1,24 @@
 // import React from "react";
 import { useContext, useState, useRef, useEffect } from "react";
 import { Button } from "../ui/button";
-import { Context } from "@/Contexts/Context";
+import { Context } from "@/Contexts/createGuideContext";
 import DOMpurify from "dompurify";
 import { useCentriumHooks } from "@/AppServices/CentriumHooks";
 import { X } from "lucide-react";
+import CircleLoader from "react-spinners/CircleLoader";
+
+const override = {
+  display: "block",
+  margin: "0 auto",
+  borderColor: "#3800A7",
+  // color: "white",
+};
 
 function Publish() {
   const [selected, setSelected] = useState<string[]>([]);
   const [value, setValue] = useState<string>("");
-  const { createGuide } = useCentriumHooks();
+  const { createGuide, saveToDrafts, isInteracting } = useCentriumHooks();
+  const [clicked, setClicked] = useState("neither");
   const useSafeContext = () => {
     const context = useContext(Context);
     if (!context) {
@@ -18,18 +27,44 @@ function Publish() {
     return context;
   };
 
-  const { guideTitle, guideDesc, steps } = useSafeContext();
-  const safesteps = steps.map((step) => [step[0], DOMpurify.sanitize(step[1])]);
+  const {
+    guideTitle,
+    guideDesc,
+    steps,
+    // setSteps,
+    // setGuideDesc,
+    // setGuideTitle,
+  } = useSafeContext();
+  const safesteps = steps.map((step) => [
+    step[0],
+    DOMpurify.sanitize(step[1]),
+    step[2],
+  ]);
 
   const publish = () => {
-    createGuide(guideTitle, safesteps, guideDesc, selected);
+    setClicked("publish");
+    createGuide(guideTitle, JSON.stringify(safesteps), guideDesc, selected);
+    // setGuideDesc("");
+    // setGuideTitle("");
+    // setSteps([[1, ""]]);
+  };
+
+  const saveDraft = () => {
+    setClicked("draft");
+    saveToDrafts(
+      guideTitle,
+      JSON.stringify(safesteps),
+      selected,
+      guideDesc,
+      false
+    );
   };
 
   const handleSelected = (tag: string) => {
     if (selected.includes(tag)) {
       setSelected((prev) => prev.filter((value) => value !== tag));
     } else if (!selected.includes(tag)) {
-      setSelected((prev) => [...prev, tag]);
+      setSelected((prev) => [...prev, tag.toLowerCase().replace(/\s+/g, "-")]);
     }
   };
 
@@ -38,7 +73,7 @@ function Publish() {
     const inputElement = inputRef.current;
     if (inputElement) {
       const handleKeyDown = (event: KeyboardEvent) => {
-        if (event.key === " " || event.key === "Enter") {
+        if (event.key === "Enter") {
           console.log("trigger button pressed");
           handleSelected(value);
           inputElement.value = "";
@@ -55,7 +90,7 @@ function Publish() {
     <div className="hidden border-l-2 gap-5 py-5 border-l-slate-300 lg:flex flex-col scrollbar-hide sticky top-0 h-screen overflow-y-scroll px-3">
       <div className="w-full">
         <div>
-          <div className="w-full flex gap-3 justify-between pr-1 py-1 border-2 border-gray-200  cursor-pointer items-center rounded-md mb-2 bg-slate-100">
+          <div className="w-full flex gap-3 justify-between pr-1 py-1 border-2 border-gray-200  cursor-pointer items-center rounded-md mb-2 bg-slate-100 dark:bg-darkk dark:border-borderr">
             <div
               className={`flex flex-wrap gap-1  ${
                 selected.length > 0 ? "" : "py-1 px-1"
@@ -69,7 +104,7 @@ function Publish() {
                 selected.map((select, i) => (
                   <span
                     key={i}
-                    className="text-[11px] rounded-3xl font-sofia px-2 py-1 w-max bg-[#E8E7EA] border-2 border-slate-100 items-center gap-1 flex"
+                    className="text-[11px] rounded-3xl font-sofia px-2 py-1 w-max bg-[#E8E7EA] border-2 border-slate-100 items-center gap-1 flex dark:bg-[#3C3C45] dark:border-0"
                     onClick={() => handleSelected(select)}
                   >
                     {select}
@@ -87,19 +122,19 @@ function Publish() {
             type="text"
             placeholder="Input tags here"
             onChange={(e) => setValue(e.currentTarget.value)}
-            className="w-full justify-between px-1 py-1 border-2 border-gray-200 cursor-pointer font-sofia text-sm rounded-md mb-2 bg-slate-100"
+            className="w-full justify-between px-1 py-1 border-2 border-gray-200 cursor-pointer font-sofia text-sm rounded-md mb-2 bg-slate-100 dark:bg-darkk dark:border-borderr"
           />
           <div
-            className={`w-full border-2 border-slate-200   flex-col gap-2 p-2 flex`}
+            className={`w-full border-2 border-slate-200   flex-col gap-2 p-2 flex dark:bg-slate-900 dark:border-borderr`}
           >
             <h3 className="font-semibold">Top tags this week</h3>
             <div className="grid grid-cols-3 text-[12px] gap-1">
               {tags.map((tag, i) =>
-                selected.includes(tag) ? (
+                selected.includes(tag.toLowerCase().replace(/\s+/g, "-")) ? (
                   <p
                     onClick={() => handleSelected(tag)}
                     key={i}
-                    className="break-words cursor-pointer text-[#0000004D]"
+                    className="break-words cursor-pointer text-[#0000004D] dark:text-[#C4C4C6] dark:font-semibold"
                   >
                     {tag}
                   </p>
@@ -107,7 +142,7 @@ function Publish() {
                   <p
                     onClick={() => handleSelected(tag)}
                     key={i}
-                    className="break-words cursor-pointer"
+                    className="break-words cursor-pointer dark:text-[#C4C4C6]"
                   >
                     {tag}
                   </p>
@@ -120,13 +155,44 @@ function Publish() {
       <div>
         <Button
           onClick={publish}
-          className="w-full bg-[#3800A7] hover:bg-[#1e0846] mb-2"
-          disabled={selected.length < 3 || !guideTitle || !safesteps}
+          className="w-full bg-[#3800A7] hover:bg-[#1e0846] mb-2 dark:text-white"
+          disabled={
+            selected.length < 3 ||
+            !guideTitle ||
+            !safesteps ||
+            !guideDesc ||
+            isInteracting
+          }
         >
-          Publish
+          {isInteracting && clicked === "publish" ? (
+            <CircleLoader
+              cssOverride={override}
+              color={"white"}
+              size={30}
+              aria-label="Loading Spinner"
+              data-testid="loader"
+            />
+          ) : (
+            "Publish"
+          )}
         </Button>
-        <Button className="w-full bg-white border border-[#3800A7] text-black hover:bg-[#1e0846] hover:text-white">
-          Save to drafts
+        <Button
+          onClick={saveDraft}
+          disabled={!guideTitle || isInteracting}
+          variant="outline"
+          className="w-full bg-white border border-[#3800A7] text-black hover:bg-[#1e0846] hover:text-white"
+        >
+          {isInteracting && clicked === "draft" ? (
+            <CircleLoader
+              cssOverride={override}
+              color={"#3800A7"}
+              size={30}
+              aria-label="Loading Spinner"
+              data-testid="loader"
+            />
+          ) : (
+            "Save to drafts"
+          )}
         </Button>
       </div>
     </div>

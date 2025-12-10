@@ -1,7 +1,12 @@
 import Editor from "../Editor/Editor";
 import { motion } from "motion/react";
-import { ChangeEvent, useContext } from "react";
-import { Context } from "@/Contexts/Context";
+import {
+  //  ChangeEvent,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
+import { Context } from "@/Contexts/createPostContext";
 // import { Button } from "../ui/button";
 
 function EditThread() {
@@ -13,10 +18,16 @@ function EditThread() {
     return context;
   };
   const { title, setTitle } = useSafeContext();
+  const [localTitle, setLocalTitle] = useState<string>(title);
 
-  const handleTitle = (event: ChangeEvent<HTMLTextAreaElement>) => {
-    setTitle(event.target.value);
-  };
+  useEffect(() => {
+    const send = setTimeout(() => {
+      console.log("sending");
+      setTitle(localTitle);
+    }, 600);
+    return () => clearTimeout(send);
+  }, [localTitle, setTitle]);
+
   return (
     <motion.div
       initial={{ opacity: 0, x: -100 }}
@@ -25,10 +36,10 @@ function EditThread() {
       className="w-full"
     >
       <textarea
-        className="text-2xl md:text-4xl font-semibold mb-5 px-6 w-full"
+        className="text-2xl md:text-4xl font-semibold mb-5 px-6 w-full dark:bg-darkk focus:outline-none"
         placeholder="Title..."
-        value={title}
-        onChange={(e) => handleTitle(e)}
+        value={localTitle}
+        onChange={(e) => setLocalTitle(e.target.value)}
         rows={3}
       />
       <div className="w-full">

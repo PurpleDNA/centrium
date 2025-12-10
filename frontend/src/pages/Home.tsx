@@ -1,22 +1,42 @@
-import Following from "@/components/Home/Following";
+import YourFeed from "@/components/Home/YourFeed";
 import Guides from "@/components/Home/Guides";
 import Threads from "@/components/Home/Threads";
 import Connect from "@/components/Static/Connect";
 import { Button } from "@/components/ui/button";
 import { PenLine } from "lucide-react";
-import { useContext, useState, useEffect } from "react";
+import { useContext } from "react";
 import { Context } from "../Contexts/Context";
-import CreateProfileModal from "@/components/modals/CreateProfileModal";
-import { useSelector } from "react-redux";
-import { useCentriumHooks } from "../AppServices/CentriumHooks";
-import { useAccount } from "wagmi";
-import FallbackLoading from "@/components/FallbackLoading";
+import CircleLoader from "react-spinners/CircleLoader";
+import { useCentriumHooks } from "@/AppServices/CentriumHooks";
+import { useQuery } from "@tanstack/react-query";
+
+export interface feedPostProps {
+  username: string;
+  date: string;
+  title: string;
+  desc: string;
+  demo: string;
+  duration: number;
+  postType: string;
+  tags: string[];
+  postHash: string;
+  userAddr: string;
+  isGuide: boolean;
+  timestamp?: string | number | boolean | string[];
+}
+
+const override = {
+  display: "block",
+  margin: "0 auto",
+  borderColor: "#3800A7",
+  // marginTop: "50px",
+  // color: "white",
+};
+
+// import UseScrollRestoration from "@/AppServices/utils/UseScrollRestoration";
 
 function Home() {
-  const [activePage, setActivePage] = useState("following");
-  const [accountModal, setAccountModal] = useState(false);
-  const { getProfile, isLoading } = useCentriumHooks();
-  const { address } = useAccount();
+  // UseScrollRestoration("home");
   const handleNavigation = (page: string) => {
     setActivePage(page);
   };
@@ -27,45 +47,44 @@ function Home() {
     }
     return context;
   };
-  const { isNavOpen, setIsModalOpen } = useSafeContext();
+  const { isNavOpen, setIsModalOpen, activePage, setActivePage } =
+    useSafeContext();
   const toggleModal = () => setIsModalOpen((prev: boolean) => !prev);
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const isAccount = useSelector((state: any) => state.userProfile.isAccount);
-  const userSession = sessionStorage.getItem("userSession");
-
-  useEffect(() => {
-    if (!userSession) {
-      if (address) {
-        getProfile(address);
-        if (isAccount === false) {
-          setAccountModal(true);
-        } else {
-          setAccountModal(false);
-        }
+  const { formatAllPosts } = useCentriumHooks();
+  const { data: postFeed, isLoading } = useQuery<feedPostProps[]>({
+    queryKey: ["feed"],
+    queryFn: async () => {
+      const result = await formatAllPosts();
+      if (result) {
+        return result;
+      } else {
+        return [];
       }
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [address, isAccount]);
+    },
+    gcTime: Infinity,
+  });
 
   return (
     <div className="flex">
-      {isLoading && <FallbackLoading />}
       <div className="w-full lg:w-3/4">
-        <div className="w-full pt-4 md:pt-10 border-b-2 border-slate-300 sticky top-8 md:top-0 bg-white">
+        <div className="w-full pt-4 md:pt-10 border-b-2 border-slate-300 dark:border-borderr sticky top-8 md:top-0 bg-white dark:bg-[#060610]">
           <div className="flex justify-between px-4 md:px-16 font-sofia w-full font-semibold">
             <span
-              onClick={() => handleNavigation("following")}
+              onClick={() => handleNavigation("Your Feed")}
               className={`cursor-pointer ${
-                activePage === "following" ? "border-b-2 border-[#3800A7]" : ""
+                activePage === "Your Feed"
+                  ? "border-b-2 border-[#3800A7]"
+                  : "text-[#9B9B9F]"
               }`}
             >
-              Following
+              Your Feed
             </span>
             <span
               onClick={() => handleNavigation("threads")}
               className={`cursor-pointer ${
-                activePage === "threads" ? "border-b-2 border-[#3800A7]" : ""
+                activePage === "threads"
+                  ? "border-b-2 border-[#3800A7]"
+                  : "text-[#9B9B9F]"
               }`}
             >
               Threads
@@ -73,29 +92,69 @@ function Home() {
             <span
               onClick={() => handleNavigation("guides")}
               className={`cursor-pointer ${
-                activePage === "guides" ? "border-b-2 border-[#3800A7]" : ""
+                activePage === "guides"
+                  ? "border-b-2 border-[#3800A7]"
+                  : "text-[#9B9B9F]"
               }`}
             >
               Guides
             </span>
           </div>
         </div>
-        <div className="">
-          {activePage === "following" && <Following />}
-          {activePage === "threads" && <Threads />}
-          {activePage === "guides" && <Guides />}
+        <div
+          className={`scrollable_container ${
+            isLoading ? "h-full flex items-center justify-center" : ""
+          }`}
+        >
+          {activePage === "Your Feed" &&
+            (isLoading ? (
+              <CircleLoader
+                cssOverride={override}
+                color={"#3800A7"}
+                size={30}
+                aria-label="Loading Spinner"
+                data-testid="loader"
+              />
+            ) : postFeed ? (
+              <YourFeed postFeed={postFeed} />
+            ) : null)}
+          {activePage === "threads" &&
+            (isLoading ? (
+              <CircleLoader
+                cssOverride={override}
+                color={"#3800A7"}
+                size={30}
+                aria-label="Loading Spinner"
+                data-testid="loader"
+              />
+            ) : postFeed ? (
+              <Threads postFeed={postFeed} />
+            ) : null)}
+          {activePage === "guides" &&
+            (isLoading ? (
+              <CircleLoader
+                cssOverride={override}
+                color={"#3800A7"}
+                size={30}
+                aria-label="Loading Spinner"
+                data-testid="loader"
+              />
+            ) : postFeed ? (
+              <Guides postFeed={postFeed} />
+            ) : null)}
         </div>
       </div>
       <div className="w-1/3 hidden lg:block">
         <Connect />
       </div>
-      {accountModal && <CreateProfileModal />}
       <Button
         onClick={toggleModal}
         className={`bg-[#3800A7] mt-12 hover:bg-[#1e0846] py-6 w-max md:hidden fixed bottom-16 right-8`}
       >
         {" "}
-        <PenLine className={`${isNavOpen ? "mr-4" : "mx-auto"}`} />
+        <PenLine
+          className={`dark:text-white ${isNavOpen ? "mr-4" : "mx-auto"}`}
+        />
       </Button>
     </div>
   );

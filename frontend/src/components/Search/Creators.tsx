@@ -16,7 +16,7 @@ const Creators = () => {
     <div className="">
       <h1 className="text-base font-semibold font-sofia">Creators to Follow</h1>
       {creatorsList.map((creator, i) => (
-        <div className="flex justify-between gap-1 my-6 items-center">
+        <div key={i} className="flex justify-between gap-1 my-6 items-center">
           <div className="flex justify-between gap-1 items-center">
             <img src={creator.profpic} alt="" />
             <div className="flex flex-col justify-start">
@@ -24,7 +24,10 @@ const Creators = () => {
               <p className="hidden lg:block">{creator.bio}</p>
             </div>
           </div>
-          <Button onClick={() => handleFollowing(i)}>
+          <Button
+            className="dark:bg-slate-900 dark:text-white dark:hover:bg-[#510FB1]"
+            onClick={() => handleFollowing(i)}
+          >
             {isFollowing?.includes(i) ? "Following" : "Follow"}
           </Button>
         </div>

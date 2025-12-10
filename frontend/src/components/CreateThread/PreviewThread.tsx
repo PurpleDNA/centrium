@@ -1,11 +1,14 @@
 // import React from 'react'
-import { Context } from "@/Contexts/Context";
+import { Context } from "@/Contexts/createPostContext";
 import { useContext } from "react";
 import DOMpurify from "dompurify";
 import profpic from "../../assets/rizzking.svg";
 import { Dot } from "lucide-react";
+import { useSelector } from "react-redux";
+import { useCentriumHooks } from "@/AppServices/CentriumHooks";
 // import { Button } from "../ui/button";
 function PreviewThread() {
+  const { truncateAddress, formatDate, estTime } = useCentriumHooks();
   const useSafeContext = () => {
     const context = useContext(Context);
     if (!context) {
@@ -13,6 +16,8 @@ function PreviewThread() {
     }
     return context;
   };
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const userProfile = useSelector((state: any) => state.userProfile);
   const { post, title } = useSafeContext();
   const safepost = DOMpurify.sanitize(post);
   return (
@@ -26,26 +31,27 @@ function PreviewThread() {
         </div>
         <div className="flex flex-col justify-between gap-3">
           <div className="flex gap-3 items-center">
-            <span className="font-sofia pr-4 border-r-2 border-slate-400">
-              The Rizz King
+            <span className="font-sofia pr-4 border-r-2 border-slate-400 font-semibold">
+              {userProfile.username}
             </span>
-            <span className="py-1 px-3 bg-slate-300 rounded-xl text-sm">
-              walletAddy
+            <span className="py-1 px-3 bg-slate-300 rounded-xl text-sm dark:bg-slate-900">
+              {truncateAddress(userProfile.walletAddress)}
             </span>
           </div>
           <div className="flex gap-1 text-sm items-center font-sofia">
-            <span>31 July 2024</span>
+            <span>{formatDate(Date.now() / 1000)}</span>
             <Dot />
-            <span>4 minute read</span>
+            <span>{estTime(safepost)} minute read</span>
           </div>
         </div>
       </div>
       <div
         style={{
-          border: "1px solid #ccc",
+          borderTop: "1px solid #ccc",
+          borderBottom: "1px solid #ccc",
           padding: "20px",
-          borderRadius: "4px",
-          backgroundColor: "#fff",
+          wordBreak: "break-word",
+          overflowWrap: "anywhere",
         }}
         className="w-full"
         dangerouslySetInnerHTML={{ __html: safepost }}

@@ -19,7 +19,7 @@ const SimilarPost: FC<Props> = ({
   postType,
 }) => {
   return (
-    <div className=" mx-auto w-[310px]  rounded-lg -z-10 flex flex-col border border-[#002873B2] gap-6 cursor-pointer hover:bg-slate-100 transition-all duration-300 pb-0 p-5">
+    <div className=" mx-auto w-[310px]  rounded-lg -z-10 flex flex-col border border-[#002873B2] gap-6 cursor-pointer hover:bg-slate-100 transition-all duration-300 pb-0 p-5 dark:hover:bg-slate-900">
       <div className="flex justify-between items-center">
         <div className="flex gap-2 items-center">
           <img
@@ -28,8 +28,10 @@ const SimilarPost: FC<Props> = ({
             alt="user profile picture"
           />
           <div className="flex flex-col gap-1">
-            <p className="font-semibold text-black font-sofia ">{username}</p>
-            <p className="text-slate-800 text-sm">{date}</p>
+            <p className="font-semibold text-black font-sofia  dark:text-white">
+              {username}
+            </p>
+            <p className="text-slate-800 text-sm dark:text-[#9B9B9F]">{date}</p>
           </div>
         </div>
         <div className="flex items-center">
@@ -44,18 +46,18 @@ const SimilarPost: FC<Props> = ({
       </div>
       <div className="'w-full flex justify-between">
         <div className="tags flex gap-3 md:gap-5">
-          <span className="rounded-lg font-sofia text-xs bg-[#ECECEC] p-1 text-black">
+          <span className="rounded-lg font-sofia text-xs bg-[#ECECEC] p-1 text-black  dark:bg-darkk hover:dark:bg-slate-900 dark:text-white">
             Web3
           </span>
-          <span className="rounded-lg font-sofia text-xs bg-[#ECECEC] p-1 text-black">
+          <span className="rounded-lg font-sofia text-xs bg-[#ECECEC] p-1 text-black dark:bg-darkk hover:dark:bg-slate-900 dark:text-white">
             Aidrop
           </span>
-          <span className="rounded-lg font-sofia text-xs bg-[#ECECEC] p-1 text-black">
+          <span className="rounded-lg font-sofia text-xs bg-[#ECECEC] p-1 text-black dark:bg-darkk hover:dark:bg-slate-900 dark:text-white">
             Hamster
           </span>
         </div>
         <div className="flex gap-2 md:gap-5 items-center">
-          <p className="font-poppins text-xs text-gray-600">
+          <p className="font-poppins text-xs text-gray-600 dark:text-white">
             {duration} min read
           </p>
         </div>

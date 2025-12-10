@@ -1,33 +1,43 @@
 // import React from "react";
 import profpic from "../../assets/rizzking.svg";
-import { Ellipsis, ThumbsDown, ThumbsUp, MessageCircle } from "lucide-react";
+import { Ellipsis } from "lucide-react";
+import { useCentriumHooks } from "@/AppServices/CentriumHooks";
+import { useEffect, useState } from "react";
 interface Props {
-  likes: number;
-  dislikes: number;
-  replies: number;
+  // likes: number;
+  // dislikes: number;
+  // replies: number;
+  commenter: `0x${string}`;
+  content: string;
+  date: string;
 }
 
-const Comment = ({ likes, dislikes, replies }: Props) => {
+const Comment = ({ content, commenter, date }: Props) => {
+  // console.log("rahhhhh");
+  const { getProfile } = useCentriumHooks();
+  const [commentMaker, setCommentMaker] = useState("");
+  useEffect(() => {
+    async function fetchData() {
+      const commenterProfile = await getProfile(commenter);
+      const result = commenterProfile?.username ?? "Unknown User";
+      setCommentMaker(result);
+    }
+    fetchData();
+  });
   return (
-    <div className="flex flex-col gap-5 mb-5 pb-3 border-b-2 border-slate-300">
+    <div className="flex flex-col gap-5 mb-5 pb-3 border-b-2 border-slate-300 dark:border-borderr">
       <div className="flex justify-between items-end">
         <div className="flex gap-2  items-center">
           <img src={profpic} alt="" />
           <div className="flex flex-col">
-            <span className="font-sofia">The Rizz King</span>
-            <span className="text-xs font-light">1 day ago</span>
+            <span className="font-sofia font-semibold">{commentMaker}</span>
+            <span className="text-xs font-light">{date}</span>
           </div>
         </div>
         <Ellipsis />
       </div>
-      <p>
-        Beyond security, scalability, and regulation, decentralized networks
-        face other potential issues, such as the environmental impact of
-        energy-intensive mining and the steep learning curve that makes them
-        challenging for average users. These risks emphasize the importance of
-        informed choices when entering decentralized spaces.
-      </p>
-      <div className="flex justify-between items-center">
+      <p className="display-text">{content}</p>
+      {/* <div className="flex justify-between items-center">
         <div className="flex gap-5 items-center">
           <div className="flex items-center gap-1">
             <ThumbsUp size={"20px"} />
@@ -43,7 +53,7 @@ const Comment = ({ likes, dislikes, replies }: Props) => {
           </div>
         </div>
         <div className="font-semibold">Reply</div>
-      </div>
+      </div> */}
     </div>
   );
 };

@@ -1,23 +1,3 @@
-.editor-wrapper {
-  display: flex;
-  flex-direction: column-reverse;
+.ql-toolbar.ql-snow + .ql-container.ql-snow {
+  min-height: 100vw;
 }
-.ql-toolbar {
-  border-bottom: 1px solid #ccc !important;
-  /* border: none !important; */
-  /* width: max-content; */
-}
-.ql-editor {
-  min-height: 70px;
-}
-/*
-  .ql-container {
-    border-bottom: none !important;
-  }
-  
-  
-  
-  .editor-container {
-    padding: 20px;
-  }
-   */
